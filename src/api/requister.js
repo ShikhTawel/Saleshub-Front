@@ -1,0 +1,44 @@
+import axios from "axios"
+
+export const axiosInstance = axios.create({
+  baseURL: 'https://jsonplaceholder.typicode.com',
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+  },
+})
+
+axiosInstance.interceptors.response.use(
+  function (response) {
+    // Any status code that lie within the range of 2xx cause this function to trigger
+    // Do something with response data
+    return response
+  },
+  function (error) {
+    console.log(error.response)
+    console.log(error.response.status)
+    if (error.response.status === 401 || error.response.status === 0) {
+      console.log("token expired")
+      localStorage.removeItem("access_token")
+      window.location.replace("/login")
+    }
+
+    if (error.response.status === 403) {
+      console.log("Access Denied")
+      localStorage.removeItem("access_token")
+      window.location.replace("/forbidden")
+    }
+    /* if (error.response.status === 500) {
+      console.log("Access Denied")
+      // localStorage.removeItem('access_token')
+      window.location.replace("/servererror")
+    }*/
+    if (error.response.status === 400) {
+      console.log("Redirect to 400 must happen")
+    }
+
+    // Any status codes that falls outside the range of 2xx cause this function to trigger
+    // Do something with response error
+    return Promise.reject(error)
+  }
+)
