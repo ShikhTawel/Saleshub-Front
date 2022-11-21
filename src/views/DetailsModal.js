@@ -4,18 +4,10 @@ import FButton from "../components/FButton";
 import FProductTag from "../components/FProductTag";
 import {Data} from "./Data";
 import {useState} from "react";
+import InstanceViewer from "./InstanceViewer";
 
 
-const InstanceViewer = ({instance, value, valueBlock}) => {
-    return (<>
-        <div className="flex items-center gap-2">
-            <span className="font-bold ">{instance}:</span>
-            {valueBlock ? valueBlock : <span className="block">{value}</span>}
 
-        </div>
-    </>)
-
-}
 
 
 

@@ -1,13 +1,12 @@
 import './App.css';
 import FAvatar from "./components/FAvatar";
-import {RadialBar, RadialBarChart, Tooltip} from "recharts";
 import FCustomDataTable from "./components/FCustomDataTable/FCustomDataTable";
-import FProductTag from "./components/FProductTag";
 import {useState} from "react";
 import {useCustomAxios} from "./Hooks/useAxios";
 import logo from '../src/assets/images/logo.jpg'
 import {Data} from "./views/Data";
 import DetailsModal from "./views/DetailsModal";
+import InstanceViewer from "./views/InstanceViewer";
 
 const data = [
 
@@ -69,15 +68,20 @@ function App() {
                     <span>Fawry Merchant System</span>
                 </div>
                 <div className={"p-5 w-full"}>
-                    <div className={"flex w-full items-center gap-2 p-3   bg-white border primary-shadow rounded my-5 "}>
-                        <FAvatar name={"Mohamed Ismail"}/>
-                        <div className={"flex flex-col "}>
-                            <span className={"text-lg"}>Mohamed Ismail</span>
-                            <div className={"flex gap-2"}>
-                                <span className={"text-lg leading-3"}>R45</span>
-                                <span className={"text-lg leading-3"}>16</span>
+                    <div
+                        className={"flex w-full  justify-between gap-2 p-3 gap-5  items-start bg-white border primary-shadow rounded my-5 "}>
+                        <div className={"flex gap-2 items-center "}>
+                            <FAvatar name={"Mohamed Ismail"}/>
+                            <div className={"flex flex-col "}>
+                                <span className={"text-lg"}>Mohamed Ismail</span>
+                                <div className={"flex gap-2"}>
+                                    <span className={"text-lg leading-3"}>R45 - </span>
+                                    <span className={"text-lg leading-3"}>16</span>
+                                </div>
                             </div>
                         </div>
+                        <InstanceViewer vertical value={'15000'} instance={'Target'}/>
+                        <InstanceViewer vertical value={'9477'} instance={'Achieved'}/>
                     </div>
                     <div className={"flex gap-2   w-full "}>
                         <div className={"w-full"}>
@@ -85,15 +89,12 @@ function App() {
                                 <div className={"my-2"}>
                                     <span className={"text-lg font-semibold"}>الموقع </span>
                                 </div>
-
-
                                 <iframe
                                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.521260322283!2d106.8195613507864!3d-6.194741395493371!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f5390917b759%3A0x6b45e67356080477!2sPT%20Kulkul%20Teknologi%20Internasional!5e0!3m2!1sen!2sid!4v1601138221085!5m2!1sen!2sid"
                                     width="100%"
                                     height="300px"
-
                                     frameBorder="0"
-                                    style={{ border: 0 }}
+                                    style={{border: 0}}
                                     allowFullScreen=""
                                     aria-hidden="false"
                                     tabIndex="0"
