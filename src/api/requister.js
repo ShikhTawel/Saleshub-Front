@@ -1,7 +1,8 @@
 import axios from "axios"
 
 export const axiosInstance = axios.create({
-  baseURL: 'https://jsonplaceholder.typicode.com',
+  baseURL: 'http://10.100.55.100:2020/api/',
+  // baseURL: 'http://localhost:2020/api/',
   headers: {
     "Content-Type": "application/json",
     Authorization: `Bearer ${localStorage.getItem("access_token")}`,

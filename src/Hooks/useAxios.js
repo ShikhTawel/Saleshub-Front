@@ -22,7 +22,7 @@ export const useCustomAxios = (axiosParams) => {
     try {
       const result = await axiosInstance.request(params)
       setResponse(result.data)
-      setTotalNumberOfPages(result.data.totalNumberOfPages)
+      setTotalNumberOfPages(result.data.totalPages)
     } catch (error) {
       setError(error)
     } finally {
