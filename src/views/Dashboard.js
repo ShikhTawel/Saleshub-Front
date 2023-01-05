@@ -5,26 +5,39 @@ import FAvatar from "../components/FAvatar";
 import InstanceViewer from "./InstanceViewer";
 import FCustomDataTable from "../components/FCustomDataTable/FCustomDataTable";
 import logo from "../assets/images/logo.jpg";
+import ESpinner from "../components/ESpinner";
+import axios from "axios";
+
 
 const Dashboard =()=>{
     const [page, setPage] = useState(0)
     const [filter, setFilter] = useState([])
     const salesRepTargetResponse = useCustomAxios({
         method: "GET",
-        url: `SalesRep/target/mostafa.elamrawiy`,
+        url: `SalesRep/target/${localStorage.getItem('username')}`,
     })
+    // const salesRepTargetResponse = '';
+    // axios
+    //     .get(`${BASE_URL}SalesRep/target/${localStorage.getItem('username')}`)
+    //     .then((res) => {
+    //         salesRepTargetResponse = res.data;
+    //     })
+    //     .catch((err) => {
+
+    //     });
+
     const salesRepAchievedResponse = useCustomAxios({
         method: "GET",
-        url: `SalesRep/achieved/mostafa.elamrawiy`,
+        url: `SalesRep/achieved/${localStorage.getItem('username')}`,
     })
     const salesRepMerchantsCountResponse = useCustomAxios({
         method: "GET",
-        url: `SalesRep/mostafa.elamrawiy/merchantsNumber`,
+        url: `SalesRep/${localStorage.getItem('username')}/merchantsNumber`,
     })
 
     const {response, loading, error, totalNumberOfPages, Refetch} = useCustomAxios({
         method: "GET",
-        url: `SalesRep/mostafa.elamrawiy/merchants/${page}/5`,
+        url: `SalesRep/${localStorage.getItem('username')}/merchants/${page}/5`,
     })
 
     useEffect(()=>{
@@ -73,14 +86,16 @@ const Dashboard =()=>{
                         <div className={"flex gap-2 items-center "}>
                             <FAvatar name={"mostafa.elamrawiy"}/>
                             <div className={"flex flex-col "}>
-                                <span className={"text-lg"}>Mostafa Elamrawiy</span>
+                                <span className={"text-lg"}>{localStorage.getItem('username')}</span>
                                 <div className={"flex gap-2"}>
-                                    <InstanceViewer  value={salesRepMerchantsCountResponse?.response} instance={'Count'}/>
+                                    <InstanceViewer  value={salesRepMerchantsCountResponse?.response} instance={'Merchants'}/>
                                 </div>
                             </div>
                         </div>
                         <InstanceViewer  value={salesRepTargetResponse?.response} instance={'Target'}/>
-                        <InstanceViewer  value={salesRepAchievedResponse?.response} instance={'Achieved'}/>
+                        <InstanceViewer  value={salesRepAchievedResponse?.response} valueBlock = {
+                            salesRepAchievedResponse.loading ? <ESpinner isVisible={true}/> : salesRepAchievedResponse?.response
+                        } instance={'Achieved Current Month'}/>
                     </div>
                     <div className={"flex gap-2   w-full "}>
                         <div className={"w-full"}>
