@@ -67,7 +67,7 @@ const Dashboard =()=>{
         },
         {
             Header: "الاداء",
-            accessor: "overdraftLimit", // String-based value accessors!
+            accessor: "performance", // String-based value accessors!
         },
 
     ]

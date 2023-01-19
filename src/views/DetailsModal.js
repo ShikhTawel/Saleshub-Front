@@ -9,7 +9,6 @@ import {
 } from "recharts";
 import FButton from "../components/FButton";
 import FProductTag from "../components/FProductTag";
-import { Data } from "./Data";
 import { useEffect, useState } from "react";
 import InstanceViewer from "./InstanceViewer";
 import { axiosInstance } from "../api/requister";
@@ -106,10 +105,10 @@ const DetailsModal = ({ isOpen, setIsOpen, merchantData }) => {
               instance={"Merchant Code"}
               value={merchantData.code}
             />
-            <InstanceViewer instance={"Class"} value={merchantData.clas} />
+            <InstanceViewer instance={"Class"} value={merchantData.merchantClass} />
             <InstanceViewer
               instance={"Overdraft Limit"}
-              value={merchantData.ovd_LIMIT}
+              value={merchantData.overdraftLimit}
             />
             <InstanceViewer
               instance={"AutoFund"}

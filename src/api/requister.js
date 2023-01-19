@@ -1,10 +1,10 @@
 import axios from "axios"
 
 export const axiosInstance = axios.create({
-  baseURL: 'http://10.100.39.100:9080/salesrep/api/',
-  // baseURL: 'https://d572-196-152-86-142.ngrok.io/api/',
+  // baseURL: 'http://10.100.39.100:9080/salesrep/api/',
+  // baseURL: 'https://whatsappbot.fawrypayments.com:9086/api/',
   // baseURL: 'https://chatbot.fawrymicrofinance.com:9084/salesrep/api/',
-  // baseURL: 'http://localhost:1234/api/',
+  baseURL: 'http://localhost:1234/api/',
   headers: {
     "Content-Type": "application/json"
     // Authorization: `Bearer ${localStorage.getItem("access_token")}`,

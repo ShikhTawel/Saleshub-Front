@@ -17,9 +17,9 @@ import 'react-toastify/dist/ReactToastify.css';
 
 
 const Login = () => {
-  // const BASE_URL = "http://localhost:1234/api/";
-  const BASE_URL = "http://10.100.39.100:9080/salesrep/api/";
-  // const BASE_URL = "https://d572-196-152-86-142.ngrok.io/api/";
+  const BASE_URL = "http://localhost:1234/api/";
+  // const BASE_URL = "http://10.100.39.100:9080/salesrep/api/";
+  // const BASE_URL = "https://whatsappbot.fawrypayments.com:9086/api/";
   // const BASE_URL = "https://chatbot.fawrymicrofinance.com:9084/salesrep/api/";
 
   const [serverErrors, setServerErrors] = useState([]);
