@@ -21,6 +21,7 @@
     "react-querybuilder": "^5.1.1",
     "react-router-dom": "^6.4.3",
     "react-scripts": "5.0.1",
+    "react-table": "^7.8.0",
     "react-toastify": "^9.1.1",
     "reactstrap": "^9.1.5",
     "recharts": "^2.1.16",
@@ -28,10 +29,13 @@
     "yup": "^0.32.11"
   },
   "scripts": {
-    "start": "set PORT=7065 && react-scripts start",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "eslint --fix --ext .js,.jsx .",
+    "lint:fix": "eslint --fix",
+    "format": "prettier --write \"**/*.+(js|jsx|json|css|md)\""
   },
   "eslintConfig": {
     "extends": [
@@ -52,8 +56,15 @@
     ]
   },
   "devDependencies": {
+    "@tailwindcss/forms": "^0.5.3",
     "autoprefixer": "^10.4.13",
+    "eslint": "^8.32.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-react": "^7.32.1",
     "postcss": "^8.4.19",
+    "prettier": "^2.7.1",
     "tailwindcss": "^3.2.4"
   }
 }
