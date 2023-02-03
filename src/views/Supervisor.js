@@ -3,8 +3,13 @@ import React from 'react'
 import SectionTitle from '../components/SectionTitle'
 import logo from '../assets/images/logo.jpg'
 import DataTableFilter from './DataTableFilter'
+import DetailsModal from './DetailsModal'
+import { useState } from 'react'
 
 const Supervisor = () => {
+  const [merchantData, setMerchantData] = useState('')
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
   const { loading, response } = useCustomAxios({
     method: 'GET',
     url: `/Supervisor/reps/${localStorage.getItem('username')}`,
@@ -57,8 +62,24 @@ const Supervisor = () => {
       accessor: 'target', // String-based value accessors!
     },
     {
-      Header: 'achieved',
-      accessor: 'achieved', // String-based value accessors!
+      Header: 'achieved Total',
+      accessor: 'achievedTotal', // String-based value accessors!
+    },
+    {
+      Header: 'achieved Airtime',
+      accessor: 'achievedAirtime', // String-based value accessors!
+    },
+    {
+      Header: 'achieved Bills',
+      accessor: 'achievedBills', // String-based value accessors!
+    },
+    {
+      Header: 'achieved Cash In',
+      accessor: 'achievedCashIn', // String-based value accessors!
+    },
+    {
+      Header: 'achieved Cash Out',
+      accessor: 'achievedCashOut', // String-based value accessors!
     },
   ])
 
@@ -73,8 +94,9 @@ const Supervisor = () => {
           setFilter(e.target.value || undefined)
         }}>
         <option value="">All</option>
-        <option value="true">Bad</option>
-        <option value="false">Good</option>
+        <option value="Bad">Bad</option>
+        <option value="Normal">Normal</option>
+        <option value="Good">Good</option>
       </select>
     )
   }
@@ -129,66 +151,131 @@ const Supervisor = () => {
         },
       },
       {
-        Header: 'P1 (3 Days)',
-        accessor: 'performanceThreeConsecutiveDaysFlag', // String-based value accessors!
+        Header: 'P1 (Airtime)',
+        accessor: 'performanceMonthlyFlagAirtime', // String-based value accessors!
         Cell: (row) => {
-          return !row.value ? (
-            <span
-              className={
-                'text-green-500  px-3 text-xs font-medium border border-green-500 rounded-full bg-green-100'
-              }>
-              {' '}
-            </span>
-          ) : (
-            <span
-              className={
-                'text-red-500  px-3 text-xs font-medium border border-red-500 rounded-full bg-red-100'
-              }></span>
-          )
+          if (row.value == 'Good')
+            return (
+              <span
+                className={
+                  'text-blue-500  px-3 text-xs font-medium border border-blue-500 rounded-full bg-blue-300'
+                }></span>
+            )
+          else if (row.value == 'Bad')
+            return (
+              <span
+                className={
+                  'text-red-500  px-3 text-xs font-medium border border-red-500 rounded-full bg-red-100'
+                }></span>
+            )
+          else
+            return (
+              <span
+                className={
+                  'text-green-500  px-3 text-xs font-medium border border-green-500 rounded-full bg-green-100'
+                }></span>
+            )
+        },
+        Filter: AnotherSelectColumnFilter,
+      },
+      {
+        Header: 'P2 (Bills)',
+        accessor: 'performanceMonthlyFlagBills', // String-based value accessors!
+        Cell: (row) => {
+          if (row.value == 'Good')
+            return (
+              <span
+                className={
+                  'text-blue-500  px-3 text-xs font-medium border border-blue-500 rounded-full bg-blue-300'
+                }></span>
+            )
+          else if (row.value == 'Bad')
+            return (
+              <span
+                className={
+                  'text-red-500  px-3 text-xs font-medium border border-red-500 rounded-full bg-red-100'
+                }></span>
+            )
+          else
+            return (
+              <span
+                className={
+                  'text-green-500  px-3 text-xs font-medium border border-green-500 rounded-full bg-green-100'
+                }></span>
+            )
+          // return !row.value ? (
+          //   <span
+          //     className={
+          //       'text-green-500  px-3 text-xs font-medium border border-green-500 rounded-full bg-green-100'
+          //     }>
+          //     {' '}
+          //   </span>
+          // ) : (
+          //   <span
+          //     className={
+          //       'text-red-500  px-3 text-xs font-medium border border-red-500 rounded-full bg-red-100'
+          //     }></span>
+          // )
         },
 
         Filter: AnotherSelectColumnFilter,
       },
-      {
-        Header: 'P2 (2 Days)',
-        accessor: 'performanceTwoConsecutiveDaysFlag', // String-based value accessors!
-        Cell: (row) => {
-          return !row.value ? (
-            <span
-              className={
-                'text-green-500  px-3 text-xs font-medium border border-green-500 rounded-full bg-green-100'
-              }>
-              {' '}
-            </span>
-          ) : (
-            <span
-              className={
-                'text-red-500  px-3 text-xs font-medium border border-red-500 rounded-full bg-red-100'
-              }></span>
-          )
-        },
-        Filter: AnotherSelectColumnFilter,
-      },
-      {
-        Header: 'P3 (1 Month)',
-        accessor: 'performanceWeekFlag', // String-based value accessors!
-        Cell: (row) => {
-          return !row.value ? (
-            <span
-              className={
-                'text-green-500  px-3 text-xs font-medium border border-green-500 rounded-full bg-green-100'
-              }>
-              {' '}
-            </span>
-          ) : (
-            <span
-              className={
-                'text-red-500  px-3 text-xs font-medium border border-red-500 rounded-full bg-red-100'
-              }></span>
-          )
-        },
-        Filter: AnotherSelectColumnFilter,
-      },
+      // {
+      //   Header: 'P3 (Cash In)',
+      //   accessor: 'performanceMonthlyFlagCashIn', // String-based value accessors!
+      //   Cell: (row) => {
+      //     if (row.value == 'Good')
+      //       return (
+      //         <span
+      //           className={
+      //             'text-green-500  px-3 text-xs font-medium border border-green-500 rounded-full bg-green-100'
+      //           }></span>
+      //       )
+      //     else if (row.value == 'Bad')
+      //       return (
+      //         <span
+      //           className={
+      //             'text-red-500  px-3 text-xs font-medium border border-red-500 rounded-full bg-red-100'
+      //           }></span>
+      //       )
+      //     else
+      //       return (
+      //         <span
+      //           className={
+      //             'text-yellow-500  px-3 text-xs font-medium border border-yellow-500 rounded-full bg-yellow-100'
+      //           }></span>
+      //       )
+      //   },
+      //   Filter: AnotherSelectColumnFilter,
+      // },
+      // {
+      //   Header: 'P4 (Cash Out)',
+      //   accessor: 'performanceMonthlyFlagCashOut', // String-based value accessors!
+      //   Cell: (row) => {
+      //     if (row.value == 'Good')
+      //       return (
+      //         <span
+      //           className={
+      //             'text-green-500  px-3 text-xs font-medium border border-green-500 rounded-full bg-green-100'
+      //           }></span>
+      //       )
+      //     else if (row.value == 'Bad')
+      //       return (
+      //         <span
+      //           className={
+      //             'text-red-500  px-3 text-xs font-medium border border-red-500 rounded-full bg-red-100'
+      //           }></span>
+      //       )
+      //     else
+      //       return (
+      //         <span
+      //           className={
+      //             'text-yellow-500  px-3 text-xs font-medium border border-yellow-500 rounded-full bg-yellow-100'
+      //           }></span>
+      //       )
+      //   },
+      //   Filter: AnotherSelectColumnFilter,
+      // },
     ]
   }, [])
 
@@ -204,13 +291,21 @@ const Supervisor = () => {
               {localStorage.getItem('username')}
             </span>
           </div>
-
+          <DetailsModal
+            merchantData={merchantData}
+            isOpen={isModalOpen}
+            setIsOpen={setIsModalOpen}
+          />
           <SectionTitle title={'المبيعات'} />
           <DataTableFilter columns={repsCols} data={response} />
           <SectionTitle title={'التجار'} />
           <DataTableFilter
             columns={columns}
             data={merchantsResponse.response}
+            onRowClick={(row) => {
+              setIsModalOpen(true)
+              setMerchantData(row)
+            }}
           />
         </div>
 

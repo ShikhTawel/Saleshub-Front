@@ -56,8 +56,9 @@ const Dashboard = () => {
           setFilter(e.target.value || undefined)
         }}>
         <option value="">All</option>
-        <option value="true">Bad</option>
-        <option value="false">Good</option>
+        <option value="Bad">Bad</option>
+        <option value="Normal">Normal</option>
+        <option value="Good">Good</option>
       </select>
     )
   }
@@ -100,6 +101,7 @@ const Dashboard = () => {
     method: 'GET',
     url: `SalesRep/targetAchieved/${localStorage.getItem('username')}`,
   })
+
   const cols = [
     {
       Header: 'الكود',
@@ -129,66 +131,75 @@ const Dashboard = () => {
       },
     },
     {
-      Header: 'P1 (3 Days)',
-      accessor: 'performanceThreeConsecutiveDaysFlag', // String-based value accessors!
+      Header: 'P1 (Airtime)',
+      accessor: 'performanceMonthlyFlagAirtime', // String-based value accessors!
       Cell: (row) => {
-        return !row.value ? (
-          <span
-            className={
-              'text-green-500  px-3 text-xs font-medium border border-green-500 rounded-full bg-green-100'
-            }>
-            {' '}
-          </span>
-        ) : (
-          <span
-            className={
-              'text-red-500  px-3 text-xs font-medium border border-red-500 rounded-full bg-red-100'
-            }></span>
-        )
+        if (row.value == 'Good')
+          return (
+            <span
+              className={
+                'text-blue-500  px-3 text-xs font-medium border border-blue-500 rounded-full bg-blue-300'
+              }></span>
+          )
+        else if (row.value == 'Bad')
+          return (
+            <span
+              className={
+                'text-red-500  px-3 text-xs font-medium border border-red-500 rounded-full bg-red-100'
+              }></span>
+          )
+        else
+          return (
+            <span
+              className={
+                'text-green-500  px-3 text-xs font-medium border border-green-500 rounded-full bg-green-100'
+              }></span>
+          )
+        // return !row.value ? (
+        //   <span
+        //     className={
+        //       'text-green-500  px-3 text-xs font-medium border border-green-500 rounded-full bg-green-100'
+        //     }>
+        //     {' '}
+        //   </span>
+        // ) : (
+        //   <span
+        //     className={
+        //       'text-red-500  px-3 text-xs font-medium border border-red-500 rounded-full bg-red-100'
+        //     }></span>
+        // )
+      },
+      Filter: AnotherSelectColumnFilter,
+    },
+    {
+      Header: 'P2 (Bills)',
+      accessor: 'performanceMonthlyFlagBills', // String-based value accessors!
+      Cell: (row) => {
+        if (row.value == 'Good')
+          return (
+            <span
+              className={
+                'text-blue-500  px-3 text-xs font-medium border border-blue-500 rounded-full bg-blue-300'
+              }></span>
+          )
+        else if (row.value == 'Bad')
+          return (
+            <span
+              className={
+                'text-red-500  px-3 text-xs font-medium border border-red-500 rounded-full bg-red-100'
+              }></span>
+          )
+        else
+          return (
+            <span
+              className={
+                'text-green-500  px-3 text-xs font-medium border border-green-500 rounded-full bg-green-100'
+              }></span>
+          )
       },
 
       Filter: AnotherSelectColumnFilter,
-    },
-    {
-      Header: 'P2 (2 Days)',
-      accessor: 'performanceTwoConsecutiveDaysFlag', // String-based value accessors!
-      Cell: (row) => {
-        return !row.value ? (
-          <span
-            className={
-              'text-green-500  px-3 text-xs font-medium border border-green-500 rounded-full bg-green-100'
-            }>
-            {' '}
-          </span>
-        ) : (
-          <span
-            className={
-              'text-red-500  px-3 text-xs font-medium border border-red-500 rounded-full bg-red-100'
-            }></span>
-        )
-      },
-      Filter: AnotherSelectColumnFilter,
-    },
-    {
-      Header: 'P3 (1 Month)',
-      accessor: 'performanceWeekFlag', // String-based value accessors!
-      Cell: (row) => {
-        return !row.value ? (
-          <span
-            className={
-              'text-green-500  px-3 text-xs font-medium border border-green-500 rounded-full bg-green-100'
-            }>
-            {' '}
-          </span>
-        ) : (
-          <span
-            className={
-              'text-red-500  px-3 text-xs font-medium border border-red-500 rounded-full bg-red-100'
-            }></span>
-        )
-      },
-      Filter: AnotherSelectColumnFilter,
-    },
+    }
   ]
   if (localStorage.getItem('role') === 'Supervisor') {
     return (
@@ -297,6 +308,9 @@ const Dashboard = () => {
                         </p>{' '}
                         <p className={'text-left px-1'}>
                           Achieved {item?.achievedAmount}
+                        </p>{' '}
+                        <p className={'text-left px-1'}>
+                          Expected Achieved {item?.expectedAchieved}
                         </p>
                       </div>
                     </div>

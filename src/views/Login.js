@@ -34,10 +34,10 @@ const Login = () => {
     onSubmit: (values) => {
       setIsLoginLoading(true)
       axios
-        .get(`${BASE_URL}SalesRep/checkUsername/${values.email}`, values)
+        .get(`${BASE_URL}SalesRep/checkUsername/${values.email.toLowerCase()}`, values)
         .then((res) => {
           setIsLoginLoading(false)
-          localStorage.setItem('username', values.email)
+          localStorage.setItem('username', values.email.toLowerCase())
           localStorage.setItem('role', res.data)
           navigate('Dashboard')
         })

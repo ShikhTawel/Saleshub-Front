@@ -13,7 +13,7 @@ axios.defaults.baseURL = "https://jsonplaceholder.typicode.com"
 export const useCustomAxios = (axiosParams) => {
   const [totalNumberOfPages, setTotalNumberOfPages] = useState(0)
 
-  const [response, setResponse] = useState(undefined)
+  const [response, setResponse] = useState([])
   const [error, setError] = useState("")
   const [loading, setloading] = useState(true)
 
