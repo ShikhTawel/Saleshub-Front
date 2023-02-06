@@ -27,7 +27,7 @@ function Table({ columns, data, onRowClick }) {
     {
       columns,
       data,
-      initialState: { pageIndex: 0 },
+      initialState: { pageIndex: 0, pageSize:50},
       defaultColumn: { Filter: DefaultColumnFilter },
     },
     usePagination,

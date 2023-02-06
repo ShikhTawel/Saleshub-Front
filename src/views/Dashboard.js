@@ -81,6 +81,12 @@ const Dashboard = () => {
     )
   }
 
+  function logout() {
+    localStorage.removeItem("username")
+    localStorage.removeItem("role")
+    window.location.href = "/"
+  }
+
   //filter function to filter the data if the number greater than 0
 
   // eslint-disable-next-line no-unused-vars
@@ -199,7 +205,7 @@ const Dashboard = () => {
       },
 
       Filter: AnotherSelectColumnFilter,
-    }
+    },
   ]
   if (localStorage.getItem('role') === 'Supervisor') {
     return (
@@ -207,6 +213,7 @@ const Dashboard = () => {
         <div className={' bg-gray-50 w-full min-h-screen f-col-center'}>
           <div className={'bg-orient-500 p-3 f-col-center text-white w-full'}>
             <span>Fawry Merchant System</span>
+            <FButton  onClick={() => logout()}>Logout</FButton>
           </div>
           <div className={'w-full'}>
             <Supervisor />
@@ -261,6 +268,7 @@ const Dashboard = () => {
           <div className={' bg-gray-50 w-full min-h-screen f-col-center'}>
             <div className={'bg-orient-500 p-3 f-col-center text-white w-full'}>
               <span>Fawry Merchant System</span>
+              <FButton  onClick={() => logout()}>Logout</FButton>
             </div>
             <div className={'p-5 w-full'}>
               <div

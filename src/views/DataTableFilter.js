@@ -67,10 +67,11 @@ function Table({ columns, data, onRowClick }) {
     setPageSize,
     state: { pageIndex, pageSize },
   } = useTable(
+    
     {
       columns,
       data,
-      initialState: { pageIndex: 0 },
+      initialState: { pageIndex: 0, pageSize:50 },
       defaultColumn, // Be sure to pass the defaultColumn option
     },
     useFilters, // useFilters!
@@ -180,6 +181,7 @@ function Table({ columns, data, onRowClick }) {
           className={
             ' w-5/12 rounded border border-gray-300 p-1.5 text-sm  shadow-sm ring-orient-400 focus:border focus:border-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2'
           }
+          
           value={pageSize}
           onChange={(e) => {
             setPageSize(Number(e.target.value))
