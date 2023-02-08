@@ -312,13 +312,13 @@ const Dashboard = () => {
                           'flex flex-col gap-1 divide-y border rounded bg-gray-100 border-dashed  '
                         }>
                         <p className={'text-left px-1'}>
-                          Target {item?.targetAmount}
+                          Target {item?.targetFormmated}
                         </p>{' '}
                         <p className={'text-left px-1'}>
-                          Achieved {item?.achievedAmount}
+                          Achieved {item?.achievedWithPercentage}
                         </p>{' '}
                         <p className={'text-left px-1'}>
-                          Expected Achieved {item?.expectedAchieved}
+                          Expected Achieved {item?.expectedWithPercentage}
                         </p>
                       </div>
                     </div>

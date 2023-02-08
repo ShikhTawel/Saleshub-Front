@@ -19,6 +19,11 @@ const Supervisor = () => {
     url: `/Supervisor/merchants/${localStorage.getItem('username')}`,
   })
 
+  const salesRepTargetAchievedResponse = useCustomAxios({
+    method: 'GET',
+    url: `/Supervisor/targetAchieved/${localStorage.getItem('username')}`,
+  })
+
   function SelectColumnFilter({
     column: { filterValue, setFilter, preFilteredRows, id },
   }) {
@@ -285,11 +290,51 @@ const Supervisor = () => {
     return (
       <>
         <div className={'p-5'}>
-          <div className={'border primary-shadow p-1 bg-white rounded'}>
-            <span className={'text-2xl font-bold'}>المشرف: </span>
-            <span className={'text-2xl font-bold'}>
-              {localStorage.getItem('username')}
-            </span>
+          <div className={'p-5 w-full'}>
+            <div
+              className={
+                'flex w-full  justify-between gap-2 p-3 gap-5  items-start bg-white border primary-shadow rounded mt-5 '
+              }>
+              <div className={'flex gap-2 items-center '}>
+                <div className={'flex flex-col '}>
+                  <span className={'text-lg'}>
+                    <div
+                      className={'border primary-shadow p-1 bg-white rounded'}>
+                      <span className={'text-2xl font-bold'}>المشرف: </span>
+                      <span className={'text-2xl font-bold'}>
+                        {localStorage.getItem('username')}
+                      </span>
+                    </div>
+                  </span>
+                </div>
+              </div>
+              {salesRepTargetAchievedResponse.response.map((item, index) => {
+                return (
+                  <div
+                    style={{
+                      direction: 'ltr',
+                    }}
+                    key={index}
+                    className={'flex flex-col gap-2 items-start '}>
+                    <span className={'text-lg'}>{item?.serviceName}</span>
+                    <div
+                      className={
+                        'flex flex-col gap-1 divide-y border rounded bg-gray-100 border-dashed  '
+                      }>
+                      <p className={'text-left px-1'}>
+                        Target {item?.targetFormmated}
+                      </p>{' '}
+                      <p className={'text-left px-1'}>
+                        Achieved {item?.achievedWithPercentage}
+                      </p>{' '}
+                      <p className={'text-left px-1'}>
+                        Expected Achieved {item?.expectedWithPercentage}
+                      </p>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
           </div>
           <DetailsModal
             merchantData={merchantData}
