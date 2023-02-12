@@ -26,10 +26,11 @@
     "reactstrap": "^9.1.5",
     "recharts": "^2.1.16",
     "web-vitals": "^2.1.4",
+    "xlsx": "^0.18.5",
     "yup": "^0.32.11"
   },
   "scripts": {
-    "start": "export PORT=7065 && react-scripts start",
+    "start": "set PORT=7065 && react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",

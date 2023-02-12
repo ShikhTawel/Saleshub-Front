@@ -5,6 +5,7 @@ import logo from '../assets/images/logo.jpg'
 import DataTableFilter from './DataTableFilter'
 import DetailsModal from './DetailsModal'
 import { useState } from 'react'
+import ESpinnerBig from '../components/ESpinnerBig'
 
 const Supervisor = () => {
   const [merchantData, setMerchantData] = useState('')
@@ -285,7 +286,13 @@ const Supervisor = () => {
   }, [])
 
   if (loading || merchantsResponse.loading) {
-    return <span>Loading</span>
+    return (
+      <>
+        <span>
+          <ESpinnerBig isVisible={true} />
+        </span>
+      </>
+    )
   } else {
     return (
       <>

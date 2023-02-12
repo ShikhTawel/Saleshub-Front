@@ -32,27 +32,39 @@ const DetailsModal = ({ isOpen, setIsOpen, merchantData }) => {
       ]
     }
     setGraphDataPlot(graphData)
-    console.log({ graphData })
   }
   useEffect(() => {
     setLoading(true)
     if (merchantData) {
-      axiosInstance
-        .get(
-          `Merchant/ServiceTransactions/` +
-            projection +
-            `/` +
-            merchantData.code +
-            `/` +
-            duration,
+      if (sessionStorage.getItem(projection + merchantData.code + duration)) {
+        console.log( JSON.parse(sessionStorage.getItem(projection + merchantData.code + duration)));
+        handleGraph(
+          JSON.parse(sessionStorage.getItem(projection + merchantData.code + duration)),
         )
-        .then((response) => {
-          handleGraph(response.data.transactions)
-          setLoading(false)
-        })
-        .catch(() => {
-          setLoading(false)
-        })
+        setLoading(false)
+      } else {
+        axiosInstance
+          .get(
+            `Merchant/ServiceTransactions/` +
+              projection +
+              `/` +
+              merchantData.code +
+              `/` +
+              duration,
+          )
+          .then((response) => {
+            handleGraph(response.data.transactions)
+            console.log(response.data.transactions);
+            sessionStorage.setItem(
+              projection + merchantData.code + duration,
+              JSON.stringify(response.data.transactions),
+            )
+            setLoading(false)
+          })
+          .catch(() => {
+            setLoading(false)
+          })
+      }
     }
   }, [merchantData, projection, duration])
 
