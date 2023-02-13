@@ -4,6 +4,9 @@ import Salesrep from './Salesrep'
 import Header from './Header'
 
 const Dashboard = () => {
+  if(!localStorage.getItem('username'))
+    window.location.href = '/'
+
   if (localStorage.getItem('role') === 'Supervisor') {
     return (
       <>
