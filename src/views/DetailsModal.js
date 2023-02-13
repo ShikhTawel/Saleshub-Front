@@ -36,10 +36,23 @@ const DetailsModal = ({ isOpen, setIsOpen, merchantData }) => {
   useEffect(() => {
     setLoading(true)
     if (merchantData) {
-      if (sessionStorage.getItem(projection + merchantData.code + duration)) {
-        console.log( JSON.parse(sessionStorage.getItem(projection + merchantData.code + duration)));
+      if (
+        sessionStorage.getItem(
+          projection +
+            merchantData.code +
+            duration +
+            new Date().toLocaleDateString(),
+        )
+      ) {
         handleGraph(
-          JSON.parse(sessionStorage.getItem(projection + merchantData.code + duration)),
+          JSON.parse(
+            sessionStorage.getItem(
+              projection +
+                merchantData.code +
+                duration +
+                new Date().toLocaleDateString(),
+            ),
+          ),
         )
         setLoading(false)
       } else {
@@ -54,9 +67,12 @@ const DetailsModal = ({ isOpen, setIsOpen, merchantData }) => {
           )
           .then((response) => {
             handleGraph(response.data.transactions)
-            console.log(response.data.transactions);
+            console.log(response.data.transactions)
             sessionStorage.setItem(
-              projection + merchantData.code + duration,
+              projection +
+                merchantData.code +
+                duration +
+                new Date().toLocaleDateString(),
               JSON.stringify(response.data.transactions),
             )
             setLoading(false)

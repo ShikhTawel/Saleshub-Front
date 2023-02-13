@@ -11,19 +11,34 @@ const Supervisor = () => {
   const [merchantData, setMerchantData] = useState('')
   const [isModalOpen, setIsModalOpen] = useState(false)
 
-  const { loading, response } = useCustomAxios({
-    method: 'GET',
-    url: `/Supervisor/reps/${localStorage.getItem('username')}`,
-  })
-  const merchantsResponse = useCustomAxios({
-    method: 'GET',
-    url: `/Supervisor/merchants/${localStorage.getItem('username')}`,
-  })
+  const { loading, response } = useCustomAxios(
+    {
+      method: 'GET',
+      url: `/Supervisor/reps/${localStorage.getItem('username')}`,
+    },
+    localStorage.getItem('username') +
+      '+reps+' +
+      new Date().toLocaleDateString(),
+  )
+  const merchantsResponse = useCustomAxios(
+    {
+      method: 'GET',
+      url: `/Supervisor/merchants/${localStorage.getItem('username')}`,
+    },
+    localStorage.getItem('username') +
+      '+merchants+' +
+      new Date().toLocaleDateString(),
+  )
 
-  const salesRepTargetAchievedResponse = useCustomAxios({
-    method: 'GET',
-    url: `/Supervisor/targetAchieved/${localStorage.getItem('username')}`,
-  })
+  const salesRepTargetAchievedResponse = useCustomAxios(
+    {
+      method: 'GET',
+      url: `/Supervisor/targetAchieved/${localStorage.getItem('username')}`,
+    },
+    localStorage.getItem('username') +
+      '+targetAchieved+' +
+      new Date().toLocaleDateString(),
+  )
 
   function SelectColumnFilter({
     column: { filterValue, setFilter, preFilteredRows, id },

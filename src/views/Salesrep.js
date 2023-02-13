@@ -11,6 +11,41 @@ import DataTableFilter from './DataTableFilter'
 import ESpinnerBig from '../components/ESpinnerBig'
 
 const Salesrep = () => {
+  // eslint-disable-next-line no-unused-vars
+  const [merchantData, setMerchantData] = useState('')
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isLocationModalOpen, setIsLocationModalOpen] = useState(false)
+
+  const { loading, response } = useCustomAxios(
+    {
+      method: 'GET',
+      url: `SalesRep/${localStorage.getItem('username')}/merchants/`,
+    },
+    localStorage.getItem('username') +
+      '+merchants+' +
+      new Date().toLocaleDateString(),
+  )
+
+  const salesRepMerchantsCountResponse = useCustomAxios(
+    {
+      method: 'GET',
+      url: `SalesRep/${localStorage.getItem('username')}/merchantsNumber`,
+    },
+    localStorage.getItem('username') +
+      '+merchantsNumber+' +
+      new Date().toLocaleDateString(),
+  )
+
+  const salesRepTargetAchievedResponse = useCustomAxios(
+    {
+      method: 'GET',
+      url: `SalesRep/targetAchieved/${localStorage.getItem('username')}`,
+    },
+    localStorage.getItem('username') +
+      '+targetAchieved+' +
+      new Date().toLocaleDateString(),
+  )
+
   function SelectColumnFilter({
     column: { filterValue, setFilter, preFilteredRows, id },
   }) {
@@ -44,7 +79,9 @@ const Salesrep = () => {
     )
   }
 
-  function PerformanceIndicatorsColumnFilter({ column: { filterValue, setFilter } }) {
+  function PerformanceIndicatorsColumnFilter({
+    column: { filterValue, setFilter },
+  }) {
     return (
       <select
         className={
@@ -79,27 +116,6 @@ const Salesrep = () => {
       </select>
     )
   }
-
-  //filter function to filter the data if the number greater than 0
-
-  // eslint-disable-next-line no-unused-vars
-  const [merchantData, setMerchantData] = useState('')
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [isLocationModalOpen, setIsLocationModalOpen] = useState(false)
-
-  const { loading, response } = useCustomAxios({
-    method: 'GET',
-    url: `SalesRep/${localStorage.getItem('username')}/merchants/`,
-  })
-  const salesRepMerchantsCountResponse = useCustomAxios({
-    method: 'GET',
-    url: `SalesRep/${localStorage.getItem('username')}/merchantsNumber`,
-  })
-
-  const salesRepTargetAchievedResponse = useCustomAxios({
-    method: 'GET',
-    url: `SalesRep/targetAchieved/${localStorage.getItem('username')}`,
-  })
 
   const cols = [
     {
