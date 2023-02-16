@@ -18,10 +18,7 @@ export const useCustomAxios = (axiosParams, cacheKey) => {
   const [loading, setloading] = useState(true)
 
   const fetchData = async (params) => {
-    console.log(cacheKey)
-    console.log(JSON.parse(sessionStorage.getItem(cacheKey)))
     if (cacheKey in sessionStorage) {
-      console.log('Exists')
       setResponse(JSON.parse(sessionStorage.getItem(cacheKey)))
       setloading(false)
     } else {

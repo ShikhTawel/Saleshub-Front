@@ -8,6 +8,7 @@ import { axiosInstance } from '../api/requister'
 import ESpinner from '../components/ESpinner'
 import FLabel from '../components/FLabel'
 import FInputField from '../components/FInputField'
+// import DatePicker from 'react-datepicker'
 
 const products = ['AIRTIME', 'BILLS', 'cash_in_B2B_MFI', 'Cash_Out_Acceptance']
 
@@ -16,6 +17,8 @@ const DetailsModal = ({ isOpen, setIsOpen, merchantData }) => {
   const [graphDataPlot, setGraphDataPlot] = useState([])
   const [loading, setLoading] = useState(false)
   const [duration, setDuration] = useState('day')
+  // const [startDate, setStartDate] = useState(new Date())
+  // const [endDate, setEndDate] = useState(new Date())
 
   const handleGraph = (graphResponse) => {
     let graphData = []
@@ -95,6 +98,21 @@ const DetailsModal = ({ isOpen, setIsOpen, merchantData }) => {
           setGraphDataPlot([])
         }}>
         <div className="flex flex-col">
+          {/* <div className="grid gap-3 my-3 grid-cols-4 border border rounded bg-gray-50 primary-shadow p-3">
+            Start Date{' '}
+            <DatePicker
+              showIcon
+              selected={startDate}
+              onChange={(date) => setStartDate(date)}
+            />
+            End Date{' '}
+            <DatePicker
+              showIcon
+              selected={endDate}
+              onChange={(date) => setEndDate(date)}
+            />
+            <FButton>Submit Filter</FButton>
+          </div> */}
           <div className="grid gap-3 my-3 grid-cols-4 border border rounded bg-gray-50 primary-shadow p-3">
             <InstanceViewer
               instance={'Merchant Code'}
