@@ -17,7 +17,6 @@ const FModal = ({
   function closeModal() {
     console.log(">>>")
     isDismissible && setIsOpen(false)
-    console.log("callbackFunction", callbackFunction)
     callbackFunction && callbackFunction()
   }
 

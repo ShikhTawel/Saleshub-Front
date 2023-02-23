@@ -79,6 +79,10 @@ const Supervisor = () => {
       accessor: 'name', // String-based value accessors!
     },
     {
+      Header: 'POS',
+      accessor: 'numberOfPOS', // String-based value accessors!
+    },
+    {
       Header: 'target',
       accessor: 'target', // String-based value accessors!
     },

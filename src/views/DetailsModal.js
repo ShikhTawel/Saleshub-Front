@@ -8,7 +8,7 @@ import { axiosInstance } from '../api/requister'
 import ESpinner from '../components/ESpinner'
 import FLabel from '../components/FLabel'
 import FInputField from '../components/FInputField'
-// import DatePicker from 'react-datepicker'
+import { format } from 'date-fns'
 
 const products = ['AIRTIME', 'BILLS', 'cash_in_B2B_MFI', 'Cash_Out_Acceptance']
 
@@ -17,8 +17,9 @@ const DetailsModal = ({ isOpen, setIsOpen, merchantData }) => {
   const [graphDataPlot, setGraphDataPlot] = useState([])
   const [loading, setLoading] = useState(false)
   const [duration, setDuration] = useState('day')
-  // const [startDate, setStartDate] = useState(new Date())
-  // const [endDate, setEndDate] = useState(new Date())
+  let [startDate, setStartDate] = useState('2022-01-01')
+  let [endDate, setEndDate] = useState(format(new Date(), 'yyyy-MM-dd'))
+  let [reset, setReset] = useState(false)
 
   const handleGraph = (graphResponse) => {
     let graphData = []
@@ -36,6 +37,84 @@ const DetailsModal = ({ isOpen, setIsOpen, merchantData }) => {
     }
     setGraphDataPlot(graphData)
   }
+
+  const resetDate = () => {
+    reset = true
+    setReset(true)
+    updateDataBasedOnDate()
+  }
+
+  const updateDataBasedOnDate = () => {
+    if (duration != 'day') return
+    if (startDate == '' || reset) {
+      startDate = '2022-01-01'
+      setStartDate('2022-01-01')
+    }
+    if (endDate == '' || reset) {
+      endDate = format(new Date(), 'yyyy-MM-dd')
+      setEndDate(format(new Date(), 'yyyy-MM-dd'))
+    }
+
+    reset = false
+    setReset(false)
+
+    console.log(startDate)
+    console.log(endDate)
+
+    setLoading(true)
+    if (merchantData) {
+      if (
+        sessionStorage.getItem(
+          projection +
+            merchantData.code +
+            startDate +
+            endDate +
+            new Date().toLocaleDateString(),
+        )
+      ) {
+        handleGraph(
+          JSON.parse(
+            sessionStorage.getItem(
+              projection +
+                merchantData.code +
+                startDate +
+                endDate +
+                new Date().toLocaleDateString(),
+            ),
+          ),
+        )
+        setLoading(false)
+      } else {
+        axiosInstance
+          .get(
+            `Merchant/ServiceTransactions/` +
+              projection +
+              `/` +
+              merchantData.code +
+              `/` +
+              startDate +
+              `/` +
+              endDate,
+          )
+          .then((response) => {
+            handleGraph(response.data.transactions)
+            sessionStorage.setItem(
+              projection +
+                merchantData.code +
+                startDate +
+                endDate +
+                new Date().toLocaleDateString(),
+              JSON.stringify(response.data.transactions),
+            )
+            setLoading(false)
+          })
+          .catch(() => {
+            setLoading(false)
+          })
+      }
+    }
+  }
+
   useEffect(() => {
     setLoading(true)
     if (merchantData) {
@@ -70,7 +149,6 @@ const DetailsModal = ({ isOpen, setIsOpen, merchantData }) => {
           )
           .then((response) => {
             handleGraph(response.data.transactions)
-            console.log(response.data.transactions)
             sessionStorage.setItem(
               projection +
                 merchantData.code +
@@ -95,24 +173,46 @@ const DetailsModal = ({ isOpen, setIsOpen, merchantData }) => {
         isOpen={isOpen}
         setIsOpen={setIsOpen}
         callbackFunction={() => {
-          setGraphDataPlot([])
+          handleGraph(
+            JSON.parse(
+              sessionStorage.getItem(
+                projection +
+                  merchantData.code +
+                  duration +
+                  new Date().toLocaleDateString(),
+              ),
+            ),
+          )
         }}>
         <div className="flex flex-col">
-          {/* <div className="grid gap-3 my-3 grid-cols-4 border border rounded bg-gray-50 primary-shadow p-3">
+          <div
+            className="grid gap-3 my-3 grid-cols-4 border border rounded bg-gray-50 primary-shadow p-3"
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
             Start Date{' '}
-            <DatePicker
-              showIcon
-              selected={startDate}
-              onChange={(date) => setStartDate(date)}
-            />
+            <input
+            value={startDate}
+              type="date"
+              onChange={(e) => {
+                e.preventDefault();
+                startDate = e.target.value
+                setStartDate(e.target.value)
+              }}></input>
             End Date{' '}
-            <DatePicker
-              showIcon
-              selected={endDate}
-              onChange={(date) => setEndDate(date)}
-            />
-            <FButton>Submit Filter</FButton>
-          </div> */}
+            <input
+              value={endDate}
+              type="date"
+              onChange={(e) => {
+                endDate = e.target.value
+                setEndDate(e.target.value)
+              }}></input>
+            <FButton onClick={updateDataBasedOnDate}>Submit Filter</FButton>
+            <FButton onClick={resetDate}>Reset</FButton>
+          </div>
+
           <div className="grid gap-3 my-3 grid-cols-4 border border rounded bg-gray-50 primary-shadow p-3">
             <InstanceViewer
               instance={'Merchant Code'}
