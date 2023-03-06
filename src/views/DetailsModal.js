@@ -9,10 +9,19 @@ import ESpinner from '../components/ESpinner'
 import FLabel from '../components/FLabel'
 import FInputField from '../components/FInputField'
 import { format } from 'date-fns'
+import { useCustomAxios } from '../Hooks/useAxios'
 
-const products = ['AIRTIME', 'BILLS', 'cash_in_B2B_MFI', 'Cash_Out_Acceptance']
 
 const DetailsModal = ({ isOpen, setIsOpen, merchantData }) => {
+
+  const products = useCustomAxios(
+    {
+      method: 'GET',
+      url: `/services`,
+    },
+    'services' + new Date().toLocaleDateString(),
+  )
+
   const [projection, selectedProjection] = useState('general')
   const [graphDataPlot, setGraphDataPlot] = useState([])
   const [loading, setLoading] = useState(false)
@@ -194,10 +203,10 @@ const DetailsModal = ({ isOpen, setIsOpen, merchantData }) => {
             }}>
             Start Date{' '}
             <input
-            value={startDate}
+              value={startDate}
               type="date"
               onChange={(e) => {
-                e.preventDefault();
+                e.preventDefault()
                 startDate = e.target.value
                 setStartDate(e.target.value)
               }}></input>
@@ -296,7 +305,7 @@ const DetailsModal = ({ isOpen, setIsOpen, merchantData }) => {
                   'my-4 w-full rounded border border-gray-300 p-1.5 text-sm  shadow-sm ring-orient-400 focus:border focus:border-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2'
                 }>
                 <option value={'general'}>General</option>
-                {products.map((serviceCategory, index) => (
+                {(products.response).map((serviceCategory, index) => (
                   <option key={index} value={serviceCategory}>
                     {serviceCategory}
                   </option>

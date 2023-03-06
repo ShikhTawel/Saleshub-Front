@@ -6,6 +6,7 @@ import DataTableFilter from './DataTableFilter'
 import DetailsModal from './DetailsModal'
 import { useState } from 'react'
 import ESpinnerBig from '../components/ESpinnerBig'
+import InstanceViewer from './InstanceViewer'
 
 const Supervisor = () => {
   const [merchantData, setMerchantData] = useState('')
@@ -37,6 +38,15 @@ const Supervisor = () => {
     },
     localStorage.getItem('username') +
       '+targetAchieved+' +
+      new Date().toLocaleDateString(),
+  )
+  const supervisorMerchantsCountResponse = useCustomAxios(
+    {
+      method: 'GET',
+      url: `/Supervisor/${localStorage.getItem('username')}/merchantsNumber`,
+    },
+    localStorage.getItem('username') +
+      '+merchantsNumber+' +
       new Date().toLocaleDateString(),
   )
 
@@ -75,36 +85,69 @@ const Supervisor = () => {
 
   const repsCols = React.useMemo(() => [
     {
-      Header: 'name',
+      Header: 'Name',
       accessor: 'name', // String-based value accessors!
     },
     {
       Header: 'POS',
+      width: 10,
       accessor: 'numberOfPOS', // String-based value accessors!
     },
     {
-      Header: 'target',
+      Header: 'Target',
       accessor: 'target', // String-based value accessors!
     },
     {
-      Header: 'achieved Total',
+      Header: 'Achieved Total',
       accessor: 'achievedTotal', // String-based value accessors!
     },
     {
-      Header: 'achieved Airtime',
+      Header: 'Achieved Airtime',
       accessor: 'achievedAirtime', // String-based value accessors!
     },
     {
-      Header: 'achieved Bills',
+      Header: 'Achieved Bills',
       accessor: 'achievedBills', // String-based value accessors!
     },
     {
-      Header: 'achieved Cash In',
+      Header: 'Achieved Utilities',
+      accessor: 'achievedUtilities', // String-based value accessors!
+    },
+    {
+      Header: 'Achieved Cash In',
       accessor: 'achievedCashIn', // String-based value accessors!
     },
     {
-      Header: 'achieved Cash Out',
+      Header: 'Achieved Cash Out',
       accessor: 'achievedCashOut', // String-based value accessors!
+    },
+    {
+      Header: 'Performance',
+      accessor: 'performaceIndicator', // String-based value accessors!
+      Cell: (row) => {
+        if (row.value == 'Good')
+          return (
+            <span
+              className={
+                'text-blue-500  px-3 text-xs font-medium border border-blue-500 rounded-full bg-blue-300'
+              }></span>
+          )
+        else if (row.value == 'Bad')
+          return (
+            <span
+              className={
+                'text-red-500  px-3 text-xs font-medium border border-red-500 rounded-full bg-red-100'
+              }></span>
+          )
+        else
+          return (
+            <span
+              className={
+                'text-green-500  px-3 text-xs font-medium border border-green-500 rounded-full bg-green-100'
+              }></span>
+          )
+      },
+      Filter: AnotherSelectColumnFilter,
     },
   ])
 
@@ -304,7 +347,11 @@ const Supervisor = () => {
     ]
   }, [])
 
-  if (loading || merchantsResponse.loading) {
+  if (
+    loading ||
+    merchantsResponse.loading ||
+    supervisorMerchantsCountResponse.loading
+  ) {
     return (
       <>
         <span>
@@ -330,6 +377,12 @@ const Supervisor = () => {
                       <span className={'text-2xl font-bold'}>
                         {localStorage.getItem('username')}
                       </span>
+                    </div>
+                    <div className={'flex gap-2'}>
+                      <InstanceViewer
+                        value={supervisorMerchantsCountResponse?.response}
+                        instance={'POS'}
+                      />
                     </div>
                   </span>
                 </div>
