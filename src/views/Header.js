@@ -5,6 +5,7 @@ const Header = () => {
   function logout() {
     localStorage.removeItem('username')
     localStorage.removeItem('role')
+    localStorage.removeItem('access_token')
     window.location.href = '/'
   }
 

@@ -16,11 +16,12 @@ import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { BASE_URL } from '../env'
 
-const Login = () => {
+const ResetPassword = () => {
   const [isLoginLoading, setIsLoginLoading] = useState(false)
   useState(false)
   const navigate = useNavigate()
 
+  //Add Storage Username instead of access_Token
   useEffect(() => {
     if (localStorage.getItem('access_token')) {
       return navigate('/dashboard')
@@ -29,44 +30,41 @@ const Login = () => {
 
   const Formik = useFormik({
     initialValues: {
-      usernameOrEmail: '',
-      password: '',
+      email: '',
+      oldPassword: '',
+      newPassword: '',
     },
+
     onSubmit: (values) => {
       setIsLoginLoading(true)
-      axios
-        .post(
-          // `${BASE_URL}checkUsername/${values.usernameOrEmail.toLowerCase()}`,
-          `${BASE_URL}auth/login`,
-          values,
-        )
-        .then((res) => {
-          setIsLoginLoading(false)
-          console.log(res);
-          let token = res.headers.get('Authorization')
-          console.log(token);
-          let tokenSplitted = token.split(" ")
-          console.log(tokenSplitted);
-          if (tokenSplitted[0] == 'Bearer')
-            localStorage.setItem('access_token', tokenSplitted[1])
-          localStorage.setItem('username', values.usernameOrEmail.toLowerCase())
-          localStorage.setItem('role', res.data)
-
-          navigate('Dashboard')
-        })
-        .catch((err) => {
-          console.log(err);
-          if (err.response.status == 308) {
-            localStorage.setItem('username', values.usernameOrEmail.toLowerCase())
-            navigate('Reset')
-          }
-          toast.error('Invalid credentials')
-          setIsLoginLoading(false)
-        })
+      console.log(values)
+      let newUserInfo = {
+        username: localStorage.getItem('username'),
+        password: values.oldPassword,
+        currentEmail: '',
+        newEmail: values.email,
+        newPassword: values.newPassword
+      }
+        axios
+          .post(
+            `${BASE_URL}auth/resetPassword`,
+            newUserInfo,
+          )
+          .then((res) => {
+            console.log(res);
+            setIsLoginLoading(false)
+            navigate('')
+          })
+          .catch((err) => {
+            console.log(err.response.data);
+            toast.error('Invalid credentials')
+            setIsLoginLoading(false);
+          })
     },
     validationSchema: Yup.object({
-      usernameOrEmail: Yup.string().required('Username Or Email is required'),
-      password: Yup.string().required('Password is required'),
+      email: Yup.string().required('Email is required'),
+      oldPassword: Yup.string().required('Old Password is required'),
+      newPassword: Yup.string().required('New Password is required'),
     }),
   })
 
@@ -89,46 +87,62 @@ const Login = () => {
         }>
         <img src={logo} alt={'watchdog_logo'} width={200} />
         <span className={'text-3xl text-gray-800 font-semibold mt-5'}>
-          Log in to your account
-        </span>
-        <span className={'text-sm text-gray-800 mt-4 mb-3'}>
-          Welcome back! Please enter your details.
+          Reset Password
         </span>
         <form noValidate onSubmit={Formik.handleSubmit} className={'w-4/12'}>
           <EFormWrapper className={'w-full'}>
-            <FLabel htmlFor={'usernameOrEmail'}>Username</FLabel>
+            <FLabel htmlFor={'email'}>ادخل البريد الالكتروني الخاص بك</FLabel>
             <FInputField
-              id={'usernameOrEmail'}
-              type={'usernameOrEmail'}
-              name={'usernameOrEmail'}
-              placeholder={'Enter Username'}
-              value={Formik.values.usernameOrEmail}
+              id={'email'}
+              type={'email'}
+              name={'email'}
+              placeholder={'Enter Email'}
+              value={Formik.values.email}
               onChange={Formik.handleChange}
               onBlur={Formik.handleBlur}
             />
 
             <EFormInvalidInput
               touched={Formik.touched}
-              FieldName={'usernameOrEmail'}
+              FieldName={'email'}
+              errors={Formik.errors}
+            />
+          </EFormWrapper>
+    
+          <EFormWrapper className={'w-full'}>
+            <FLabel htmlFor={'oldPassword'}>كلمة المرور الحالية</FLabel>
+            <FInputField
+              id={'oldPassword'}
+              type={'oldPassword'}
+              name={'oldPassword'}
+              placeholder={'Enter Old Password'}
+              value={Formik.values.oldPassword}
+              onChange={Formik.handleChange}
+              onBlur={Formik.handleBlur}
+            />
+
+            <EFormInvalidInput
+              touched={Formik.touched}
+              FieldName={'oldPassword'}
               errors={Formik.errors}
             />
           </EFormWrapper>
           <EFormWrapper className={'w-full'}>
             <div className={'flex gap-2 justify-between'}>
-              <FLabel htmlFor={'password'}>Password</FLabel>
+              <FLabel htmlFor={'newPassword'}>كلمة المرور الجديدة</FLabel>
             </div>
             <FInputField
-              type={'password'}
-              name={'password'}
-              id={'password'}
-              placeholder={'Enter password'}
-              value={Formik.values.password}
+              type={'newPassword'}
+              name={'newPassword'}
+              id={'newPassword'}
+              placeholder={'Enter New Password'}
+              value={Formik.values.newPassword}
               onChange={Formik.handleChange}
               onBlur={Formik.handleBlur}
             />
             <EFormInvalidInput
               touched={Formik.touched}
-              FieldName={'password'}
+              FieldName={'newPassword'}
               errors={Formik.errors}
             />
           </EFormWrapper>
@@ -136,7 +150,7 @@ const Login = () => {
             <FButton className={'w-full mt-1'} type={'submit'}>
               <FIconWrapper>
                 <ESpinner isVisible={isLoginLoading} />
-                <span className={'text-xs'}>Login</span>
+                <span className={'text-xs'}>Update Password</span>
               </FIconWrapper>
             </FButton>
           </EFormWrapper>
@@ -147,4 +161,4 @@ const Login = () => {
   )
 }
 
-export default Login
+export default ResetPassword

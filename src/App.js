@@ -3,6 +3,8 @@ import './App.css'
 import { HashRouter, Route, Routes } from 'react-router-dom'
 import Dashboard from './views/Dashboard'
 import Login from './views/Login'
+import ResetPassword from './views/ResetPassword'
+import VerifyPassword from './views/VerifyPassword'
 
 function App() {
   // var hours = 12 // to clear the localStorage after 1 hour
@@ -25,6 +27,8 @@ function App() {
       <Routes>
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/" element={<Login />} />
+        <Route path="/reset" element={<ResetPassword />} />
+        <Route path="/auth/verify" element={<VerifyPassword />} />
       </Routes>
     </HashRouter>
   )

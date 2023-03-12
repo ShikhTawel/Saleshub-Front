@@ -67,9 +67,6 @@ const DetailsModal = ({ isOpen, setIsOpen, merchantData }) => {
     reset = false
     setReset(false)
 
-    console.log(startDate)
-    console.log(endDate)
-
     setLoading(true)
     if (merchantData) {
       if (
