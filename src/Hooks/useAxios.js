@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { axiosInstance } from '../api/requister'
+import { BASE_URL } from '../env'
 
-axios.defaults.baseURL = 'https://jsonplaceholder.typicode.com'
+axios.defaults.baseURL = BASE_URL
+axios.defaults.headers.common['Authorization'] = localStorage.getItem('access_token');
 
 /**
  fixed :

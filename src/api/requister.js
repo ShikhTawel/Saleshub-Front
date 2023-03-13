@@ -4,9 +4,18 @@ import { BASE_URL } from '../env'
 export const axiosInstance = axios.create({
   baseURL: BASE_URL,
   headers: {
+    'Authorization': localStorage.getItem(`access_token`),
     'Content-Type': 'application/json',
-    'Authorization': localStorage.getItem('access_token'),
   },
+})
+
+axiosInstance.interceptors.request.use(function (config) {
+
+  const token = localStorage.getItem(`access_token`)
+  if(token != null)
+    config.headers.Authorization = token
+  // config.headers.ContentType = 'application/json'
+  return config
 })
 
 axiosInstance.interceptors.response.use(
@@ -23,8 +32,8 @@ axiosInstance.interceptors.response.use(
     }
 
     if (error.response.status === 403) {
-      localStorage.removeItem('access_token')
-      window.location.replace('/forbidden')
+      // localStorage.removeItem('access_token')
+      // window.location.replace('/forbidden')
     }
     /* if (error.response.status === 500) {
       console.log("Access Denied")

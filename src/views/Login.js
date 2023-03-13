@@ -44,11 +44,8 @@ const Login = () => {
           setIsLoginLoading(false)
           console.log(res);
           let token = res.headers.get('Authorization')
-          console.log(token);
-          let tokenSplitted = token.split(" ")
-          console.log(tokenSplitted);
-          if (tokenSplitted[0] == 'Bearer')
-            localStorage.setItem('access_token', tokenSplitted[1])
+    
+          localStorage.setItem('access_token', token)
           localStorage.setItem('username', values.usernameOrEmail.toLowerCase())
           localStorage.setItem('role', res.data)
 
