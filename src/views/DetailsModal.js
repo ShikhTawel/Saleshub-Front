@@ -10,10 +10,9 @@ import FLabel from '../components/FLabel'
 import FInputField from '../components/FInputField'
 import { format } from 'date-fns'
 import { useCustomAxios } from '../Hooks/useAxios'
-
+import { subMonths } from 'date-fns'
 
 const DetailsModal = ({ isOpen, setIsOpen, merchantData }) => {
-
   const products = useCustomAxios(
     {
       method: 'GET',
@@ -26,7 +25,9 @@ const DetailsModal = ({ isOpen, setIsOpen, merchantData }) => {
   const [graphDataPlot, setGraphDataPlot] = useState([])
   const [loading, setLoading] = useState(false)
   const [duration, setDuration] = useState('day')
-  let [startDate, setStartDate] = useState('2022-01-01')
+  let [startDate, setStartDate] = useState(
+    format(subMonths(new Date(), 3), 'yyyy-MM-dd'),
+  )
   let [endDate, setEndDate] = useState(format(new Date(), 'yyyy-MM-dd'))
   let [reset, setReset] = useState(false)
 
@@ -56,8 +57,8 @@ const DetailsModal = ({ isOpen, setIsOpen, merchantData }) => {
   const updateDataBasedOnDate = () => {
     if (duration != 'day') return
     if (startDate == '' || reset) {
-      startDate = '2022-01-01'
-      setStartDate('2022-01-01')
+      startDate = format(subMonths(new Date(), 3), 'yyyy-MM-dd')
+      setStartDate(format(subMonths(new Date(), 3), 'yyyy-MM-dd'))
     }
     if (endDate == '' || reset) {
       endDate = format(new Date(), 'yyyy-MM-dd')
@@ -73,6 +74,7 @@ const DetailsModal = ({ isOpen, setIsOpen, merchantData }) => {
         sessionStorage.getItem(
           projection +
             merchantData.code +
+            duration +
             startDate +
             endDate +
             new Date().toLocaleDateString(),
@@ -83,6 +85,7 @@ const DetailsModal = ({ isOpen, setIsOpen, merchantData }) => {
             sessionStorage.getItem(
               projection +
                 merchantData.code +
+                duration +
                 startDate +
                 endDate +
                 new Date().toLocaleDateString(),
@@ -91,22 +94,21 @@ const DetailsModal = ({ isOpen, setIsOpen, merchantData }) => {
         )
         setLoading(false)
       } else {
+        let serviceTransactionsRequestDto = {
+          serviceName: projection,
+          merchantId: merchantData.code,
+          filter: duration,
+          startDate: startDate,
+          endDate: endDate,
+        }
         axiosInstance
-          .get(
-            `Merchant/ServiceTransactions/` +
-              projection +
-              `/` +
-              merchantData.code +
-              `/` +
-              startDate +
-              `/` +
-              endDate,
-          )
+          .post(`Merchant/ServiceTransactions`, serviceTransactionsRequestDto)
           .then((response) => {
             handleGraph(response.data.transactions)
             sessionStorage.setItem(
               projection +
                 merchantData.code +
+                duration +
                 startDate +
                 endDate +
                 new Date().toLocaleDateString(),
@@ -129,6 +131,8 @@ const DetailsModal = ({ isOpen, setIsOpen, merchantData }) => {
           projection +
             merchantData.code +
             duration +
+            startDate +
+            endDate +
             new Date().toLocaleDateString(),
         )
       ) {
@@ -138,27 +142,31 @@ const DetailsModal = ({ isOpen, setIsOpen, merchantData }) => {
               projection +
                 merchantData.code +
                 duration +
+                startDate +
+                endDate +
                 new Date().toLocaleDateString(),
             ),
           ),
         )
         setLoading(false)
       } else {
+        let serviceTransactionsRequestDto = {
+          serviceName: projection,
+          merchantId: merchantData.code,
+          filter: duration,
+          startDate: startDate,
+          endDate: endDate,
+        }
         axiosInstance
-          .get(
-            `Merchant/ServiceTransactions/` +
-              projection +
-              `/` +
-              merchantData.code +
-              `/` +
-              duration,
-          )
+          .post(`Merchant/ServiceTransactions`, serviceTransactionsRequestDto)
           .then((response) => {
             handleGraph(response.data.transactions)
             sessionStorage.setItem(
               projection +
                 merchantData.code +
                 duration +
+                startDate +
+                endDate +
                 new Date().toLocaleDateString(),
               JSON.stringify(response.data.transactions),
             )
@@ -185,6 +193,8 @@ const DetailsModal = ({ isOpen, setIsOpen, merchantData }) => {
                 projection +
                   merchantData.code +
                   duration +
+                  startDate +
+                  endDate +
                   new Date().toLocaleDateString(),
               ),
             ),
@@ -302,7 +312,7 @@ const DetailsModal = ({ isOpen, setIsOpen, merchantData }) => {
                   'my-4 w-full rounded border border-gray-300 p-1.5 text-sm  shadow-sm ring-orient-400 focus:border focus:border-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2'
                 }>
                 <option value={'general'}>General</option>
-                {(products.response).map((serviceCategory, index) => (
+                {products.response.map((serviceCategory, index) => (
                   <option key={index} value={serviceCategory}>
                     {serviceCategory}
                   </option>

@@ -36,13 +36,12 @@ const Login = () => {
       setIsLoginLoading(true)
       axios
         .post(
-          // `${BASE_URL}checkUsername/${values.usernameOrEmail.toLowerCase()}`,
           `${BASE_URL}auth/login`,
           values,
         )
         .then((res) => {
           setIsLoginLoading(false)
-          console.log(res);
+
           let token = res.headers.get('Authorization')
     
           localStorage.setItem('access_token', token)
@@ -53,12 +52,12 @@ const Login = () => {
         })
         .catch((err) => {
           console.log(err);
+          setIsLoginLoading(false)
           if (err.response.status == 308) {
             localStorage.setItem('username', values.usernameOrEmail.toLowerCase())
             navigate('Reset')
           }
           toast.error('Invalid credentials')
-          setIsLoginLoading(false)
         })
     },
     validationSchema: Yup.object({

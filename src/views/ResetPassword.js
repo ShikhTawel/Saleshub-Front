@@ -37,29 +37,32 @@ const ResetPassword = () => {
 
     onSubmit: (values) => {
       setIsLoginLoading(true)
-      console.log(values)
+      
       let newUserInfo = {
         username: localStorage.getItem('username'),
         password: values.oldPassword,
         currentEmail: '',
         newEmail: values.email,
-        newPassword: values.newPassword
+        newPassword: values.newPassword,
       }
-        axios
-          .post(
-            `${BASE_URL}auth/resetPassword`,
-            newUserInfo,
-          )
-          .then((res) => {
-            console.log(res);
-            setIsLoginLoading(false)
-            navigate('')
-          })
-          .catch((err) => {
-            console.log(err.response.data);
-            toast.error('Invalid credentials')
-            setIsLoginLoading(false);
-          })
+      axios
+        .post(`${BASE_URL}auth/resetPassword`, newUserInfo)
+        .then((res) => {
+          toast.info(res.data)
+          setIsLoginLoading(false)
+        })
+        .catch((err) => {
+          setIsLoginLoading(false)
+
+          if (err.response.data.errors) {
+            let errors = err.response.data.errors
+
+            for (let index = 0; index < errors.length; index++) {
+              const error = errors[index]
+              toast.error(error.message)
+            }
+          } else toast.error('Error Occurred')
+        })
     },
     validationSchema: Yup.object({
       email: Yup.string().required('Email is required'),
@@ -108,7 +111,7 @@ const ResetPassword = () => {
               errors={Formik.errors}
             />
           </EFormWrapper>
-    
+
           <EFormWrapper className={'w-full'}>
             <FLabel htmlFor={'oldPassword'}>كلمة المرور الحالية</FLabel>
             <FInputField

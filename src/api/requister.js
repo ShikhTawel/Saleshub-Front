@@ -32,8 +32,8 @@ axiosInstance.interceptors.response.use(
     }
 
     if (error.response.status === 403) {
-      // localStorage.removeItem('access_token')
-      // window.location.replace('/forbidden')
+      localStorage.removeItem('access_token')
+      window.location.replace('/login')
     }
     /* if (error.response.status === 500) {
       console.log("Access Denied")
