@@ -84,87 +84,19 @@ const Manager = () => {
       new Date().toLocaleDateString(),
   )
 
-  const repsCols = React.useMemo(() => [
+  const cols = React.useMemo(() => [
     {
       Header: 'Name',
       accessor: 'name', // String-based value accessors!
     },
     {
-      Header: 'Supervisor',
-      accessor: 'managerName', // String-based value accessors!
-      Filter: SelectColumnFilter,
+      Header: 'Target',
+      accessor: 'target', // String-based value accessors!
     },
     {
       Header: 'POS',
       accessor: 'numberOfPOS', // String-based value accessors!
       Filter: SelectColumnFilter,
-    },
-    {
-      Header: 'Target',
-      accessor: 'target', // String-based value accessors!
-    },
-    {
-      Header: 'Achieved Total',
-      accessor: 'achievedTotal', // String-based value accessors!
-    },
-    {
-      Header: 'Achieved Airtime',
-      accessor: 'achievedAirtime', // String-based value accessors!
-    },
-    {
-      Header: 'Achieved Bills',
-      accessor: 'achievedBills', // String-based value accessors!
-    },
-    {
-      Header: 'Achieved Utilities',
-      accessor: 'achievedUtilities', // String-based value accessors!
-    },
-    {
-      Header: 'Achieved Cash In',
-      accessor: 'achievedCashIn', // String-based value accessors!
-    },
-    {
-      Header: 'Achieved Cash Out',
-      accessor: 'achievedCashOut', // String-based value accessors!
-    },
-    {
-      Header: 'Performance',
-      accessor: 'performaceIndicator', // String-based value accessors!
-      Cell: (row) => {
-        if (row.value == 'Good')
-          return (
-            <span
-              className={
-                'text-blue-500  px-3 text-xs font-medium border border-blue-500 rounded-full bg-blue-300'
-              }></span>
-          )
-        else if (row.value == 'Bad')
-          return (
-            <span
-              className={
-                'text-red-500  px-3 text-xs font-medium border border-red-500 rounded-full bg-red-100'
-              }></span>
-          )
-        else
-          return (
-            <span
-              className={
-                'text-green-500  px-3 text-xs font-medium border border-green-500 rounded-full bg-green-100'
-              }></span>
-          )
-      },
-      Filter: AnotherSelectColumnFilter,
-    },
-  ])
-
-  const supervisorsCols = React.useMemo(() => [
-    {
-      Header: 'Name',
-      accessor: 'name', // String-based value accessors!
-    },
-    {
-      Header: 'Target',
-      accessor: 'target', // String-based value accessors!
     },
     {
       Header: 'Achieved Total',
@@ -309,11 +241,11 @@ const Manager = () => {
           </div>
           <SectionTitle title={'المشرفين'} />
           <DataTableFilter
-            columns={supervisorsCols}
+            columns={cols}
             data={supervisorsResponse.response}
           />
           <SectionTitle title={'المناديب'} />
-          <DataTableFilter columns={repsCols} data={response} />
+          <DataTableFilter columns={cols} data={response} />
           {/* <div
             className={
               'flex w-full  justify-center gap-2 p-3 gap-5  items-start bg-white border primary-shadow rounded mt-5 '

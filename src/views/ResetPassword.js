@@ -30,7 +30,6 @@ const ResetPassword = () => {
 
   const Formik = useFormik({
     initialValues: {
-      email: '',
       oldPassword: '',
       newPassword: '',
     },
@@ -41,14 +40,13 @@ const ResetPassword = () => {
       let newUserInfo = {
         username: localStorage.getItem('username'),
         password: values.oldPassword,
-        currentEmail: '',
-        newEmail: values.email,
         newPassword: values.newPassword,
       }
       axios
         .post(`${BASE_URL}auth/resetPassword`, newUserInfo)
         .then((res) => {
-          toast.info(res.data)
+          console.log(res);
+          toast.info(res.data.message)
           setIsLoginLoading(false)
         })
         .catch((err) => {
@@ -65,7 +63,6 @@ const ResetPassword = () => {
         })
     },
     validationSchema: Yup.object({
-      email: Yup.string().required('Email is required'),
       oldPassword: Yup.string().required('Old Password is required'),
       newPassword: Yup.string().required('New Password is required'),
     }),
@@ -93,25 +90,6 @@ const ResetPassword = () => {
           Reset Password
         </span>
         <form noValidate onSubmit={Formik.handleSubmit} className={'w-4/12'}>
-          <EFormWrapper className={'w-full'}>
-            <FLabel htmlFor={'email'}>ادخل البريد الالكتروني الخاص بك</FLabel>
-            <FInputField
-              id={'email'}
-              type={'email'}
-              name={'email'}
-              placeholder={'Enter Email'}
-              value={Formik.values.email}
-              onChange={Formik.handleChange}
-              onBlur={Formik.handleBlur}
-            />
-
-            <EFormInvalidInput
-              touched={Formik.touched}
-              FieldName={'email'}
-              errors={Formik.errors}
-            />
-          </EFormWrapper>
-
           <EFormWrapper className={'w-full'}>
             <FLabel htmlFor={'oldPassword'}>كلمة المرور الحالية</FLabel>
             <FInputField

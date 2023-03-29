@@ -35,15 +35,12 @@ const Login = () => {
     onSubmit: (values) => {
       setIsLoginLoading(true)
       axios
-        .post(
-          `${BASE_URL}auth/login`,
-          values,
-        )
+        .post(`${BASE_URL}auth/login`, values)
         .then((res) => {
           setIsLoginLoading(false)
 
           let token = res.headers.get('Authorization')
-    
+
           localStorage.setItem('access_token', token)
           localStorage.setItem('username', values.usernameOrEmail.toLowerCase())
           localStorage.setItem('role', res.data)
@@ -51,13 +48,22 @@ const Login = () => {
           navigate('Dashboard')
         })
         .catch((err) => {
-          console.log(err);
           setIsLoginLoading(false)
           if (err.response.status == 308) {
-            localStorage.setItem('username', values.usernameOrEmail.toLowerCase())
+            localStorage.setItem(
+              'username',
+              values.usernameOrEmail.toLowerCase(),
+            )
             navigate('Reset')
           }
-          toast.error('Invalid credentials')
+          if (err.response.data.errors != null && err.response.data.errors.length > 0)
+            for (
+              let index = 0;
+              index < err.response.data.errors.length;
+              index++
+            )
+              toast.error(err.response.data.errors[index].message)
+          else toast.error('Invalid credentials')
         })
     },
     validationSchema: Yup.object({
