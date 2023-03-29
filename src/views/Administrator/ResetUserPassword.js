@@ -16,6 +16,8 @@ import FButton from '../../components/FButton'
 import SideBar from '../../components/Layout/SideBar'
 
 const ResetUserPassword = () => {
+  if (!localStorage.getItem('access_token')) window.location.href = '/'
+
   const [isLoginLoading, setIsLoginLoading] = useState(false)
   const [isSideBarOpen, setIsSideBarOpen] = useState(false)
 

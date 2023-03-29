@@ -30,9 +30,9 @@ function App() {
       <Routes>
         <Route path="/dashboard" element={<Dashboard />} />
         
-        <Route path="/dashboard/reset-user-password" element={<ResetUserPassword />} />
-        <Route path="/dashboard/upload-data" element={<UploadData />} />
-        <Route path="/dashboard/remove-penalty" element={<RemovePenalty />} />
+        <Route path="/reset-user-password" element={<ResetUserPassword />} />
+        <Route path="/upload-data" element={<UploadData />} />
+        <Route path="/remove-penalty" element={<RemovePenalty />} />
 
         <Route path="/" element={<Login />} />
         <Route path="/reset" element={<ResetPassword />} />

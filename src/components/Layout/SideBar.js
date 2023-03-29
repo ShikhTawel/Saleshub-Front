@@ -74,21 +74,21 @@ const SideBar = ({ isSideBarOpen, setIsSideBarOpen, onClickOutside }) => {
             </FNavLink>
 
             
-            <FNavLink setIsSideBarOpen={setIsSideBarOpen} to={"/dashboard/reset-user-password"}>
+            <FNavLink setIsSideBarOpen={setIsSideBarOpen} to={"/reset-user-password"}>
               <FaRegUser size={25} />
               <span className={`text-sm ${isCollapse ? "hidden" : ""}`}>
                تغيير كلمة المرور
               </span>
             </FNavLink>
             
-            <FNavLink setIsSideBarOpen={setIsSideBarOpen} to={"/dashboard/upload-data"}>
+            <FNavLink setIsSideBarOpen={setIsSideBarOpen} to={"/upload-data"}>
               <FaFileExcel size={25} />
               <span className={`text-sm ${isCollapse ? "hidden" : ""}`}>
                رفع ملفات اكسل
               </span>
             </FNavLink>
 
-            <FNavLink setIsSideBarOpen={setIsSideBarOpen} to={"/dashboard/remove-penalty"}>
+            <FNavLink setIsSideBarOpen={setIsSideBarOpen} to={"/remove-penalty"}>
               <FaRegStopCircle size={25} />
               <span className={`text-sm ${isCollapse ? "hidden" : ""}`}>
                 الغاء مخالفة

@@ -16,6 +16,8 @@ import FButton from '../../components/FButton'
 import SideBar from '../../components/Layout/SideBar'
 
 const RemovePenalty = () => {
+  if (!localStorage.getItem('access_token')) window.location.href = '/'
+
   const [isSideBarOpen, setIsSideBarOpen] = useState(false)
   const [isLoginLoading, setIsLoginLoading] = useState(false)
 
