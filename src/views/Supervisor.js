@@ -31,7 +31,7 @@ const Supervisor = () => {
       new Date().toLocaleDateString(),
   )
 
-  const salesRepTargetAchievedResponse = useCustomAxios(
+  const supervisorTargetAchievedResponse = useCustomAxios(
     {
       method: 'GET',
       url: `/Supervisor/targetAchieved/${localStorage.getItem('username')}`,
@@ -47,6 +47,16 @@ const Supervisor = () => {
     },
     localStorage.getItem('username') +
       '+merchantsNumber+' +
+      new Date().toLocaleDateString(),
+  )
+
+  const supervisorPerformanceResponse = useCustomAxios(
+    {
+      method: 'GET',
+      url: `/Supervisor/performance/${localStorage.getItem('username')}`,
+    },
+    localStorage.getItem('username') +
+      '+performance+' +
       new Date().toLocaleDateString(),
   )
 
@@ -89,6 +99,34 @@ const Supervisor = () => {
       accessor: 'name', // String-based value accessors!
     },
     {
+      Header: 'Performance',
+      accessor: 'performaceIndicator', // String-based value accessors!
+      Cell: (row) => {
+        if (row.value == 'Good')
+          return (
+            <span
+              className={
+                'text-blue-500  px-3 text-xs font-medium border border-blue-500 rounded-full bg-blue-300'
+              }></span>
+          )
+        else if (row.value == 'Bad')
+          return (
+            <span
+              className={
+                'text-red-500  px-3 text-xs font-medium border border-red-500 rounded-full bg-red-100'
+              }></span>
+          )
+        else
+          return (
+            <span
+              className={
+                'text-green-500  px-3 text-xs font-medium border border-green-500 rounded-full bg-green-100'
+              }></span>
+          )
+      },
+      Filter: AnotherSelectColumnFilter,
+    },
+    {
       Header: 'POS',
       width: 10,
       accessor: 'numberOfPOS', // String-based value accessors!
@@ -121,34 +159,7 @@ const Supervisor = () => {
       Header: 'Achieved Cash Out',
       accessor: 'achievedCashOut', // String-based value accessors!
     },
-    {
-      Header: 'Performance',
-      accessor: 'performaceIndicator', // String-based value accessors!
-      Cell: (row) => {
-        if (row.value == 'Good')
-          return (
-            <span
-              className={
-                'text-blue-500  px-3 text-xs font-medium border border-blue-500 rounded-full bg-blue-300'
-              }></span>
-          )
-        else if (row.value == 'Bad')
-          return (
-            <span
-              className={
-                'text-red-500  px-3 text-xs font-medium border border-red-500 rounded-full bg-red-100'
-              }></span>
-          )
-        else
-          return (
-            <span
-              className={
-                'text-green-500  px-3 text-xs font-medium border border-green-500 rounded-full bg-green-100'
-              }></span>
-          )
-      },
-      Filter: AnotherSelectColumnFilter,
-    },
+    
   ])
 
   function AnotherSelectColumnFilter({ column: { filterValue, setFilter } }) {
@@ -384,10 +395,17 @@ const Supervisor = () => {
                         instance={'POS'}
                       />
                     </div>
+                    <div className={'flex gap-2'}>
+                      <InstanceViewer
+                        value={supervisorPerformanceResponse?.response}
+                        instance={'الاداء'}
+                      />
+                    </div>
+                    
                   </span>
                 </div>
               </div>
-              {salesRepTargetAchievedResponse.response.map((item, index) => {
+              {supervisorTargetAchievedResponse.response.map((item, index) => {
                 return (
                   <div
                     style={{

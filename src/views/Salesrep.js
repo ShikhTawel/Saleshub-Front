@@ -46,6 +46,16 @@ const Salesrep = () => {
       new Date().toLocaleDateString(),
   )
 
+  const salesRepPerformanceResponse = useCustomAxios(
+    {
+      method: 'GET',
+      url: `SalesRep/performance/${localStorage.getItem('username')}`,
+    },
+    localStorage.getItem('username') +
+      '+performance+' +
+      new Date().toLocaleDateString(),
+  )
+
   function SelectColumnFilter({
     column: { filterValue, setFilter, preFilteredRows, id },
   }) {
@@ -216,6 +226,7 @@ const Salesrep = () => {
       Filter: PerformanceIndicatorsColumnFilter,
     },
   ]
+
   if (loading) {
     return (
       <>
@@ -284,6 +295,7 @@ const Salesrep = () => {
                       value={salesRepMerchantsCountResponse?.response}
                       instance={'Merchants'}
                     />
+                    <InstanceViewer value={salesRepPerformanceResponse?.response} instance={'الاداء'} />
                   </div>
                   <span
                     onClick={() => {

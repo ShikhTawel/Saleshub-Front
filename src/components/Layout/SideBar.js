@@ -81,6 +81,13 @@ const SideBar = ({ isSideBarOpen, setIsSideBarOpen, onClickOutside }) => {
               </span>
             </FNavLink>
             
+            <FNavLink setIsSideBarOpen={setIsSideBarOpen} to={"/remove-user"}>
+              <FaRegStopCircle size={25} />
+              <span className={`text-sm ${isCollapse ? "hidden" : ""}`}>
+                حذف مستخدم
+              </span>
+            </FNavLink>
+            
             <FNavLink setIsSideBarOpen={setIsSideBarOpen} to={"/upload-data"}>
               <FaFileExcel size={25} />
               <span className={`text-sm ${isCollapse ? "hidden" : ""}`}>
@@ -88,12 +95,7 @@ const SideBar = ({ isSideBarOpen, setIsSideBarOpen, onClickOutside }) => {
               </span>
             </FNavLink>
 
-            <FNavLink setIsSideBarOpen={setIsSideBarOpen} to={"/remove-penalty"}>
-              <FaRegStopCircle size={25} />
-              <span className={`text-sm ${isCollapse ? "hidden" : ""}`}>
-                الغاء مخالفة
-              </span>
-            </FNavLink>
+            
 
             <FButton  onClick={() => logout()}  >
               <HiLogout style={{ minWidth: "15px" }} size={25} />

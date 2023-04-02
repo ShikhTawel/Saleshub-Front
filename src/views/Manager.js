@@ -11,7 +11,6 @@ import InstanceViewer from './InstanceViewer'
 
 const Manager = () => {
 
-
   function SelectColumnFilter({
     column: { filterValue, setFilter, preFilteredRows, id },
   }) {
@@ -44,6 +43,17 @@ const Manager = () => {
       </select>
     )
   }
+
+  const managerPerformanceResponse = useCustomAxios(
+    {
+      method: 'GET',
+      url: `/Manager/performance/${localStorage.getItem('username')}`,
+    },
+    localStorage.getItem('username') +
+      '+performance+' +
+      new Date().toLocaleDateString(),
+  )
+
 
   const { loading, response } = useCustomAxios(
     {
@@ -90,39 +100,6 @@ const Manager = () => {
       accessor: 'name', // String-based value accessors!
     },
     {
-      Header: 'Target',
-      accessor: 'target', // String-based value accessors!
-    },
-    {
-      Header: 'POS',
-      accessor: 'numberOfPOS', // String-based value accessors!
-      Filter: SelectColumnFilter,
-    },
-    {
-      Header: 'Achieved Total',
-      accessor: 'achievedTotal', // String-based value accessors!
-    },
-    {
-      Header: 'Achieved Airtime',
-      accessor: 'achievedAirtime', // String-based value accessors!
-    },
-    {
-      Header: 'Achieved Bills',
-      accessor: 'achievedBills', // String-based value accessors!
-    },
-    {
-      Header: 'Achieved Utilities',
-      accessor: 'achievedUtilities', // String-based value accessors!
-    },
-    {
-      Header: 'Achieved Cash In',
-      accessor: 'achievedCashIn', // String-based value accessors!
-    },
-    {
-      Header: 'Achieved Cash Out',
-      accessor: 'achievedCashOut', // String-based value accessors!
-    },
-    {
       Header: 'Performance',
       accessor: 'performaceIndicator', // String-based value accessors!
       Cell: (row) => {
@@ -150,6 +127,40 @@ const Manager = () => {
       },
       Filter: AnotherSelectColumnFilter,
     },
+    {
+      Header: 'POS',
+      accessor: 'numberOfPOS', // String-based value accessors!
+      Filter: SelectColumnFilter,
+    },
+    {
+      Header: 'Target',
+      accessor: 'target', // String-based value accessors!
+    },
+    {
+      Header: 'Achieved Total',
+      accessor: 'achievedTotal', // String-based value accessors!
+    },
+    {
+      Header: 'Achieved Airtime',
+      accessor: 'achievedAirtime', // String-based value accessors!
+    },
+    {
+      Header: 'Achieved Bills',
+      accessor: 'achievedBills', // String-based value accessors!
+    },
+    {
+      Header: 'Achieved Utilities',
+      accessor: 'achievedUtilities', // String-based value accessors!
+    },
+    {
+      Header: 'Achieved Cash In',
+      accessor: 'achievedCashIn', // String-based value accessors!
+    },
+    {
+      Header: 'Achieved Cash Out',
+      accessor: 'achievedCashOut', // String-based value accessors!
+    },
+    
   ])
 
   function AnotherSelectColumnFilter({ column: { filterValue, setFilter } }) {
@@ -206,6 +217,12 @@ const Manager = () => {
                       <InstanceViewer
                         value={managerMerchantsCountResponse?.response}
                         instance={'POS'}
+                      />
+                    </div>
+                    <div className={'flex gap-2'}>
+                      <InstanceViewer
+                        value={managerPerformanceResponse?.response}
+                        instance={'الاداء'}
                       />
                     </div>
                   </span>
