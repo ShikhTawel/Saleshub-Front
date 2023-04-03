@@ -5,12 +5,17 @@ import { BASE_URL } from '../../env'
 import { toast, ToastContainer } from 'react-toastify'
 import FIconWrapper from '../../components/FIconWrapper'
 import ESpinner from '../../components/ESpinner'
+import fromByteArrayToExcel from '../../Utilities/ToExcelConvertor'
+import * as FileSaver from 'file-saver'
+import axios from 'axios'
 
 const UploadData = () => {
   const [isSideBarOpen, setIsSideBarOpen] = useState(false)
+
   const [isLoading, SetIsLoading] = useState(false)
-  
   const [isUsersLoading, SetIsUsersLoading] = useState(false)
+  const [isTargetSampleLoading, SetIsTargetSampleLoading] = useState(false)
+  const [isUserSampleLoading, SetIsUserSampleLoading] = useState(false)
 
   const [selectedFile, setSelectedFile] = useState()
   const [selectedFileTarget, setSelectedFileTarget] = useState()
@@ -80,6 +85,61 @@ const UploadData = () => {
       })
       .catch((err) => {
         SetIsLoading(false)
+        if (err.response.data?.errors != null) {
+          let errors = err.response.data.errors
+
+          for (let index = 0; index < errors.length; index++) {
+            const error = errors[index]
+            toast.error(error.message)
+          }
+        } else toast.error('Error Occurred')
+      })
+  }
+
+  const exportSampleTarget = () => {
+    SetIsTargetSampleLoading(true)
+
+    axios
+      .get(`${BASE_URL}admin/exportSampleTarget`, {
+        headers: {
+          Authorization: localStorage.getItem(`access_token`),
+        },
+      })
+      .then((result) => {
+        SetIsTargetSampleLoading(false)
+        FileSaver.saveAs(fromByteArrayToExcel(result, 'Target-Sample'))
+      })
+      .catch((err) => {
+        SetIsTargetSampleLoading(false)
+
+        if (err.response.data.errors) {
+          let errors = err.response.data.errors
+
+          for (let index = 0; index < errors.length; index++) {
+            const error = errors[index]
+            toast.error(error.message)
+          }
+        } else toast.error('Error Occurred')
+      })
+  }
+
+  const exportSampleUser = () => {
+    SetIsUserSampleLoading(true)
+
+    axios
+      .get(`${BASE_URL}admin/exportSampleUsers`, {
+        headers: {
+          Authorization: localStorage.getItem(`access_token`),
+        },
+      })
+      .then((result) => {
+        SetIsUserSampleLoading(false)
+        FileSaver.saveAs(fromByteArrayToExcel(result, 'Users-Sample'))
+      })
+      .catch((err) => {
+        SetIsUserSampleLoading(false)
+
+        console.log(err)
         if (err.response.data.errors) {
           let errors = err.response.data.errors
 
@@ -138,6 +198,12 @@ const UploadData = () => {
               </FIconWrapper>
             </FButton>
           </div>
+          <FButton onClick={exportSampleTarget}>
+            <FIconWrapper>
+              <ESpinner isVisible={isTargetSampleLoading} />
+              <span className={'text-s'}>تحميل عينة من ملف التارجتس</span>
+            </FIconWrapper>
+          </FButton>
         </div>
         <div
           className={
@@ -156,6 +222,12 @@ const UploadData = () => {
               </FIconWrapper>
             </FButton>
           </div>
+          <FButton onClick={exportSampleUser}>
+            <FIconWrapper>
+              <ESpinner isVisible={isUserSampleLoading} />
+              <span className={'text-s'}>تحميل عينة من ملف المستخدمين</span>
+            </FIconWrapper>
+          </FButton>
         </div>
       </div>
     </>

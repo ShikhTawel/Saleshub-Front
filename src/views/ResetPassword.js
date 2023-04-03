@@ -48,6 +48,7 @@ const ResetPassword = () => {
           console.log(res);
           toast.info(res.data.message)
           setIsLoginLoading(false)
+          navigate('/')
         })
         .catch((err) => {
           setIsLoginLoading(false)
