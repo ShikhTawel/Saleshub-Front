@@ -87,11 +87,11 @@ const SideBar = ({ isSideBarOpen, setIsSideBarOpen, onClickOutside }) => {
                 حذف مستخدم
               </span>
             </FNavLink>
-            
+
             <FNavLink setIsSideBarOpen={setIsSideBarOpen} to={"/upload-data"}>
               <FaFileExcel size={25} />
               <span className={`text-sm ${isCollapse ? "hidden" : ""}`}>
-               رفع ملفات اكسل
+               ملفات الاكسل
               </span>
             </FNavLink>
 

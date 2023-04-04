@@ -60,6 +60,16 @@ const Supervisor = () => {
       new Date().toLocaleDateString(),
   )
 
+  const supervisorMerchantsClassesResponse = useCustomAxios(
+    {
+      method: 'GET',
+      url: `/Supervisor/merchantsClasses/${localStorage.getItem('username')}`,
+    },
+    localStorage.getItem('username') +
+      '+merchantsClasses+' +
+      new Date().toLocaleDateString(),
+  )
+
   function SelectColumnFilter({
     column: { filterValue, setFilter, preFilteredRows, id },
   }) {
@@ -159,7 +169,6 @@ const Supervisor = () => {
       Header: 'Achieved Cash Out',
       accessor: 'achievedCashOut', // String-based value accessors!
     },
-    
   ])
 
   function AnotherSelectColumnFilter({ column: { filterValue, setFilter } }) {
@@ -282,79 +291,10 @@ const Supervisor = () => {
                   'text-green-500  px-3 text-xs font-medium border border-green-500 rounded-full bg-green-100'
                 }></span>
             )
-          // return !row.value ? (
-          //   <span
-          //     className={
-          //       'text-green-500  px-3 text-xs font-medium border border-green-500 rounded-full bg-green-100'
-          //     }>
-          //     {' '}
-          //   </span>
-          // ) : (
-          //   <span
-          //     className={
-          //       'text-red-500  px-3 text-xs font-medium border border-red-500 rounded-full bg-red-100'
-          //     }></span>
-          // )
         },
 
         Filter: AnotherSelectColumnFilter,
       },
-      // {
-      //   Header: 'P3 (Cash In)',
-      //   accessor: 'performanceMonthlyFlagCashIn', // String-based value accessors!
-      //   Cell: (row) => {
-      //     if (row.value == 'Good')
-      //       return (
-      //         <span
-      //           className={
-      //             'text-green-500  px-3 text-xs font-medium border border-green-500 rounded-full bg-green-100'
-      //           }></span>
-      //       )
-      //     else if (row.value == 'Bad')
-      //       return (
-      //         <span
-      //           className={
-      //             'text-red-500  px-3 text-xs font-medium border border-red-500 rounded-full bg-red-100'
-      //           }></span>
-      //       )
-      //     else
-      //       return (
-      //         <span
-      //           className={
-      //             'text-yellow-500  px-3 text-xs font-medium border border-yellow-500 rounded-full bg-yellow-100'
-      //           }></span>
-      //       )
-      //   },
-      //   Filter: AnotherSelectColumnFilter,
-      // },
-      // {
-      //   Header: 'P4 (Cash Out)',
-      //   accessor: 'performanceMonthlyFlagCashOut', // String-based value accessors!
-      //   Cell: (row) => {
-      //     if (row.value == 'Good')
-      //       return (
-      //         <span
-      //           className={
-      //             'text-green-500  px-3 text-xs font-medium border border-green-500 rounded-full bg-green-100'
-      //           }></span>
-      //       )
-      //     else if (row.value == 'Bad')
-      //       return (
-      //         <span
-      //           className={
-      //             'text-red-500  px-3 text-xs font-medium border border-red-500 rounded-full bg-red-100'
-      //           }></span>
-      //       )
-      //     else
-      //       return (
-      //         <span
-      //           className={
-      //             'text-yellow-500  px-3 text-xs font-medium border border-yellow-500 rounded-full bg-yellow-100'
-      //           }></span>
-      //       )
-      //   },
-      //   Filter: AnotherSelectColumnFilter,
-      // },
     ]
   }, [])
 
@@ -401,7 +341,6 @@ const Supervisor = () => {
                         instance={'الاداء'}
                       />
                     </div>
-                    
                   </span>
                 </div>
               </div>
@@ -433,13 +372,52 @@ const Supervisor = () => {
               })}
             </div>
           </div>
+          <div className={'p-5 w-full'}>
+            <div
+              className={
+                'flex w-full  justify-between gap-2 p-3 gap-5  items-start bg-white border primary-shadow rounded mt-5 '
+              }>
+              <div className={'flex flex-col '}>
+                <span className={'text-lg'}>فئات التجار</span>
+              </div>
+              {supervisorMerchantsClassesResponse.response.map((item, index) => {
+                return (
+                  <div
+                    style={{
+                      direction: 'ltr',
+                    }}
+                    key={index}
+                    className={'flex flex-col gap-2 items-start '}>
+                    <span className={'text-lg'}>{item?.classType}</span>
+                    <div
+                      className={
+                        'flex flex-col gap-1 divide-y border rounded bg-gray-100 border-dashed  '
+                      }>
+                      <p className={'text-left px-1'}>Count {item?.count}</p>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
           <DetailsModal
             merchantData={merchantData}
             isOpen={isModalOpen}
             setIsOpen={setIsModalOpen}
           />
-          <SectionTitle title={'المبيعات'} />
-          <DataTableFilter columns={repsCols} data={response} />
+          <SectionTitle title={'المناديب'} />
+          <DataTableFilter
+            columns={repsCols}
+            data={response}
+            onRowClick={(row) => {
+              localStorage.setItem(
+                'username',
+                row.name.toLowerCase(),
+              )
+              localStorage.setItem('role', 'Rep')
+              window.location.reload();
+            }}
+          />
           <SectionTitle title={'التجار'} />
           <DataTableFilter
             columns={columns}

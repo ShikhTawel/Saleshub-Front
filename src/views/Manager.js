@@ -10,7 +10,6 @@ import InstanceViewer from './InstanceViewer'
 // const menu = ['mohamed.hm.mahmoud', 'mahmoud.hadad', 'baher.shehata']
 
 const Manager = () => {
-
   function SelectColumnFilter({
     column: { filterValue, setFilter, preFilteredRows, id },
   }) {
@@ -54,7 +53,6 @@ const Manager = () => {
       new Date().toLocaleDateString(),
   )
 
-
   const { loading, response } = useCustomAxios(
     {
       method: 'GET',
@@ -74,7 +72,7 @@ const Manager = () => {
       new Date().toLocaleDateString(),
   )
 
-  const salesRepTargetAchievedResponse = useCustomAxios(
+  const managerTargetAchievedResponse = useCustomAxios(
     {
       method: 'GET',
       url: `/Manager/targetAchieved/${localStorage.getItem('username')}`,
@@ -91,6 +89,16 @@ const Manager = () => {
     },
     localStorage.getItem('username') +
       '+merchantsNumber+' +
+      new Date().toLocaleDateString(),
+  )
+
+  const managerMerchantsClassesResponse = useCustomAxios(
+    {
+      method: 'GET',
+      url: `/Manager/merchantsClasses/${localStorage.getItem('username')}`,
+    },
+    localStorage.getItem('username') +
+      '+merchantsClasses+' +
       new Date().toLocaleDateString(),
   )
 
@@ -160,7 +168,6 @@ const Manager = () => {
       Header: 'Achieved Cash Out',
       accessor: 'achievedCashOut', // String-based value accessors!
     },
-    
   ])
 
   function AnotherSelectColumnFilter({ column: { filterValue, setFilter } }) {
@@ -184,7 +191,7 @@ const Manager = () => {
   if (
     loading ||
     supervisorsResponse.loading ||
-    salesRepTargetAchievedResponse.loading ||
+    managerTargetAchievedResponse.loading ||
     managerMerchantsCountResponse.loading
   ) {
     return (
@@ -228,7 +235,7 @@ const Manager = () => {
                   </span>
                 </div>
               </div>
-              {salesRepTargetAchievedResponse.response.map((item, index) => {
+              {managerTargetAchievedResponse.response.map((item, index) => {
                 return (
                   <div
                     style={{
@@ -256,13 +263,54 @@ const Manager = () => {
               })}
             </div>
           </div>
+          <div className={'p-5 w-full'}>
+            <div
+              className={
+                'flex w-full  justify-between gap-2 p-3 gap-5  items-start bg-white border primary-shadow rounded mt-5 '
+              }>
+              <div className={'flex flex-col '}>
+                <span className={'text-lg'}>فئات التجار</span>
+              </div>
+              {managerMerchantsClassesResponse.response.map((item, index) => {
+                return (
+                  <div
+                    style={{
+                      direction: 'ltr',
+                    }}
+                    key={index}
+                    className={'flex flex-col gap-2 items-start '}>
+                    <span className={'text-lg'}>{item?.classType}</span>
+                    <div
+                      className={
+                        'flex flex-col gap-1 divide-y border rounded bg-gray-100 border-dashed  '
+                      }>
+                      <p className={'text-left px-1'}>Count {item?.count}</p>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
           <SectionTitle title={'المشرفين'} />
           <DataTableFilter
             columns={cols}
             data={supervisorsResponse.response}
+            onRowClick={(row) => {
+              localStorage.setItem('username', row.name.toLowerCase())
+              localStorage.setItem('role', 'Supervisor')
+              window.location.reload()
+            }}
           />
           <SectionTitle title={'المناديب'} />
-          <DataTableFilter columns={cols} data={response} />
+          <DataTableFilter
+            columns={cols}
+            data={response}
+            onRowClick={(row) => {
+              localStorage.setItem('username', row.name.toLowerCase())
+              localStorage.setItem('role', 'Rep')
+              window.location.reload()
+            }}
+          />
           {/* <div
             className={
               'flex w-full  justify-center gap-2 p-3 gap-5  items-start bg-white border primary-shadow rounded mt-5 '
@@ -283,4 +331,3 @@ const Manager = () => {
 }
 
 export default Manager
-

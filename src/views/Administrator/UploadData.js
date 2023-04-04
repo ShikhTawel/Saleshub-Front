@@ -10,12 +10,15 @@ import * as FileSaver from 'file-saver'
 import axios from 'axios'
 
 const UploadData = () => {
+  if (!localStorage.getItem('access_token')) window.location.href = '/'
+
   const [isSideBarOpen, setIsSideBarOpen] = useState(false)
 
   const [isLoading, SetIsLoading] = useState(false)
   const [isUsersLoading, SetIsUsersLoading] = useState(false)
   const [isTargetSampleLoading, SetIsTargetSampleLoading] = useState(false)
   const [isUserSampleLoading, SetIsUserSampleLoading] = useState(false)
+  const [isDownloadUsersLoading, SetIsDownloadUsersLoading] = useState(false)
 
   const [selectedFile, setSelectedFile] = useState()
   const [selectedFileTarget, setSelectedFileTarget] = useState()
@@ -151,7 +154,35 @@ const UploadData = () => {
       })
   }
 
-  if (!localStorage.getItem('access_token')) window.location.href = '/'
+  const exportAllUsers = () => {
+    SetIsDownloadUsersLoading(true)
+
+    axios
+      .get(`${BASE_URL}admin/exportAllUsers`, {
+        headers: {
+          Authorization: localStorage.getItem(`access_token`),
+        },
+      })
+      .then((result) => {
+        SetIsDownloadUsersLoading(false)
+        FileSaver.saveAs(fromByteArrayToExcel(result, 'System_Users'))
+      })
+      .catch((err) => {
+        SetIsDownloadUsersLoading(false)
+
+        console.log(err)
+        if (err.response.data.errors) {
+          let errors = err.response.data.errors
+
+          for (let index = 0; index < errors.length; index++) {
+            const error = errors[index]
+            toast.error(error.message)
+          }
+        } else toast.error('Error Occurred')
+      })
+  }
+
+  
 
   return (
     <>
@@ -226,6 +257,12 @@ const UploadData = () => {
             <FIconWrapper>
               <ESpinner isVisible={isUserSampleLoading} />
               <span className={'text-s'}>تحميل عينة من ملف المستخدمين</span>
+            </FIconWrapper>
+          </FButton>
+          <FButton onClick={exportAllUsers}>
+            <FIconWrapper>
+              <ESpinner isVisible={isDownloadUsersLoading} />
+              <span className={'text-s'}>تنزيل ملف المستخدمين</span>
             </FIconWrapper>
           </FButton>
         </div>

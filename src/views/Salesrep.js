@@ -56,6 +56,16 @@ const Salesrep = () => {
       new Date().toLocaleDateString(),
   )
 
+  const salesRepMerchantsClassesResponse = useCustomAxios(
+    {
+      method: 'GET',
+      url: `SalesRep/merchantsClasses/${localStorage.getItem('username')}`,
+    },
+    localStorage.getItem('username') +
+      '+merchantsClasses+' +
+      new Date().toLocaleDateString(),
+  )
+
   function SelectColumnFilter({
     column: { filterValue, setFilter, preFilteredRows, id },
   }) {
@@ -295,7 +305,10 @@ const Salesrep = () => {
                       value={salesRepMerchantsCountResponse?.response}
                       instance={'Merchants'}
                     />
-                    <InstanceViewer value={salesRepPerformanceResponse?.response} instance={'الاداء'} />
+                    <InstanceViewer
+                      value={salesRepPerformanceResponse?.response}
+                      instance={'الاداء'}
+                    />
                   </div>
                   <span
                     onClick={() => {
@@ -330,6 +343,34 @@ const Salesrep = () => {
                       <p className={'text-left px-1'}>
                         Expected Achieved {item?.expectedWithPercentage}
                       </p>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+          <div className={'p-5 w-full'}>
+            <div
+              className={
+                'flex w-full  justify-between gap-2 p-3 gap-5  items-start bg-white border primary-shadow rounded mt-5 '
+              }>
+              <div className={'flex flex-col '}>
+                <span className={'text-lg'}>فئات التجار</span>
+              </div>
+              {salesRepMerchantsClassesResponse.response.map((item, index) => {
+                return (
+                  <div
+                    style={{
+                      direction: 'ltr',
+                    }}
+                    key={index}
+                    className={'flex flex-col gap-2 items-start '}>
+                    <span className={'text-lg'}>{item?.classType}</span>
+                    <div
+                      className={
+                        'flex flex-col gap-1 divide-y border rounded bg-gray-100 border-dashed  '
+                      }>
+                      <p className={'text-left px-1'}>Count {item?.count}</p>
                     </div>
                   </div>
                 )

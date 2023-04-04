@@ -96,7 +96,7 @@ const DetailsModal = ({ isOpen, setIsOpen, merchantData }) => {
       } else {
         let serviceTransactionsRequestDto = {
           serviceName: projection,
-          merchantId: merchantData.code,
+          id: merchantData.code,
           filter: duration,
           startDate: startDate,
           endDate: endDate,
@@ -152,7 +152,7 @@ const DetailsModal = ({ isOpen, setIsOpen, merchantData }) => {
       } else {
         let serviceTransactionsRequestDto = {
           serviceName: projection,
-          merchantId: merchantData.code,
+          id: merchantData.code,
           filter: duration,
           startDate: startDate,
           endDate: endDate,
