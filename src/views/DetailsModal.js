@@ -102,7 +102,7 @@ const DetailsModal = ({ isOpen, setIsOpen, merchantData }) => {
           endDate: endDate,
         }
         axiosInstance
-          .post(`Merchant/ServiceTransactions`, serviceTransactionsRequestDto)
+          .post(`merchant/serviceTransactions`, serviceTransactionsRequestDto)
           .then((response) => {
             handleGraph(response.data.transactions)
             sessionStorage.setItem(
@@ -158,7 +158,7 @@ const DetailsModal = ({ isOpen, setIsOpen, merchantData }) => {
           endDate: endDate,
         }
         axiosInstance
-          .post(`Merchant/ServiceTransactions`, serviceTransactionsRequestDto)
+          .post(`merchant/serviceTransactions`, serviceTransactionsRequestDto)
           .then((response) => {
             handleGraph(response.data.transactions)
             sessionStorage.setItem(

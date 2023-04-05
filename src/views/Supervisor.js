@@ -15,7 +15,7 @@ const Supervisor = () => {
   const { loading, response } = useCustomAxios(
     {
       method: 'GET',
-      url: `/Supervisor/reps/${localStorage.getItem('username')}`,
+      url: `/supervisor/${localStorage.getItem('username')}/reps`,
     },
     localStorage.getItem('username') +
       '+reps+' +
@@ -24,7 +24,7 @@ const Supervisor = () => {
   const merchantsResponse = useCustomAxios(
     {
       method: 'GET',
-      url: `/Supervisor/merchants/${localStorage.getItem('username')}`,
+      url: `/supervisor/${localStorage.getItem('username')}/merchants`,
     },
     localStorage.getItem('username') +
       '+merchants+' +
@@ -34,7 +34,7 @@ const Supervisor = () => {
   const supervisorTargetAchievedResponse = useCustomAxios(
     {
       method: 'GET',
-      url: `/Supervisor/targetAchieved/${localStorage.getItem('username')}`,
+      url: `/supervisor/${localStorage.getItem('username')}/targetAchieved`,
     },
     localStorage.getItem('username') +
       '+targetAchieved+' +
@@ -43,7 +43,7 @@ const Supervisor = () => {
   const supervisorMerchantsCountResponse = useCustomAxios(
     {
       method: 'GET',
-      url: `/Supervisor/${localStorage.getItem('username')}/merchantsNumber`,
+      url: `/supervisor/${localStorage.getItem('username')}/merchantsNumber`,
     },
     localStorage.getItem('username') +
       '+merchantsNumber+' +
@@ -53,7 +53,7 @@ const Supervisor = () => {
   const supervisorPerformanceResponse = useCustomAxios(
     {
       method: 'GET',
-      url: `/Supervisor/performance/${localStorage.getItem('username')}`,
+      url: `/supervisor/${localStorage.getItem('username')}/performance`,
     },
     localStorage.getItem('username') +
       '+performance+' +
@@ -63,7 +63,7 @@ const Supervisor = () => {
   const supervisorMerchantsClassesResponse = useCustomAxios(
     {
       method: 'GET',
-      url: `/Supervisor/merchantsClasses/${localStorage.getItem('username')}`,
+      url: `/supervisor/${localStorage.getItem('username')}/merchantsClasses`,
     },
     localStorage.getItem('username') +
       '+merchantsClasses+' +

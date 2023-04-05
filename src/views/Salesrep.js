@@ -19,7 +19,7 @@ const Salesrep = () => {
   const { loading, response } = useCustomAxios(
     {
       method: 'GET',
-      url: `SalesRep/${localStorage.getItem('username')}/merchants/`,
+      url: `salesRep/${localStorage.getItem('username')}/merchants`,
     },
     localStorage.getItem('username') +
       '+merchants+' +
@@ -29,7 +29,7 @@ const Salesrep = () => {
   const salesRepMerchantsCountResponse = useCustomAxios(
     {
       method: 'GET',
-      url: `SalesRep/${localStorage.getItem('username')}/merchantsNumber`,
+      url: `salesRep/${localStorage.getItem('username')}/merchantsNumber`,
     },
     localStorage.getItem('username') +
       '+merchantsNumber+' +
@@ -39,7 +39,7 @@ const Salesrep = () => {
   const salesRepTargetAchievedResponse = useCustomAxios(
     {
       method: 'GET',
-      url: `SalesRep/targetAchieved/${localStorage.getItem('username')}`,
+      url: `salesRep/${localStorage.getItem('username')}/targetAchieved`,
     },
     localStorage.getItem('username') +
       '+targetAchieved+' +
@@ -49,7 +49,7 @@ const Salesrep = () => {
   const salesRepPerformanceResponse = useCustomAxios(
     {
       method: 'GET',
-      url: `SalesRep/performance/${localStorage.getItem('username')}`,
+      url: `salesRep/${localStorage.getItem('username')}/performance`,
     },
     localStorage.getItem('username') +
       '+performance+' +
@@ -59,7 +59,7 @@ const Salesrep = () => {
   const salesRepMerchantsClassesResponse = useCustomAxios(
     {
       method: 'GET',
-      url: `SalesRep/merchantsClasses/${localStorage.getItem('username')}`,
+      url: `salesRep/${localStorage.getItem('username')}/merchantsClasses`,
     },
     localStorage.getItem('username') +
       '+merchantsClasses+' +

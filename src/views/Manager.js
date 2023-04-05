@@ -46,7 +46,7 @@ const Manager = () => {
   const managerPerformanceResponse = useCustomAxios(
     {
       method: 'GET',
-      url: `/Manager/performance/${localStorage.getItem('username')}`,
+      url: `/manager/${localStorage.getItem('username')}/performance`,
     },
     localStorage.getItem('username') +
       '+performance+' +
@@ -56,7 +56,7 @@ const Manager = () => {
   const { loading, response } = useCustomAxios(
     {
       method: 'GET',
-      url: `/Manager/reps/${localStorage.getItem('username')}`,
+      url: `/manager/${localStorage.getItem('username')}/reps`,
     },
     localStorage.getItem('username') +
       '+reps+' +
@@ -65,7 +65,7 @@ const Manager = () => {
   const supervisorsResponse = useCustomAxios(
     {
       method: 'GET',
-      url: `/Manager/supervisors/${localStorage.getItem('username')}`,
+      url: `/manager/${localStorage.getItem('username')}/supervisors`,
     },
     localStorage.getItem('username') +
       '+supervisors+' +
@@ -75,7 +75,7 @@ const Manager = () => {
   const managerTargetAchievedResponse = useCustomAxios(
     {
       method: 'GET',
-      url: `/Manager/targetAchieved/${localStorage.getItem('username')}`,
+      url: `/manager/${localStorage.getItem('username')}/targetAchieved`,
     },
     localStorage.getItem('username') +
       '+targetAchieved+' +
@@ -85,7 +85,7 @@ const Manager = () => {
   const managerMerchantsCountResponse = useCustomAxios(
     {
       method: 'GET',
-      url: `/Manager/${localStorage.getItem('username')}/merchantsNumber`,
+      url: `/manager/${localStorage.getItem('username')}/merchantsNumber`,
     },
     localStorage.getItem('username') +
       '+merchantsNumber+' +
@@ -95,7 +95,7 @@ const Manager = () => {
   const managerMerchantsClassesResponse = useCustomAxios(
     {
       method: 'GET',
-      url: `/Manager/merchantsClasses/${localStorage.getItem('username')}`,
+      url: `/manager/${localStorage.getItem('username')}/merchantsClasses`,
     },
     localStorage.getItem('username') +
       '+merchantsClasses+' +
