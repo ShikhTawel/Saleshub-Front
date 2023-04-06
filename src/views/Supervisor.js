@@ -7,10 +7,14 @@ import DetailsModal from './DetailsModal'
 import { useState } from 'react'
 import ESpinnerBig from '../components/ESpinnerBig'
 import InstanceViewer from './InstanceViewer'
+import DetailsModalRep from './DetailsModalRep'
 
 const Supervisor = () => {
   const [merchantData, setMerchantData] = useState('')
   const [isModalOpen, setIsModalOpen] = useState(false)
+
+  const [repData, setRepData] = useState('')
+  const [isRepModalOpen, setIsRepModalOpen] = useState(false)
 
   const { loading, response } = useCustomAxios(
     {
@@ -405,17 +409,18 @@ const Supervisor = () => {
             isOpen={isModalOpen}
             setIsOpen={setIsModalOpen}
           />
+          <DetailsModalRep
+            repData={repData}
+            isOpen={isRepModalOpen}
+            setIsOpen={setIsRepModalOpen}
+          />
           <SectionTitle title={'المناديب'} />
           <DataTableFilter
             columns={repsCols}
             data={response}
             onRowClick={(row) => {
-              localStorage.setItem(
-                'username',
-                row.name.toLowerCase(),
-              )
-              localStorage.setItem('role', 'Rep')
-              window.location.reload();
+              setIsRepModalOpen(true)
+              setRepData(row)
             }}
           />
           <SectionTitle title={'التجار'} />

@@ -1,15 +1,20 @@
 import { useCustomAxios } from '../Hooks/useAxios'
-import React from 'react'
+import React, { useState } from 'react'
 import SectionTitle from '../components/SectionTitle'
 import logo from '../assets/images/logo.jpg'
 import DataTableFilter from './DataTableFilter'
 import ESpinnerBig from '../components/ESpinnerBig'
 import InstanceViewer from './InstanceViewer'
+import DetailsModalRep from './DetailsModalRep'
+
 // import Dropdown from './Dropdown'
 
 // const menu = ['mohamed.hm.mahmoud', 'mahmoud.hadad', 'baher.shehata']
 
 const Manager = () => {
+  const [repData, setRepData] = useState('')
+  const [isRepModalOpen, setIsRepModalOpen] = useState(false)
+
   function SelectColumnFilter({
     column: { filterValue, setFilter, preFilteredRows, id },
   }) {
@@ -301,14 +306,18 @@ const Manager = () => {
               window.location.reload()
             }}
           />
+          <DetailsModalRep
+            repData={repData}
+            isOpen={isRepModalOpen}
+            setIsOpen={setIsRepModalOpen}
+          />
           <SectionTitle title={'المناديب'} />
           <DataTableFilter
             columns={cols}
             data={response}
             onRowClick={(row) => {
-              localStorage.setItem('username', row.name.toLowerCase())
-              localStorage.setItem('role', 'Rep')
-              window.location.reload()
+              setIsRepModalOpen(true)
+              setRepData(row)
             }}
           />
           {/* <div
