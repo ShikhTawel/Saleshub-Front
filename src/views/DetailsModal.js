@@ -201,34 +201,35 @@ const DetailsModal = ({ isOpen, setIsOpen, merchantData }) => {
           )
         }}>
         <div className="flex flex-col">
-          <div
-            className="grid gap-3 my-3 grid-cols-4 border border rounded bg-gray-50 primary-shadow p-3"
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            Start Date{' '}
-            <input
-              value={startDate}
-              type="date"
-              onChange={(e) => {
-                e.preventDefault()
-                startDate = e.target.value
-                setStartDate(e.target.value)
-              }}></input>
-            End Date{' '}
-            <input
-              value={endDate}
-              type="date"
-              onChange={(e) => {
-                endDate = e.target.value
-                setEndDate(e.target.value)
-              }}></input>
-            <FButton onClick={updateDataBasedOnDate}>Submit Filter</FButton>
-            <FButton onClick={resetDate}>Reset</FButton>
-          </div>
-
+          {duration == 'day' ? (
+            <div
+              className="grid gap-3 my-3 grid-cols-4 border border rounded bg-gray-50 primary-shadow p-3"
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              Start Date{' '}
+              <input
+                value={startDate}
+                type="date"
+                onChange={(e) => {
+                  e.preventDefault()
+                  startDate = e.target.value
+                  setStartDate(e.target.value)
+                }}></input>
+              End Date{' '}
+              <input
+                value={endDate}
+                type="date"
+                onChange={(e) => {
+                  endDate = e.target.value
+                  setEndDate(e.target.value)
+                }}></input>
+              <FButton onClick={updateDataBasedOnDate}>Submit Filter</FButton>
+              <FButton onClick={resetDate}>Reset</FButton>
+            </div>
+          ) : null}
           <div className="grid gap-3 my-3 grid-cols-4 border border rounded bg-gray-50 primary-shadow p-3">
             <InstanceViewer
               instance={'Merchant Code'}
