@@ -8,6 +8,8 @@ import { useState } from 'react'
 import ESpinnerBig from '../components/ESpinnerBig'
 import InstanceViewer from './InstanceViewer'
 import DetailsModalRep from './DetailsModalRep'
+import {ovdFilter, PerformanceIndicatorsColumnFilter } from '../Utilities/TableFilter'
+import { getColor } from '../Utilities/GeneralUtils'
 
 const Supervisor = () => {
   const [merchantData, setMerchantData] = useState('')
@@ -138,7 +140,7 @@ const Supervisor = () => {
               }></span>
           )
       },
-      Filter: AnotherSelectColumnFilter,
+      Filter: PerformanceIndicatorsColumnFilter,
     },
     {
       Header: 'POS',
@@ -175,41 +177,7 @@ const Supervisor = () => {
     },
   ])
 
-  function AnotherSelectColumnFilter({ column: { filterValue, setFilter } }) {
-    return (
-      <select
-        className={
-          'w-full rounded text-gray-800 border border-gray-300 p-1.5 text-sm  shadow-sm ring-orient-400 focus:border focus:border-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2'
-        }
-        value={filterValue}
-        onChange={(e) => {
-          setFilter(e.target.value || undefined)
-        }}>
-        <option value="">All</option>
-        <option value="Bad">Bad</option>
-        <option value="Normal">Normal</option>
-        <option value="Good">Good</option>
-      </select>
-    )
-  }
 
-  function ovdFilter({ column: { filterValue, setFilter } }) {
-    // Render a multi-select box
-    return (
-      <select
-        className={
-          'w-full rounded text-gray-800 border border-gray-300 p-1.5 text-sm  shadow-sm ring-orient-400 focus:border focus:border-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2'
-        }
-        value={filterValue}
-        onChange={(e) => {
-          setFilter(e.target.value || undefined)
-        }}>
-        <option value="">All</option>
-        <option value="false">Zero</option>
-        <option value="true">Value</option>
-      </select>
-    )
-  }
   const columns = React.useMemo(() => {
     return [
       {
@@ -235,7 +203,6 @@ const Supervisor = () => {
         accessor: 'overdraftLimit', // String-based value accessors!
         Filter: ovdFilter,
         filter: (rows, id, filterValue) => {
-          console.log(rows, id, filterValue)
           if (filterValue === 'true') {
             return rows.filter((row) => row.values[id] > 0)
           }
@@ -268,7 +235,7 @@ const Supervisor = () => {
                 }></span>
             )
         },
-        Filter: AnotherSelectColumnFilter,
+        Filter: PerformanceIndicatorsColumnFilter,
       },
       {
         Header: 'P2 (Bills)',
@@ -297,7 +264,7 @@ const Supervisor = () => {
             )
         },
 
-        Filter: AnotherSelectColumnFilter,
+        Filter: PerformanceIndicatorsColumnFilter,
       },
     ]
   }, [])
@@ -339,8 +306,8 @@ const Supervisor = () => {
                         instance={'POS'}
                       />
                     </div>
-                    <div className={'flex gap-2'}>
-                      <InstanceViewer
+                    <div className={'flex gap-2'} style={{backgroundColor: getColor(supervisorPerformanceResponse?.response)}}>
+                      <InstanceViewer 
                         value={supervisorPerformanceResponse?.response}
                         instance={'الاداء'}
                       />
