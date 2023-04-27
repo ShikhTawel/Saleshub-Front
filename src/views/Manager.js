@@ -6,8 +6,8 @@ import DataTableFilter from './DataTableFilter'
 import ESpinnerBig from '../components/ESpinnerBig'
 import InstanceViewer from './InstanceViewer'
 import DetailsModalRep from './DetailsModalRep'
-import { PerformanceIndicatorsColumnFilter, SelectColumnFilter } from '../Utilities/TableFilter'
-import { getColor } from '../Utilities/GeneralUtils'
+import { getColor, getPerformance } from '../Utilities/Performance'
+import { getRepsColumns } from '../Utilities/ColumnsDefinition'
 
 // import Dropdown from './Dropdown'
 
@@ -76,73 +76,7 @@ const Manager = () => {
       new Date().toLocaleDateString(),
   )
 
-  const cols = React.useMemo(() => [
-    {
-      Header: 'Name',
-      accessor: 'name', // String-based value accessors!
-    },
-    {
-      Header: 'Performance',
-      accessor: 'performaceIndicator', // String-based value accessors!
-      Cell: (row) => {
-        if (row.value == 'Good')
-          return (
-            <span
-              className={
-                'text-blue-500  px-3 text-xs font-medium border border-blue-500 rounded-full bg-blue-300'
-              }></span>
-          )
-        else if (row.value == 'Bad')
-          return (
-            <span
-              className={
-                'text-red-500  px-3 text-xs font-medium border border-red-500 rounded-full bg-red-100'
-              }></span>
-          )
-        else
-          return (
-            <span
-              className={
-                'text-green-500  px-3 text-xs font-medium border border-green-500 rounded-full bg-green-100'
-              }></span>
-          )
-      },
-      Filter: PerformanceIndicatorsColumnFilter,
-    },
-    {
-      Header: 'POS',
-      accessor: 'numberOfPOS', // String-based value accessors!
-      Filter: SelectColumnFilter,
-    },
-    {
-      Header: 'Target',
-      accessor: 'target', // String-based value accessors!
-    },
-    {
-      Header: 'Achieved Total',
-      accessor: 'achievedTotal', // String-based value accessors!
-    },
-    {
-      Header: 'Achieved Airtime',
-      accessor: 'achievedAirtime', // String-based value accessors!
-    },
-    {
-      Header: 'Achieved Bills',
-      accessor: 'achievedBills', // String-based value accessors!
-    },
-    {
-      Header: 'Achieved Utilities',
-      accessor: 'achievedUtilities', // String-based value accessors!
-    },
-    {
-      Header: 'Achieved Cash In',
-      accessor: 'achievedCashIn', // String-based value accessors!
-    },
-    {
-      Header: 'Achieved Cash Out',
-      accessor: 'achievedCashOut', // String-based value accessors!
-    },
-  ])
+  const cols = getRepsColumns()
 
   if (
     loading ||
@@ -184,7 +118,7 @@ const Manager = () => {
                     </div>
                     <div className={'flex gap-2'} style={{backgroundColor: getColor(managerPerformanceResponse?.response)}}>
                       <InstanceViewer
-                        value={managerPerformanceResponse?.response}
+                        value={getPerformance(managerPerformanceResponse?.response)}
                         instance={'الاداء'}
                       />
                     </div>

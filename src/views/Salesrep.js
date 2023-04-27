@@ -9,8 +9,8 @@ import FButton from '../components/FButton'
 import SectionTitle from '../components/SectionTitle'
 import DataTableFilter from './DataTableFilter'
 import ESpinnerBig from '../components/ESpinnerBig'
-import { ovdFilter, PerformanceIndicatorsColumnFilter, SelectColumnFilter } from '../Utilities/TableFilter'
-import { getColor } from '../Utilities/GeneralUtils'
+import { getColor, getPerformance } from '../Utilities/Performance'
+import { getMerchantsColumns } from '../Utilities/ColumnsDefinition'
 
 const Salesrep = () => {
   // eslint-disable-next-line no-unused-vars
@@ -68,105 +68,7 @@ const Salesrep = () => {
       new Date().toLocaleDateString(),
   )
  
-  const cols = [
-    {
-      Header: 'الكود',
-      accessor: 'code', // String-based value accessors!
-    },
-    {
-      Header: 'الأسم',
-      accessor: 'name', // String-based value accessors!
-    },
-
-    {
-      Header: 'Class',
-      accessor: 'merchantClass', // String-based value accessors!
-      Filter: SelectColumnFilter,
-      filter: 'includes',
-    },
-    {
-      Header: 'OVD',
-      accessor: 'overdraftLimit', // String-based value accessors!
-      Filter: ovdFilter,
-      filter: (rows, id, filterValue) => {
-        console.log(rows, id, filterValue)
-        if (filterValue === 'true') {
-          return rows.filter((row) => row.values[id] > 0)
-        }
-        return rows.filter((row) => row.values[id] === 0)
-      },
-    },
-    {
-      Header: 'P1 (Airtime)',
-      accessor: 'performanceMonthlyFlagAirtime', // String-based value accessors!
-      Cell: (row) => {
-        if (row.value == 'Good')
-          return (
-            <span
-              className={
-                'text-blue-500  px-3 text-xs font-medium border border-blue-500 rounded-full bg-blue-300'
-              }></span>
-          )
-        else if (row.value == 'Bad')
-          return (
-            <span
-              className={
-                'text-red-500  px-3 text-xs font-medium border border-red-500 rounded-full bg-red-100'
-              }></span>
-          )
-        else
-          return (
-            <span
-              className={
-                'text-green-500  px-3 text-xs font-medium border border-green-500 rounded-full bg-green-100'
-              }></span>
-          )
-        // return !row.value ? (
-        //   <span
-        //     className={
-        //       'text-green-500  px-3 text-xs font-medium border border-green-500 rounded-full bg-green-100'
-        //     }>
-        //     {' '}
-        //   </span>
-        // ) : (
-        //   <span
-        //     className={
-        //       'text-red-500  px-3 text-xs font-medium border border-red-500 rounded-full bg-red-100'
-        //     }></span>
-        // )
-      },
-      Filter: PerformanceIndicatorsColumnFilter,
-    },
-    {
-      Header: 'P2 (Bills)',
-      accessor: 'performanceMonthlyFlagBills', // String-based value accessors!
-      Cell: (row) => {
-        if (row.value == 'Good')
-          return (
-            <span
-              className={
-                'text-blue-500  px-3 text-xs font-medium border border-blue-500 rounded-full bg-blue-300'
-              }></span>
-          )
-        else if (row.value == 'Bad')
-          return (
-            <span
-              className={
-                'text-red-500  px-3 text-xs font-medium border border-red-500 rounded-full bg-red-100'
-              }></span>
-          )
-        else
-          return (
-            <span
-              className={
-                'text-green-500  px-3 text-xs font-medium border border-green-500 rounded-full bg-green-100'
-              }></span>
-          )
-      },
-
-      Filter: PerformanceIndicatorsColumnFilter,
-    },
-  ]
+  const cols = getMerchantsColumns()
 
   if (loading) {
     return (
@@ -241,7 +143,7 @@ const Salesrep = () => {
                     className={'flex gap-2'}
                     style={{ backgroundColor: getColor(salesRepPerformanceResponse?.response) }}>
                     <InstanceViewer
-                      value={salesRepPerformanceResponse?.response}
+                      value={getPerformance(salesRepPerformanceResponse?.response)}
                       instance={'الاداء'}
                     />
                   </div>

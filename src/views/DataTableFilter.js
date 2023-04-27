@@ -73,6 +73,14 @@ function Table({ columns, data, onRowClick }) {
       data,
       initialState: { pageIndex: 0, pageSize:50 },
       defaultColumn, // Be sure to pass the defaultColumn option
+      filterTypes: {
+        exact: (rows, id, filterValue) => {
+          return rows.filter((row) => {
+            const rowValue = row.values[id];
+            return rowValue === filterValue;
+          });
+        },
+      },
     },
     useFilters, // useFilters!
     useGlobalFilter, // useGlobalFilter!
