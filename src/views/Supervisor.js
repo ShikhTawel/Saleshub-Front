@@ -76,6 +76,26 @@ const Supervisor = () => {
       new Date().toLocaleDateString(),
   )
 
+  const supervisorMerchantsLicenseSummaryResponse = useCustomAxios(
+    {
+      method: 'GET',
+      url: `/supervisor/${localStorage.getItem('username')}/merchantsLicenseSummary`,
+    },
+    localStorage.getItem('username') +
+      '+merchantsLicenseSummary+' +
+      new Date().toLocaleDateString(),
+  )
+
+  const supervisorMerchantsClosingBalanceSummaryResponse = useCustomAxios(
+    {
+      method: 'GET',
+      url: `/supervisor/${localStorage.getItem('username')}/merchantsClosingBalanceSummary`,
+    },
+    localStorage.getItem('username') +
+      '+merchantsClosingBalanceSummary+' +
+      new Date().toLocaleDateString(),
+  )
+
   const repsCols = getRepsColumns()
 
   const columns = getMerchantsColumns()
@@ -154,6 +174,27 @@ const Supervisor = () => {
               })}
             </div>
           </div>
+          
+          <DetailsModal
+            merchantData={merchantData}
+            isOpen={isModalOpen}
+            setIsOpen={setIsModalOpen}
+          />
+          <DetailsModalRep
+            repData={repData}
+            isOpen={isRepModalOpen}
+            setIsOpen={setIsRepModalOpen}
+          />
+          <SectionTitle title={'المناديب'} />
+          <DataTableFilter
+            columns={repsCols}
+            data={response}
+            onRowClick={(row) => {
+              setIsRepModalOpen(true)
+              setRepData(row)
+            }}
+          />
+          
           <div className={'p-5 w-full'}>
             <div
               className={
@@ -181,26 +222,59 @@ const Supervisor = () => {
                 )
               })}
             </div>
+            <div
+              className={
+                'flex w-full  justify-between gap-2 p-3 gap-5  items-start bg-white border primary-shadow rounded mt-5 '
+              }>
+              <div className={'flex flex-col '}>
+                <span className={'text-lg'}>License</span>
+              </div>
+              {supervisorMerchantsLicenseSummaryResponse.response.map((item, index) => {
+                return (
+                  <div
+                    style={{
+                      direction: 'ltr',
+                    }}
+                    key={index}
+                    className={'flex flex-col gap-2 items-start '}>
+                    <span className={'text-lg'}>{item?.license}</span>
+                    <div
+                      className={
+                        'flex flex-col gap-1 divide-y border rounded bg-gray-100 border-dashed  '
+                      }>
+                      <p className={'text-left px-1'}>Count {item?.count}</p>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+            <div
+              className={
+                'flex w-full  justify-between gap-2 p-3 gap-5  items-start bg-white border primary-shadow rounded mt-5 '
+              }>
+              <div className={'flex flex-col '}>
+                <span className={'text-lg'}>Closing Balance</span>
+              </div>
+              {supervisorMerchantsClosingBalanceSummaryResponse.response.map((item, index) => {
+                return (
+                  <div
+                    style={{
+                      direction: 'ltr',
+                    }}
+                    key={index}
+                    className={'flex flex-col gap-2 items-start '}>
+                    <span className={'text-lg'}>{item?.range}</span>
+                    <div
+                      className={
+                        'flex flex-col gap-1 divide-y border rounded bg-gray-100 border-dashed  '
+                      }>
+                      <p className={'text-left px-1'}>Count {item?.count}</p>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
           </div>
-          <DetailsModal
-            merchantData={merchantData}
-            isOpen={isModalOpen}
-            setIsOpen={setIsModalOpen}
-          />
-          <DetailsModalRep
-            repData={repData}
-            isOpen={isRepModalOpen}
-            setIsOpen={setIsRepModalOpen}
-          />
-          <SectionTitle title={'المناديب'} />
-          <DataTableFilter
-            columns={repsCols}
-            data={response}
-            onRowClick={(row) => {
-              setIsRepModalOpen(true)
-              setRepData(row)
-            }}
-          />
           <SectionTitle title={'التجار'} />
           <DataTableFilter
             columns={columns}

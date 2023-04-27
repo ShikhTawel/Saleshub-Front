@@ -68,6 +68,26 @@ const Salesrep = () => {
       new Date().toLocaleDateString(),
   )
  
+  const salesRepMerchantsLicenseSummaryResponse = useCustomAxios(
+    {
+      method: 'GET',
+      url: `salesrep/${localStorage.getItem('username')}/merchantsLicenseSummary`,
+    },
+    localStorage.getItem('username') +
+      '+merchantsLicenseSummary+' +
+      new Date().toLocaleDateString(),
+  )
+
+  const salesRepMerchantsClosingBalanceSummaryResponse = useCustomAxios(
+    {
+      method: 'GET',
+      url: `salesrep/${localStorage.getItem('username')}/merchantsClosingBalanceSummary`,
+    },
+    localStorage.getItem('username') +
+      '+merchantsClosingBalanceSummary+' +
+      new Date().toLocaleDateString(),
+  )
+
   const cols = getMerchantsColumns()
 
   if (loading) {
@@ -204,6 +224,58 @@ const Salesrep = () => {
                     key={index}
                     className={'flex flex-col gap-2 items-start '}>
                     <span className={'text-lg'}>{item?.classType}</span>
+                    <div
+                      className={
+                        'flex flex-col gap-1 divide-y border rounded bg-gray-100 border-dashed  '
+                      }>
+                      <p className={'text-left px-1'}>Count {item?.count}</p>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+            <div
+              className={
+                'flex w-full  justify-between gap-2 p-3 gap-5  items-start bg-white border primary-shadow rounded mt-5 '
+              }>
+              <div className={'flex flex-col '}>
+                <span className={'text-lg'}>License</span>
+              </div>
+              {salesRepMerchantsLicenseSummaryResponse.response.map((item, index) => {
+                return (
+                  <div
+                    style={{
+                      direction: 'ltr',
+                    }}
+                    key={index}
+                    className={'flex flex-col gap-2 items-start '}>
+                    <span className={'text-lg'}>{item?.license}</span>
+                    <div
+                      className={
+                        'flex flex-col gap-1 divide-y border rounded bg-gray-100 border-dashed  '
+                      }>
+                      <p className={'text-left px-1'}>Count {item?.count}</p>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+            <div
+              className={
+                'flex w-full  justify-between gap-2 p-3 gap-5  items-start bg-white border primary-shadow rounded mt-5 '
+              }>
+              <div className={'flex flex-col '}>
+                <span className={'text-lg'}>Closing Balance</span>
+              </div>
+              {salesRepMerchantsClosingBalanceSummaryResponse.response.map((item, index) => {
+                return (
+                  <div
+                    style={{
+                      direction: 'ltr',
+                    }}
+                    key={index}
+                    className={'flex flex-col gap-2 items-start '}>
+                    <span className={'text-lg'}>{item?.range}</span>
                     <div
                       className={
                         'flex flex-col gap-1 divide-y border rounded bg-gray-100 border-dashed  '

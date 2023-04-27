@@ -1,5 +1,5 @@
 import React from 'react'
-import { ovdFilter, PerformanceIndicatorsColumnFilter, SelectColumnFilter } from './TableFilter'
+import { closingBalanceFilter, ovdFilter, PerformanceIndicatorsColumnFilter, SelectColumnFilter } from './TableFilter'
 
 export function getRepsColumns() {
   return React.useMemo(() => [
@@ -102,6 +102,21 @@ export function getMerchantsColumns() {
                 return rows.filter((row) => row.values[id] > 0)
               }
               return rows.filter((row) => row.values[id] === 0)
+            },
+          },
+          {
+            Header: 'Closing Balance',
+            accessor: 'closingBalance', // String-based value accessors!
+            Filter: closingBalanceFilter,
+            filter: (rows, id, filterValue) => {
+              if (filterValue === 'lessThanZero') 
+                return rows.filter((row) => row.values[id] < 0)
+              else if(filterValue === 'equalsZero')
+                return rows.filter((row) => row.values[id] === 0)
+              else if(filterValue === 'betweenZeroAndFiveHundred')
+                return rows.filter((row) => row.values[id] > 0 && row.values[id] <= 500)
+              else if(filterValue === 'moreThanFiveHundred')
+                return rows.filter((row) => row.values[id] > 500)
             },
           },
           {

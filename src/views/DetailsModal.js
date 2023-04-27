@@ -117,6 +117,10 @@ const DetailsModal = ({ isOpen, setIsOpen, merchantData }) => {
             setLoading(false)
           })
           .catch(() => {
+            startDate = format(subMonths(new Date(), 3), 'yyyy-MM-dd')
+            setStartDate(format(subMonths(new Date(), 3), 'yyyy-MM-dd'))
+            endDate = format(new Date(), 'yyyy-MM-dd')
+            setEndDate(format(new Date(), 'yyyy-MM-dd'))
             setLoading(false)
           })
       }
@@ -173,6 +177,10 @@ const DetailsModal = ({ isOpen, setIsOpen, merchantData }) => {
             setLoading(false)
           })
           .catch(() => {
+            startDate = format(subMonths(new Date(), 3), 'yyyy-MM-dd')
+            setStartDate(format(subMonths(new Date(), 3), 'yyyy-MM-dd'))
+            endDate = format(new Date(), 'yyyy-MM-dd')
+            setEndDate(format(new Date(), 'yyyy-MM-dd'))
             setLoading(false)
           })
       }

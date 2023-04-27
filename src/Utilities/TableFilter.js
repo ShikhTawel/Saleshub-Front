@@ -51,6 +51,27 @@ export function ovdFilter({ column: { filterValue, setFilter } }) {
   )
 }
 
+export function closingBalanceFilter({ column: { filterValue, setFilter } }) {
+  // Render a multi-select box
+  return (
+    <select
+      className={
+        'w-full rounded text-gray-800 border border-gray-300 p-1.5 text-sm  shadow-sm ring-orient-400 focus:border focus:border-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2'
+      }
+      value={filterValue}
+      onChange={(e) => {
+        setFilter(e.target.value || undefined)
+      }}>
+      <option value="">All</option>
+      <option value="lessThanZero">اقل من الصفر</option>
+      <option value="equalsZero">يساوي الصفر</option>
+      <option value="betweenZeroAndFiveHundred">بين صفر و 500</option>
+      <option value="moreThanFiveHundred">اكثر من 500</option>
+
+    </select>
+  )
+}
+
 export function PerformanceIndicatorsColumnFilter({
   column: { filterValue, setFilter },
 }) {
