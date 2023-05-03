@@ -18,6 +18,7 @@ import { BASE_URL } from '../env'
 
 const Login = () => {
   const [isLoginLoading, setIsLoginLoading] = useState(false)
+  const [isResetPasswordLoading, SetIsResetPasswordLoading] = useState(false)
   useState(false)
   const navigate = useNavigate()
 
@@ -56,7 +57,10 @@ const Login = () => {
             )
             navigate('Reset')
           }
-          if (err.response.data.errors != null && err.response.data.errors.length > 0)
+          if (
+            err.response.data.errors != null &&
+            err.response.data.errors.length > 0
+          )
             for (
               let index = 0;
               index < err.response.data.errors.length;
@@ -71,6 +75,33 @@ const Login = () => {
       password: Yup.string().required('Password is required'),
     }),
   })
+
+  const resetPassword = () => {
+    SetIsResetPasswordLoading(true)
+    if (Formik.values.usernameOrEmail == '') {
+      toast.error('Enter Username')
+      return
+    }
+    axios
+      .post(
+        `${BASE_URL}auth/resetPasswordRequest`,
+        Formik.values.usernameOrEmail,
+      )
+      .then((res) => {
+        toast.info(res.data.message)
+        sessionStorage.removeItem('ResetPasswordRequests+' + new Date().toLocaleDateString())
+      })
+      .catch((err) => {
+        if (
+          err.response.data.errors != null &&
+          err.response.data.errors.length > 0
+        )
+          for (let index = 0; index < err.response.data.errors.length; index++)
+            toast.error(err.response.data.errors[index].message)
+        else toast.error('Error Occured')
+      })
+      .finally(SetIsResetPasswordLoading(false))
+  }
 
   return (
     <>
@@ -133,6 +164,20 @@ const Login = () => {
               FieldName={'password'}
               errors={Formik.errors}
             />
+          </EFormWrapper>
+          <EFormWrapper>
+            <FIconWrapper>
+              <ESpinner isVisible={isResetPasswordLoading} />
+
+              <button
+                className={
+                  'font-medium underline text-orient-600 cursor-pointer'
+                }
+                type="button"
+                onClick={resetPassword}>
+                Reset Password
+              </button>
+            </FIconWrapper>
           </EFormWrapper>
           <EFormWrapper>
             <FButton className={'w-full mt-1'} type={'submit'}>

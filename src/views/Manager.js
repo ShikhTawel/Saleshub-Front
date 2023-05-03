@@ -8,6 +8,8 @@ import InstanceViewer from './InstanceViewer'
 import DetailsModalRep from './DetailsModalRep'
 import { getColor, getPerformance } from '../Utilities/Performance'
 import { getRepsColumns } from '../Utilities/ColumnsDefinition'
+import GiveFeedback from './GiveFeedback'
+import { ToastContainer } from 'react-toastify'
 
 // import Dropdown from './Dropdown'
 
@@ -16,6 +18,7 @@ import { getRepsColumns } from '../Utilities/ColumnsDefinition'
 const Manager = () => {
   const [repData, setRepData] = useState('')
   const [isRepModalOpen, setIsRepModalOpen] = useState(false)
+  const [isComplainModalOpen, setIsComplainModalOpen] = useState(false)
 
   const managerPerformanceResponse = useCustomAxios(
     {
@@ -114,6 +117,17 @@ const Manager = () => {
   } else {
     return (
       <>
+       <ToastContainer
+          position="bottom-left"
+          autoClose={3000}
+          hideProgressBar
+          newestOnTop={true}
+          closeOnClick
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme={'colored'}
+        />
         <div className={'p-5'}>
           <div className={'p-5 w-full'}>
             <div
@@ -142,6 +156,15 @@ const Manager = () => {
                         instance={'الاداء'}
                       />
                     </div>
+                    <span
+                    onClick={() => {
+                      setIsComplainModalOpen(true)
+                    }}
+                    className={
+                      'font-medium underline text-orient-600 cursor-pointer'
+                    }>
+                    تقديم شكوى او مقترح
+                  </span>
                   </span>
                 </div>
               </div>
@@ -263,6 +286,10 @@ const Manager = () => {
               window.location.reload()
             }}
           />
+           <GiveFeedback
+          isOpen={isComplainModalOpen}
+          setIsOpen={setIsComplainModalOpen}
+        />
           <DetailsModalRep
             repData={repData}
             isOpen={isRepModalOpen}

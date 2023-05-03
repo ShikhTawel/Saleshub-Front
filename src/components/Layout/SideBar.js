@@ -7,7 +7,7 @@ import {
 import FFlexWrapper from "../FFlexWrapper"
 import { useEffect, useRef, useState } from "react"
 import FNavLink from "../FNavLink"
-import { FaFileExcel, FaRegStopCircle, FaRegUser } from "react-icons/fa"
+import { FaFileExcel, FaRegRegistered, FaRegStopCircle, FaRegUser, FaUserCheck } from "react-icons/fa"
 import useWindowDimensions from "../../Hooks/useWindowDimensions"
 import FButton from "../FButton"
 
@@ -73,7 +73,14 @@ const SideBar = ({ isSideBarOpen, setIsSideBarOpen, onClickOutside }) => {
               </span>
             </FNavLink>
 
-            
+
+            <FNavLink setIsSideBarOpen={setIsSideBarOpen} to={"/reset-requests"}>
+              <FaRegRegistered size={25} />
+              <span className={`text-sm ${isCollapse ? "hidden" : ""}`}>
+               طلبات تغيير كلمة المرور
+              </span>
+            </FNavLink>
+
             <FNavLink setIsSideBarOpen={setIsSideBarOpen} to={"/reset-user-password"}>
               <FaRegUser size={25} />
               <span className={`text-sm ${isCollapse ? "hidden" : ""}`}>
@@ -95,7 +102,12 @@ const SideBar = ({ isSideBarOpen, setIsSideBarOpen, onClickOutside }) => {
               </span>
             </FNavLink>
 
-            
+            <FNavLink setIsSideBarOpen={setIsSideBarOpen} to={"/view-feedback"}>
+              <FaUserCheck size={25} />
+              <span className={`text-sm ${isCollapse ? "hidden" : ""}`}>
+               عرض المقترحات و الشكاوي
+              </span>
+            </FNavLink>
 
             <FButton  onClick={() => logout()}  >
               <HiLogout style={{ minWidth: "15px" }} size={25} />

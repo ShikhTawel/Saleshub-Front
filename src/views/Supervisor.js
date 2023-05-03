@@ -9,7 +9,12 @@ import ESpinnerBig from '../components/ESpinnerBig'
 import InstanceViewer from './InstanceViewer'
 import DetailsModalRep from './DetailsModalRep'
 import { getColor, getPerformance } from '../Utilities/Performance'
-import { getMerchantsColumns, getRepsColumns } from '../Utilities/ColumnsDefinition'
+import {
+  getMerchantsColumns,
+  getRepsColumns,
+} from '../Utilities/ColumnsDefinition'
+import GiveFeedback from './GiveFeedback'
+import { ToastContainer } from 'react-toastify'
 
 const Supervisor = () => {
   const [merchantData, setMerchantData] = useState('')
@@ -17,6 +22,7 @@ const Supervisor = () => {
 
   const [repData, setRepData] = useState('')
   const [isRepModalOpen, setIsRepModalOpen] = useState(false)
+  const [isComplainModalOpen, setIsComplainModalOpen] = useState(false)
 
   const { loading, response } = useCustomAxios(
     {
@@ -79,7 +85,9 @@ const Supervisor = () => {
   const supervisorMerchantsLicenseSummaryResponse = useCustomAxios(
     {
       method: 'GET',
-      url: `/supervisor/${localStorage.getItem('username')}/merchantsLicenseSummary`,
+      url: `/supervisor/${localStorage.getItem(
+        'username',
+      )}/merchantsLicenseSummary`,
     },
     localStorage.getItem('username') +
       '+merchantsLicenseSummary+' +
@@ -89,7 +97,9 @@ const Supervisor = () => {
   const supervisorMerchantsClosingBalanceSummaryResponse = useCustomAxios(
     {
       method: 'GET',
-      url: `/supervisor/${localStorage.getItem('username')}/merchantsClosingBalanceSummary`,
+      url: `/supervisor/${localStorage.getItem(
+        'username',
+      )}/merchantsClosingBalanceSummary`,
     },
     localStorage.getItem('username') +
       '+merchantsClosingBalanceSummary+' +
@@ -115,6 +125,17 @@ const Supervisor = () => {
   } else {
     return (
       <>
+       <ToastContainer
+          position="bottom-left"
+          autoClose={3000}
+          hideProgressBar
+          newestOnTop={true}
+          closeOnClick
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme={'colored'}
+        />
         <div className={'p-5'}>
           <div className={'p-5 w-full'}>
             <div
@@ -137,12 +158,29 @@ const Supervisor = () => {
                         instance={'POS'}
                       />
                     </div>
-                    <div className={'flex gap-2'} style={{backgroundColor: getColor(supervisorPerformanceResponse?.response)}}>
-                      <InstanceViewer 
-                        value={getPerformance(supervisorPerformanceResponse?.response)}
+                    <div
+                      className={'flex gap-2'}
+                      style={{
+                        backgroundColor: getColor(
+                          supervisorPerformanceResponse?.response,
+                        ),
+                      }}>
+                      <InstanceViewer
+                        value={getPerformance(
+                          supervisorPerformanceResponse?.response,
+                        )}
                         instance={'الاداء'}
                       />
                     </div>
+                    <span
+                      onClick={() => {
+                        setIsComplainModalOpen(true)
+                      }}
+                      className={
+                        'font-medium underline text-orient-600 cursor-pointer'
+                      }>
+                      تقديم شكوى او مقترح
+                    </span>
                   </span>
                 </div>
               </div>
@@ -174,7 +212,10 @@ const Supervisor = () => {
               })}
             </div>
           </div>
-          
+          <GiveFeedback
+            isOpen={isComplainModalOpen}
+            setIsOpen={setIsComplainModalOpen}
+          />
           <DetailsModal
             merchantData={merchantData}
             isOpen={isModalOpen}
@@ -194,7 +235,7 @@ const Supervisor = () => {
               setRepData(row)
             }}
           />
-          
+
           <div className={'p-5 w-full'}>
             <div
               className={
@@ -203,24 +244,26 @@ const Supervisor = () => {
               <div className={'flex flex-col '}>
                 <span className={'text-lg'}>فئات التجار</span>
               </div>
-              {supervisorMerchantsClassesResponse.response.map((item, index) => {
-                return (
-                  <div
-                    style={{
-                      direction: 'ltr',
-                    }}
-                    key={index}
-                    className={'flex flex-col gap-2 items-start '}>
-                    <span className={'text-lg'}>{item?.classType}</span>
+              {supervisorMerchantsClassesResponse.response.map(
+                (item, index) => {
+                  return (
                     <div
-                      className={
-                        'flex flex-col gap-1 divide-y border rounded bg-gray-100 border-dashed  '
-                      }>
-                      <p className={'text-left px-1'}>Count {item?.count}</p>
+                      style={{
+                        direction: 'ltr',
+                      }}
+                      key={index}
+                      className={'flex flex-col gap-2 items-start '}>
+                      <span className={'text-lg'}>{item?.classType}</span>
+                      <div
+                        className={
+                          'flex flex-col gap-1 divide-y border rounded bg-gray-100 border-dashed  '
+                        }>
+                        <p className={'text-left px-1'}>Count {item?.count}</p>
+                      </div>
                     </div>
-                  </div>
-                )
-              })}
+                  )
+                },
+              )}
             </div>
             <div
               className={
@@ -229,24 +272,26 @@ const Supervisor = () => {
               <div className={'flex flex-col '}>
                 <span className={'text-lg'}>License</span>
               </div>
-              {supervisorMerchantsLicenseSummaryResponse.response.map((item, index) => {
-                return (
-                  <div
-                    style={{
-                      direction: 'ltr',
-                    }}
-                    key={index}
-                    className={'flex flex-col gap-2 items-start '}>
-                    <span className={'text-lg'}>{item?.license}</span>
+              {supervisorMerchantsLicenseSummaryResponse.response.map(
+                (item, index) => {
+                  return (
                     <div
-                      className={
-                        'flex flex-col gap-1 divide-y border rounded bg-gray-100 border-dashed  '
-                      }>
-                      <p className={'text-left px-1'}>Count {item?.count}</p>
+                      style={{
+                        direction: 'ltr',
+                      }}
+                      key={index}
+                      className={'flex flex-col gap-2 items-start '}>
+                      <span className={'text-lg'}>{item?.license}</span>
+                      <div
+                        className={
+                          'flex flex-col gap-1 divide-y border rounded bg-gray-100 border-dashed  '
+                        }>
+                        <p className={'text-left px-1'}>Count {item?.count}</p>
+                      </div>
                     </div>
-                  </div>
-                )
-              })}
+                  )
+                },
+              )}
             </div>
             <div
               className={
@@ -255,24 +300,26 @@ const Supervisor = () => {
               <div className={'flex flex-col '}>
                 <span className={'text-lg'}>Closing Balance</span>
               </div>
-              {supervisorMerchantsClosingBalanceSummaryResponse.response.map((item, index) => {
-                return (
-                  <div
-                    style={{
-                      direction: 'ltr',
-                    }}
-                    key={index}
-                    className={'flex flex-col gap-2 items-start '}>
-                    <span className={'text-lg'}>{item?.range}</span>
+              {supervisorMerchantsClosingBalanceSummaryResponse.response.map(
+                (item, index) => {
+                  return (
                     <div
-                      className={
-                        'flex flex-col gap-1 divide-y border rounded bg-gray-100 border-dashed  '
-                      }>
-                      <p className={'text-left px-1'}>Count {item?.count}</p>
+                      style={{
+                        direction: 'ltr',
+                      }}
+                      key={index}
+                      className={'flex flex-col gap-2 items-start '}>
+                      <span className={'text-lg'}>{item?.range}</span>
+                      <div
+                        className={
+                          'flex flex-col gap-1 divide-y border rounded bg-gray-100 border-dashed  '
+                        }>
+                        <p className={'text-left px-1'}>Count {item?.count}</p>
+                      </div>
                     </div>
-                  </div>
-                )
-              })}
+                  )
+                },
+              )}
             </div>
           </div>
           <SectionTitle title={'التجار'} />

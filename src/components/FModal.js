@@ -15,7 +15,6 @@ const FModal = ({
   color,
 }) => {
   function closeModal() {
-    console.log(">>>")
     isDismissible && setIsOpen(false)
     callbackFunction && callbackFunction()
   }

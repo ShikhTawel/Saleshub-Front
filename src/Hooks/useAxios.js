@@ -4,7 +4,8 @@ import { axiosInstance } from '../api/requister'
 import { BASE_URL } from '../env'
 
 axios.defaults.baseURL = BASE_URL
-axios.defaults.headers.common['Authorization'] = localStorage.getItem('access_token');
+axios.defaults.headers.common['Authorization'] =
+  localStorage.getItem('access_token')
 
 /**
  fixed :
@@ -20,11 +21,13 @@ export const useCustomAxios = (axiosParams, cacheKey) => {
   const [loading, setloading] = useState(true)
 
   const fetchData = async (params) => {
-    if (cacheKey in sessionStorage) {
-      setResponse(JSON.parse(sessionStorage.getItem(cacheKey)))
-      setloading(false)
-    } else {
-      setloading(true)
+    setloading(true)
+    if (cacheKey != null)
+      if (cacheKey in sessionStorage) {
+        setResponse(JSON.parse(sessionStorage.getItem(cacheKey)))
+        setloading(false)
+      }
+    if (loading)
       try {
         const result = await axiosInstance.request(params)
         setResponse(result.data)
@@ -35,8 +38,8 @@ export const useCustomAxios = (axiosParams, cacheKey) => {
       } finally {
         setloading(false)
       }
-    }
   }
+
   const Refetch = async () => fetchData(axiosParams)
 
   useEffect(() => {

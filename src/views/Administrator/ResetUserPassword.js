@@ -47,6 +47,7 @@ const ResetUserPassword = () => {
         .then((res) => {
           console.log(res)
           toast.info(res.data.message)
+          sessionStorage.removeItem('ResetPasswordRequests+' + new Date().toLocaleDateString())
           setIsLoginLoading(false)
         })
         .catch((err) => {

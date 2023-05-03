@@ -23,6 +23,7 @@
     "react-datepicker": "^4.10.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.6.0",
+    "react-native-paper": "^5.7.0",
     "react-querybuilder": "^5.1.1",
     "react-router-dom": "^6.4.3",
     "react-scripts": "5.0.1",

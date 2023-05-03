@@ -4,19 +4,24 @@ import { useCustomAxios } from '../Hooks/useAxios'
 import DetailsModal from './DetailsModal'
 import React, { useState } from 'react'
 import InstanceViewer from './InstanceViewer'
-import FModal from '../components/FModal'
-import FButton from '../components/FButton'
+
 import SectionTitle from '../components/SectionTitle'
 import DataTableFilter from './DataTableFilter'
 import ESpinnerBig from '../components/ESpinnerBig'
-import { getColor, getPerformance } from '../Utilities/Performance'
+import {
+  getColor,
+  getPerformance,
+} from '../Utilities/Performance'
 import { getMerchantsColumns } from '../Utilities/ColumnsDefinition'
+
+import { ToastContainer } from 'react-toastify'
+import GiveFeedback from './GiveFeedback'
 
 const Salesrep = () => {
   // eslint-disable-next-line no-unused-vars
   const [merchantData, setMerchantData] = useState('')
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [isLocationModalOpen, setIsLocationModalOpen] = useState(false)
+  const [isComplainModalOpen, setIsComplainModalOpen] = useState(false)
 
   const { loading, response } = useCustomAxios(
     {
@@ -67,11 +72,13 @@ const Salesrep = () => {
       '+merchantsClasses+' +
       new Date().toLocaleDateString(),
   )
- 
+
   const salesRepMerchantsLicenseSummaryResponse = useCustomAxios(
     {
       method: 'GET',
-      url: `salesrep/${localStorage.getItem('username')}/merchantsLicenseSummary`,
+      url: `salesrep/${localStorage.getItem(
+        'username',
+      )}/merchantsLicenseSummary`,
     },
     localStorage.getItem('username') +
       '+merchantsLicenseSummary+' +
@@ -81,7 +88,9 @@ const Salesrep = () => {
   const salesRepMerchantsClosingBalanceSummaryResponse = useCustomAxios(
     {
       method: 'GET',
-      url: `salesrep/${localStorage.getItem('username')}/merchantsClosingBalanceSummary`,
+      url: `salesrep/${localStorage.getItem(
+        'username',
+      )}/merchantsClosingBalanceSummary`,
     },
     localStorage.getItem('username') +
       '+merchantsClosingBalanceSummary+' +
@@ -101,7 +110,18 @@ const Salesrep = () => {
   } else {
     return (
       <>
-        <FModal
+        <ToastContainer
+          position="bottom-left"
+          autoClose={3000}
+          hideProgressBar
+          newestOnTop={true}
+          closeOnClick
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme={'colored'}
+        />
+        {/* <FModal
           title={'الموقع'}
           isOpen={isLocationModalOpen}
           setIsOpen={setIsLocationModalOpen}>
@@ -135,7 +155,11 @@ const Salesrep = () => {
               إغلاق
             </FButton>
           </div>
-        </FModal>
+        </FModal> */}
+        <GiveFeedback
+          isOpen={isComplainModalOpen}
+          setIsOpen={setIsComplainModalOpen}
+        />
         <DetailsModal
           merchantData={merchantData}
           isOpen={isModalOpen}
@@ -161,21 +185,27 @@ const Salesrep = () => {
                   </div>
                   <div
                     className={'flex gap-2'}
-                    style={{ backgroundColor: getColor(salesRepPerformanceResponse?.response) }}>
+                    style={{
+                      backgroundColor: getColor(
+                        salesRepPerformanceResponse?.response,
+                      ),
+                    }}>
                     <InstanceViewer
-                      value={getPerformance(salesRepPerformanceResponse?.response)}
+                      value={getPerformance(
+                        salesRepPerformanceResponse?.response,
+                      )}
                       instance={'الاداء'}
                     />
                   </div>
 
                   <span
                     onClick={() => {
-                      setIsLocationModalOpen(true)
+                      setIsComplainModalOpen(true)
                     }}
                     className={
                       'font-medium underline text-orient-600 cursor-pointer'
                     }>
-                    إظهار الموقع
+                    تقديم شكوى او مقترح
                   </span>
                 </div>
               </div>
@@ -241,24 +271,26 @@ const Salesrep = () => {
               <div className={'flex flex-col '}>
                 <span className={'text-lg'}>License</span>
               </div>
-              {salesRepMerchantsLicenseSummaryResponse.response.map((item, index) => {
-                return (
-                  <div
-                    style={{
-                      direction: 'ltr',
-                    }}
-                    key={index}
-                    className={'flex flex-col gap-2 items-start '}>
-                    <span className={'text-lg'}>{item?.license}</span>
+              {salesRepMerchantsLicenseSummaryResponse.response.map(
+                (item, index) => {
+                  return (
                     <div
-                      className={
-                        'flex flex-col gap-1 divide-y border rounded bg-gray-100 border-dashed  '
-                      }>
-                      <p className={'text-left px-1'}>Count {item?.count}</p>
+                      style={{
+                        direction: 'ltr',
+                      }}
+                      key={index}
+                      className={'flex flex-col gap-2 items-start '}>
+                      <span className={'text-lg'}>{item?.license}</span>
+                      <div
+                        className={
+                          'flex flex-col gap-1 divide-y border rounded bg-gray-100 border-dashed  '
+                        }>
+                        <p className={'text-left px-1'}>Count {item?.count}</p>
+                      </div>
                     </div>
-                  </div>
-                )
-              })}
+                  )
+                },
+              )}
             </div>
             <div
               className={
@@ -267,24 +299,26 @@ const Salesrep = () => {
               <div className={'flex flex-col '}>
                 <span className={'text-lg'}>Closing Balance</span>
               </div>
-              {salesRepMerchantsClosingBalanceSummaryResponse.response.map((item, index) => {
-                return (
-                  <div
-                    style={{
-                      direction: 'ltr',
-                    }}
-                    key={index}
-                    className={'flex flex-col gap-2 items-start '}>
-                    <span className={'text-lg'}>{item?.range}</span>
+              {salesRepMerchantsClosingBalanceSummaryResponse.response.map(
+                (item, index) => {
+                  return (
                     <div
-                      className={
-                        'flex flex-col gap-1 divide-y border rounded bg-gray-100 border-dashed  '
-                      }>
-                      <p className={'text-left px-1'}>Count {item?.count}</p>
+                      style={{
+                        direction: 'ltr',
+                      }}
+                      key={index}
+                      className={'flex flex-col gap-2 items-start '}>
+                      <span className={'text-lg'}>{item?.range}</span>
+                      <div
+                        className={
+                          'flex flex-col gap-1 divide-y border rounded bg-gray-100 border-dashed  '
+                        }>
+                        <p className={'text-left px-1'}>Count {item?.count}</p>
+                      </div>
                     </div>
-                  </div>
-                )
-              })}
+                  )
+                },
+              )}
             </div>
           </div>
           <div className={'w-full px-4'}>
