@@ -16,12 +16,16 @@ const UploadData = () => {
 
   const [isLoading, SetIsLoading] = useState(false)
   const [isUsersLoading, SetIsUsersLoading] = useState(false)
+  const [isMerchantsTargetLoading, SetIsMerchantsTargetLoading] = useState(false)
+
   const [isTargetSampleLoading, SetIsTargetSampleLoading] = useState(false)
+  const [isMerchantsTargetSampleLoading, SetIsMerchantsTargetSampleLoading] = useState(false)
   const [isUserSampleLoading, SetIsUserSampleLoading] = useState(false)
   const [isDownloadUsersLoading, SetIsDownloadUsersLoading] = useState(false)
 
   const [selectedFile, setSelectedFile] = useState()
   const [selectedFileTarget, setSelectedFileTarget] = useState()
+  const [selectedFileMerchantsTarget, setSelectedFileMerchantsTarget] = useState()
 
   const changeHandler = (event) => {
     setSelectedFile(event.target.files[0])
@@ -29,6 +33,10 @@ const UploadData = () => {
 
   const changeHandlerTarget = (event) => {
     setSelectedFileTarget(event.target.files[0])
+  }
+
+  const changeHandlerMrechantsTarget = (event) => {
+    setSelectedFileMerchantsTarget(event.target.files[0])
   }
 
   const postFileRequestUsers = () => {
@@ -182,7 +190,66 @@ const UploadData = () => {
       })
   }
 
-  
+  const postFileRequestMerchantsTarget = () => {
+    SetIsMerchantsTargetLoading(true)
+
+    const multipartFile = new FormData()
+
+    multipartFile.append('multipartFile', selectedFileMerchantsTarget)
+
+    let headers = {
+      Authorization: localStorage.getItem(`access_token`),
+    }
+
+    fetch(BASE_URL + 'admin/uploadMerchantsTarget', {
+      method: 'POST',
+      body: multipartFile,
+      headers: headers,
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        SetIsMerchantsTargetLoading(false)
+        toast.info(result.message)
+      })
+      .catch((err) => {
+        SetIsMerchantsTargetLoading(false)
+        if (err.response.data?.errors != null) {
+          let errors = err.response.data.errors
+
+          for (let index = 0; index < errors.length; index++) {
+            const error = errors[index]
+            toast.error(error.message)
+          }
+        } else toast.error('Error Occurred')
+      })
+  }
+
+  const exportSampleMerchantsTarget = () => {
+    SetIsMerchantsTargetSampleLoading(true)
+
+    axios
+      .get(`${BASE_URL}admin/exportSampleMerchantsTarget`, {
+        headers: {
+          Authorization: localStorage.getItem(`access_token`),
+        },
+      })
+      .then((result) => {
+        SetIsMerchantsTargetSampleLoading(false)
+        FileSaver.saveAs(fromByteArrayToExcel(result, 'Merhcants_Increase_Target_Sample'))
+      })
+      .catch((err) => {
+        SetIsMerchantsTargetSampleLoading(false)
+
+        if (err.response.data.errors) {
+          let errors = err.response.data.errors
+
+          for (let index = 0; index < errors.length; index++) {
+            const error = errors[index]
+            toast.error(error.message)
+          }
+        } else toast.error('Error Occurred')
+      })
+  }
 
   return (
     <>
@@ -233,6 +300,30 @@ const UploadData = () => {
             <FIconWrapper>
               <ESpinner isVisible={isTargetSampleLoading} />
               <span className={'text-s'}>تحميل عينة من ملف التارجتس</span>
+            </FIconWrapper>
+          </FButton>
+        </div>
+        <div
+          className={
+            'flex flex-col  items-center justify-center w-full h-screen'
+          }>
+          <span className={'text-3xl text-gray-800 font-semibold mt-5'}>
+            Upload Merchants Increasing Target
+          </span>
+          <input type="file" name="fileTargetMerchants" onChange={changeHandlerMrechantsTarget} />
+
+          <div>
+            <FButton onClick={postFileRequestMerchantsTarget}>
+              <FIconWrapper>
+                <ESpinner isVisible={isMerchantsTargetLoading} />
+                <span className={'text-s'}>Submit</span>
+              </FIconWrapper>
+            </FButton>
+          </div>
+          <FButton onClick={exportSampleMerchantsTarget}>
+            <FIconWrapper>
+              <ESpinner isVisible={isMerchantsTargetSampleLoading} />
+              <span className={'text-s'}>تحميل عينة من ملف تارجتس التجار</span>
             </FIconWrapper>
           </FButton>
         </div>

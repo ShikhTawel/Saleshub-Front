@@ -106,6 +106,18 @@ const Supervisor = () => {
       new Date().toLocaleDateString(),
   )
 
+  const supervisorMerchantsIncreasingCountsResponse = useCustomAxios(
+    {
+      method: 'GET',
+      url: `/supervisor/${localStorage.getItem(
+        'username',
+      )}/merchantsIncreasingCounts`,
+    },
+    localStorage.getItem('username') +
+      '+merchantsIncreasingCounts+' +
+      new Date().toLocaleDateString(),
+  )
+
   const repsCols = getRepsColumns()
 
   const columns = getMerchantsColumns()
@@ -125,7 +137,7 @@ const Supervisor = () => {
   } else {
     return (
       <>
-       <ToastContainer
+        <ToastContainer
           position="bottom-left"
           autoClose={3000}
           hideProgressBar
@@ -170,6 +182,14 @@ const Supervisor = () => {
                           supervisorPerformanceResponse?.response,
                         )}
                         instance={'الاداء'}
+                      />
+                    </div>
+                    <div className={'flex gap-2'}>
+                      <InstanceViewer
+                        value={
+                          supervisorMerchantsIncreasingCountsResponse?.response
+                        }
+                        instance={'زيادة عدد التجار'}
                       />
                     </div>
                     <span

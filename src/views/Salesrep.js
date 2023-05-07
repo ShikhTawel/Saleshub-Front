@@ -97,6 +97,18 @@ const Salesrep = () => {
       new Date().toLocaleDateString(),
   )
 
+  const salesRepMerchantsIncreasingCountsResponse = useCustomAxios(
+    {
+      method: 'GET',
+      url: `salesrep/${localStorage.getItem(
+        'username',
+      )}/merchantsIncreasingCounts`,
+    },
+    localStorage.getItem('username') +
+      '+merchantsIncreasingCounts+' +
+      new Date().toLocaleDateString(),
+  )
+
   const cols = getMerchantsColumns()
 
   if (loading) {
@@ -198,6 +210,12 @@ const Salesrep = () => {
                     />
                   </div>
 
+                  <div className={'flex gap-2'}>
+                    <InstanceViewer
+                      value={salesRepMerchantsIncreasingCountsResponse?.response}
+                      instance={'زيادة عدد التجار'}
+                    />
+                  </div>
                   <span
                     onClick={() => {
                       setIsComplainModalOpen(true)

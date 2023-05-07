@@ -99,6 +99,18 @@ const Manager = () => {
       new Date().toLocaleDateString(),
   )
 
+  const managerMerchantsIncreasingCountsResponse = useCustomAxios(
+    {
+      method: 'GET',
+      url: `/manager/${localStorage.getItem(
+        'username',
+      )}/merchantsIncreasingCounts`,
+    },
+    localStorage.getItem('username') +
+      '+merchantsIncreasingCounts+' +
+      new Date().toLocaleDateString(),
+  )
+
   const cols = getRepsColumns()
 
   if (
@@ -154,6 +166,14 @@ const Manager = () => {
                       <InstanceViewer
                         value={getPerformance(managerPerformanceResponse?.response)}
                         instance={'الاداء'}
+                      />
+                    </div>
+                    <div className={'flex gap-2'}>
+                      <InstanceViewer
+                        value={
+                          managerMerchantsIncreasingCountsResponse?.response
+                        }
+                        instance={'زيادة عدد التجار'}
                       />
                     </div>
                     <span
