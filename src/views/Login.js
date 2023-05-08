@@ -125,7 +125,7 @@ const Login = () => {
           Log in to your account
         </span>
         <span className={'text-sm text-gray-800 mt-4 mb-3'}>
-          Welcome back! Please enter your details.
+          Welcome back To SalesHub! Please enter your details.
         </span>
         <form noValidate onSubmit={Formik.handleSubmit} className={'w-4/12'}>
           <EFormWrapper className={'w-full'}>

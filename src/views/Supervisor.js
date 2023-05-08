@@ -290,7 +290,7 @@ const Supervisor = () => {
                 'flex w-full  justify-between gap-2 p-3 gap-5  items-start bg-white border primary-shadow rounded mt-5 '
               }>
               <div className={'flex flex-col '}>
-                <span className={'text-lg'}>License</span>
+                <span className={'text-lg'}>الرخص</span>
               </div>
               {supervisorMerchantsLicenseSummaryResponse.response.map(
                 (item, index) => {

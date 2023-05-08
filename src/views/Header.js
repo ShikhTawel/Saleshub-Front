@@ -11,7 +11,7 @@ const Header = () => {
 
   return (
     <div className={'bg-orient-500 p-3 f-col-center text-white w-full'}>
-      <span>Fawry Merchant System</span>
+      <span>SalesHub</span>
       <FButton onClick={() => logout()}>Logout</FButton>
     </div>
   )
