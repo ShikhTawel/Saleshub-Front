@@ -39,12 +39,12 @@ const NavigateToUser = () => {
         'Content-Type': 'application/json',
       }
       axiosInstance
-        .post(`${BASE_URL}checkUsername/` + routeDto.navigatedUser, headers)
+        .post(`${BASE_URL}checkUsername/` + routeDto.navigatedUser.toLowerCase(), headers)
         .then((res) => {
           setIsLoginLoading(false)
 
           localStorage.setItem('username', routeDto.navigatedUser.toLowerCase())
-          localStorage.setItem('role', res)
+          localStorage.setItem('role', res.data)
 
           navigate('/Dashboard')
         })
