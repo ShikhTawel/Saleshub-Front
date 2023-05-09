@@ -7,7 +7,7 @@ import {
 import FFlexWrapper from "../FFlexWrapper"
 import { useEffect, useRef, useState } from "react"
 import FNavLink from "../FNavLink"
-import { FaFileExcel, FaRegRegistered, FaRegStopCircle, FaRegUser, FaUserCheck } from "react-icons/fa"
+import { FaFileExcel, FaRegEye, FaRegRegistered, FaRegStopCircle, FaRegUser, FaUserCheck } from "react-icons/fa"
 import useWindowDimensions from "../../Hooks/useWindowDimensions"
 import FButton from "../FButton"
 
@@ -73,6 +73,13 @@ const SideBar = ({ isSideBarOpen, setIsSideBarOpen, onClickOutside }) => {
               </span>
             </FNavLink>
 
+
+            <FNavLink setIsSideBarOpen={setIsSideBarOpen} to={"/navigate"}>
+              <FaRegEye size={25} />
+              <span className={`text-sm ${isCollapse ? "hidden" : ""}`}>
+               الذهاب الي صفحة مستخدم
+              </span>
+            </FNavLink>
 
             <FNavLink setIsSideBarOpen={setIsSideBarOpen} to={"/reset-requests"}>
               <FaRegRegistered size={25} />
