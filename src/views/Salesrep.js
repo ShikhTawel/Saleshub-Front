@@ -8,10 +8,7 @@ import InstanceViewer from './InstanceViewer'
 import SectionTitle from '../components/SectionTitle'
 import DataTableFilter from './DataTableFilter'
 import ESpinnerBig from '../components/ESpinnerBig'
-import {
-  getColor,
-  getPerformance,
-} from '../Utilities/Performance'
+import { getColor, getPerformance } from '../Utilities/Performance'
 import { getMerchantsColumns } from '../Utilities/ColumnsDefinition'
 
 import { ToastContainer } from 'react-toastify'
@@ -109,6 +106,7 @@ const Salesrep = () => {
       new Date().toLocaleDateString(),
   )
 
+
   const cols = getMerchantsColumns()
 
   if (loading) {
@@ -120,20 +118,20 @@ const Salesrep = () => {
       </>
     )
   } else {
-    return (
-      <>
-        <ToastContainer
-          position="bottom-left"
-          autoClose={3000}
-          hideProgressBar
-          newestOnTop={true}
-          closeOnClick
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme={'colored'}
-        />
-        {/* <FModal
+      return (
+        <>
+          <ToastContainer
+            position="bottom-left"
+            autoClose={3000}
+            hideProgressBar
+            newestOnTop={true}
+            closeOnClick
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme={'colored'}
+          />
+          {/* <FModal
           title={'الموقع'}
           isOpen={isLocationModalOpen}
           setIsOpen={setIsLocationModalOpen}>
@@ -168,199 +166,209 @@ const Salesrep = () => {
             </FButton>
           </div>
         </FModal> */}
-        <GiveFeedback
-          isOpen={isComplainModalOpen}
-          setIsOpen={setIsComplainModalOpen}
-        />
-        <DetailsModal
-          merchantData={merchantData}
-          isOpen={isModalOpen}
-          setIsOpen={setIsModalOpen}
-        />
-        <div className={' bg-gray-50 w-full min-h-screen f-col-center'}>
-          <div className={'p-5 w-full'}>
-            <div
-              className={
-                'flex w-full  justify-between gap-2 p-3 gap-5  items-start bg-white border primary-shadow rounded mt-5 '
-              }>
-              <div className={'flex gap-2 items-center '}>
-                <FAvatar name={'mostafa.elamrawiy'} />
-                <div className={'flex flex-col '}>
-                  <span className={'text-lg'}>
-                    {localStorage.getItem('username')}
-                  </span>
-                  <div className={'flex gap-2'}>
-                    <InstanceViewer
-                      value={salesRepMerchantsCountResponse?.response}
-                      instance={'Merchants'}
-                    />
-                  </div>
-                  <div
-                    className={'flex gap-2'}
-                    style={{
-                      backgroundColor: getColor(
-                        salesRepPerformanceResponse?.response,
-                      ),
-                    }}>
-                    <InstanceViewer
-                      value={getPerformance(
-                        salesRepPerformanceResponse?.response,
-                      )}
-                      instance={'الاداء'}
-                    />
-                  </div>
-
-                  <div className={'flex gap-2'}>
-                    <InstanceViewer
-                      value={salesRepMerchantsIncreasingCountsResponse?.response}
-                      instance={'زيادة عدد التجار'}
-                    />
-                  </div>
-                  <span
-                    onClick={() => {
-                      setIsComplainModalOpen(true)
-                    }}
-                    className={
-                      'font-medium underline text-orient-600 cursor-pointer'
-                    }>
-                    تقديم شكوى او مقترح
-                  </span>
-                </div>
-              </div>
-              {salesRepTargetAchievedResponse.response.map((item, index) => {
-                return (
-                  <div
-                    style={{
-                      direction: 'ltr',
-                    }}
-                    key={index}
-                    className={'flex flex-col gap-2 items-start '}>
-                    <span className={'text-lg'}>{item?.serviceName}</span>
-                    <div
-                      className={
-                        'flex flex-col gap-1 divide-y border rounded bg-gray-100 border-dashed  '
-                      }>
-                      <p className={'text-left px-1'}>
-                        Target {item?.targetFormmated}
-                      </p>{' '}
-                      <p className={'text-left px-1'}>
-                        Achieved {item?.achievedWithPercentage}
-                      </p>{' '}
-                      <p className={'text-left px-1'}>
-                        Expected Achieved {item?.expectedWithPercentage}
-                      </p>
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
-          </div>
-          <div className={'p-5 w-full'}>
-            <div
-              className={
-                'flex w-full  justify-between gap-2 p-3 gap-5  items-start bg-white border primary-shadow rounded mt-5 '
-              }>
-              <div className={'flex flex-col '}>
-                <span className={'text-lg'}>فئات التجار</span>
-              </div>
-              {salesRepMerchantsClassesResponse.response.map((item, index) => {
-                return (
-                  <div
-                    style={{
-                      direction: 'ltr',
-                    }}
-                    key={index}
-                    className={'flex flex-col gap-2 items-start '}>
-                    <span className={'text-lg'}>{item?.classType}</span>
-                    <div
-                      className={
-                        'flex flex-col gap-1 divide-y border rounded bg-gray-100 border-dashed  '
-                      }>
-                      <p className={'text-left px-1'}>Count {item?.count}</p>
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
-            <div
-              className={
-                'flex w-full  justify-between gap-2 p-3 gap-5  items-start bg-white border primary-shadow rounded mt-5 '
-              }>
-              <div className={'flex flex-col '}>
-                <span className={'text-lg'}>الرخص</span>
-              </div>
-              {salesRepMerchantsLicenseSummaryResponse.response.map(
-                (item, index) => {
-                  return (
-                    <div
-                      style={{
-                        direction: 'ltr',
-                      }}
-                      key={index}
-                      className={'flex flex-col gap-2 items-start '}>
-                      <span className={'text-lg'}>{item?.license}</span>
-                      <div
-                        className={
-                          'flex flex-col gap-1 divide-y border rounded bg-gray-100 border-dashed  '
-                        }>
-                        <p className={'text-left px-1'}>Count {item?.count}</p>
-                      </div>
-                    </div>
-                  )
-                },
-              )}
-            </div>
-            <div
-              className={
-                'flex w-full  justify-between gap-2 p-3 gap-5  items-start bg-white border primary-shadow rounded mt-5 '
-              }>
-              <div className={'flex flex-col '}>
-                <span className={'text-lg'}>Closing Balance</span>
-              </div>
-              {salesRepMerchantsClosingBalanceSummaryResponse.response.map(
-                (item, index) => {
-                  return (
-                    <div
-                      style={{
-                        direction: 'ltr',
-                      }}
-                      key={index}
-                      className={'flex flex-col gap-2 items-start '}>
-                      <span className={'text-lg'}>{item?.range}</span>
-                      <div
-                        className={
-                          'flex flex-col gap-1 divide-y border rounded bg-gray-100 border-dashed  '
-                        }>
-                        <p className={'text-left px-1'}>Count {item?.count}</p>
-                      </div>
-                    </div>
-                  )
-                },
-              )}
-            </div>
-          </div>
-          <div className={'w-full px-4'}>
-            <SectionTitle title={'التجار'} />
-          </div>
-          <DataTableFilter
-            data={response}
-            columns={cols}
-            onRowClick={(row) => {
-              setIsModalOpen(true)
-              setMerchantData(row)
-            }}
+          <GiveFeedback
+            isOpen={isComplainModalOpen}
+            setIsOpen={setIsComplainModalOpen}
           />
+          <DetailsModal
+            merchantData={merchantData}
+            isOpen={isModalOpen}
+            setIsOpen={setIsModalOpen}
+          />
+          <div className={' bg-gray-50 w-full min-h-screen f-col-center'}>
+            <div className={'p-5 w-full'}>
+              <div
+                className={
+                  'flex w-full  justify-between gap-2 p-3 gap-5  items-start bg-white border primary-shadow rounded mt-5 '
+                }>
+                <div className={'flex gap-2 items-center '}>
+                  <FAvatar name={'mostafa.elamrawiy'} />
+                  <div className={'flex flex-col '}>
+                    <span className={'text-lg'}>
+                      {localStorage.getItem('username')}
+                    </span>
+                    <div className={'flex gap-2'}>
+                      <InstanceViewer
+                        value={salesRepMerchantsCountResponse?.response}
+                        instance={'Merchants'}
+                      />
+                    </div>
+                    <div
+                      className={'flex gap-2'}
+                      style={{
+                        backgroundColor: getColor(
+                          salesRepPerformanceResponse?.response,
+                        ),
+                      }}>
+                      <InstanceViewer
+                        value={getPerformance(
+                          salesRepPerformanceResponse?.response,
+                        )}
+                        instance={'الاداء'}
+                      />
+                    </div>
 
-          <div
-            className={
-              'bg-orient-500 p-3 f-col-center mt-auto w-full text-white'
-            }>
-            <img src={logo} width={80} />
+                    <div className={'flex gap-2'}>
+                      <InstanceViewer
+                        value={
+                          salesRepMerchantsIncreasingCountsResponse?.response
+                        }
+                        instance={'زيادة عدد التجار'}
+                      />
+                    </div>
+                    <span
+                      onClick={() => {
+                        setIsComplainModalOpen(true)
+                      }}
+                      className={
+                        'font-medium underline text-orient-600 cursor-pointer'
+                      }>
+                      تقديم شكوى او مقترح
+                    </span>
+                  </div>
+                </div>
+                {salesRepTargetAchievedResponse.response.map((item, index) => {
+                  return (
+                    <div
+                      style={{
+                        direction: 'ltr',
+                      }}
+                      key={index}
+                      className={'flex flex-col gap-2 items-start '}>
+                      <span className={'text-lg'}>{item?.serviceName}</span>
+                      <div
+                        className={
+                          'flex flex-col gap-1 divide-y border rounded bg-gray-100 border-dashed  '
+                        }>
+                        <p className={'text-left px-1'}>
+                          Target {item?.targetFormmated}
+                        </p>{' '}
+                        <p className={'text-left px-1'}>
+                          Achieved {item?.achievedWithPercentage}
+                        </p>{' '}
+                        <p className={'text-left px-1'}>
+                          Expected Achieved {item?.expectedWithPercentage}
+                        </p>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+            <div className={'p-5 w-full'}>
+              <div
+                className={
+                  'flex w-full  justify-between gap-2 p-3 gap-5  items-start bg-white border primary-shadow rounded mt-5 '
+                }>
+                <div className={'flex flex-col '}>
+                  <span className={'text-lg'}>فئات التجار</span>
+                </div>
+                {salesRepMerchantsClassesResponse.response.map(
+                  (item, index) => {
+                    return (
+                      <div
+                        style={{
+                          direction: 'ltr',
+                        }}
+                        key={index}
+                        className={'flex flex-col gap-2 items-start '}>
+                        <span className={'text-lg'}>{item?.classType}</span>
+                        <div
+                          className={
+                            'flex flex-col gap-1 divide-y border rounded bg-gray-100 border-dashed  '
+                          }>
+                          <p className={'text-left px-1'}>
+                            Count {item?.count}
+                          </p>
+                        </div>
+                      </div>
+                    )
+                  },
+                )}
+              </div>
+              <div
+                className={
+                  'flex w-full  justify-between gap-2 p-3 gap-5  items-start bg-white border primary-shadow rounded mt-5 '
+                }>
+                <div className={'flex flex-col '}>
+                  <span className={'text-lg'}>الرخص</span>
+                </div>
+                {salesRepMerchantsLicenseSummaryResponse.response.map(
+                  (item, index) => {
+                    return (
+                      <div
+                        style={{
+                          direction: 'ltr',
+                        }}
+                        key={index}
+                        className={'flex flex-col gap-2 items-start '}>
+                        <span className={'text-lg'}>{item?.license}</span>
+                        <div
+                          className={
+                            'flex flex-col gap-1 divide-y border rounded bg-gray-100 border-dashed  '
+                          }>
+                          <p className={'text-left px-1'}>
+                            Count {item?.count}
+                          </p>
+                        </div>
+                      </div>
+                    )
+                  },
+                )}
+              </div>
+              <div
+                className={
+                  'flex w-full  justify-between gap-2 p-3 gap-5  items-start bg-white border primary-shadow rounded mt-5 '
+                }>
+                <div className={'flex flex-col '}>
+                  <span className={'text-lg'}>Closing Balance</span>
+                </div>
+                {salesRepMerchantsClosingBalanceSummaryResponse.response.map(
+                  (item, index) => {
+                    return (
+                      <div
+                        style={{
+                          direction: 'ltr',
+                        }}
+                        key={index}
+                        className={'flex flex-col gap-2 items-start '}>
+                        <span className={'text-lg'}>{item?.range}</span>
+                        <div
+                          className={
+                            'flex flex-col gap-1 divide-y border rounded bg-gray-100 border-dashed  '
+                          }>
+                          <p className={'text-left px-1'}>
+                            Count {item?.count}
+                          </p>
+                        </div>
+                      </div>
+                    )
+                  },
+                )}
+              </div>
+            </div>
+            <div className={'w-full px-4'}>
+              <SectionTitle title={'التجار'} />
+            </div>
+            <DataTableFilter
+              data={response}
+              columns={cols}
+              onRowClick={(row) => {
+                setIsModalOpen(true)
+                setMerchantData(row)
+              }}
+            />
+
+            <div
+              className={
+                'bg-orient-500 p-3 f-col-center mt-auto w-full text-white'
+              }>
+              <img src={logo} width={80} />
+            </div>
           </div>
-        </div>
-      </>
-    )
+        </>
+      )
+    }
   }
-}
 
 export default Salesrep
