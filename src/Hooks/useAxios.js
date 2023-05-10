@@ -18,7 +18,7 @@ export const useCustomAxios = (axiosParams, cacheKey) => {
 
   const [response, setResponse] = useState([])
   const [error, setError] = useState('')
-  const [loading, setloading] = useState(true)
+  let [loading, setloading] = useState(true)
 
   const fetchData = async (params) => {
     setloading(true)
@@ -26,6 +26,7 @@ export const useCustomAxios = (axiosParams, cacheKey) => {
       if (cacheKey in sessionStorage) {
         setResponse(JSON.parse(sessionStorage.getItem(cacheKey)))
         setloading(false)
+        loading = false
       }
     if (loading)
       try {

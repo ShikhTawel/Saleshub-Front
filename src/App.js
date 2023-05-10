@@ -12,6 +12,8 @@ import RemoveUser from './views/Administrator/RemoveUser'
 import ViewComplainsAndSuggestions from './views/Administrator/ViewComplainsAndSuggestions'
 import ViewResetPasswordRequests from './views/Administrator/ViewResetPasswordRequests'
 import NavigateToUser from './views/Administrator/NavigateToUser'
+import SendNotification from './views/Administrator/SendNotifications'
+import ViewAllSentNotifications from './views/Administrator/ViewAllSentNotifications'
 
 function App() {
   // var hours = 12 // to clear the localStorage after 1 hour
@@ -42,6 +44,8 @@ function App() {
         <Route path="/remove-user" element={<RemoveUser />} />
         <Route path="/view-feedback" element={<ViewComplainsAndSuggestions />} />
         <Route path="/navigate" element={<NavigateToUser />} />
+        <Route path="/send-notification" element={<SendNotification />} />
+        <Route path="/view-notifications" element={<ViewAllSentNotifications />} />
 
         <Route path="/" element={<Login />} />
         <Route path="/reset" element={<ResetPassword />} />

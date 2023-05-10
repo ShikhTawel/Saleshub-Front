@@ -214,6 +214,18 @@ export function getFeedbackCols() {
   ])
 }
 
+export function getNotificationsCols() {
+  return React.useMemo(() => [
+    {
+      Header: 'الرسالة',
+      accessor: 'message', // String-based value accessors!
+    },
+    {
+      Header: 'التاريخ',
+      accessor: 'creationDate', // String-based value accessors!
+    },
+  ])
+}
 
 export function getResetPasswordRequestsCols() {
   return React.useMemo(() => [
