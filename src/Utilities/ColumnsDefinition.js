@@ -155,8 +155,8 @@ export function getMerchantsColumns() {
         Filter: PerformanceIndicatorsColumnFilter,
       },
       {
-        Header: 'P2 (Bills)',
-        accessor: 'performanceMonthlyFlagBills', // String-based value accessors!
+        Header: 'P2 (Utilities)',
+        accessor: 'performanceMonthlyFlagUtilities', // String-based value accessors!
         Cell: (row) => {
           if (row.value == 'Good')
             return (

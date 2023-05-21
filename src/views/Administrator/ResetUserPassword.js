@@ -48,6 +48,9 @@ const ResetUserPassword = () => {
           console.log(res)
           toast.info(res.data.message)
           sessionStorage.removeItem('ResetPasswordRequests+' + new Date().toLocaleDateString())
+          Formik.values.username = ''
+          Formik.values.password = ''
+
           setIsLoginLoading(false)
         })
         .catch((err) => {
