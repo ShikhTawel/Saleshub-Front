@@ -1,15 +1,20 @@
-import { useCustomAxios } from '../Hooks/useAxios'
+import { useCustomAxios } from '../../Hooks/useAxios'
 import React, { useState } from 'react'
-import SectionTitle from '../components/SectionTitle'
-import logo from '../assets/images/logo.jpg'
-import DataTableFilter from './DataTableFilter'
-import ESpinnerBig from '../components/ESpinnerBig'
-import InstanceViewer from './InstanceViewer'
-import DetailsModalRep from './DetailsModalRep'
-import { getColor, getPerformance } from '../Utilities/Performance'
-import { getRepsColumns } from '../Utilities/ColumnsDefinition'
-import GiveFeedback from './GiveFeedback'
+import SectionTitle from '../../components/SectionTitle'
+import logo from '../../assets/images/logo.jpg'
+import DataTableFilter from '../DataTableFilter'
+import ESpinnerBig from '../../components/ESpinnerBig'
+import InstanceViewer from '../InstanceViewer'
+import DetailsModalRep from '../Modals/DetailsModalRep'
+import {
+  getColor,
+  getNotifications,
+  getPerformance,
+} from '../../Utilities/Performance'
+import { getRepsColumns } from '../../Utilities/ColumnsDefinition'
+import GiveFeedback from '../Modals/GiveFeedback'
 import { ToastContainer } from 'react-toastify'
+import Notifications from '../Modals/Notifications'
 
 // import Dropdown from './Dropdown'
 
@@ -19,6 +24,9 @@ const Manager = () => {
   const [repData, setRepData] = useState('')
   const [isRepModalOpen, setIsRepModalOpen] = useState(false)
   const [isComplainModalOpen, setIsComplainModalOpen] = useState(false)
+
+  let [notifications, setNotifications] = useState([])
+  let [isNotificationsOpen, SetIsNotificationsOpen] = useState(false)
 
   const managerPerformanceResponse = useCustomAxios(
     {
@@ -82,7 +90,9 @@ const Manager = () => {
   const managerMerchantsLicenseSummaryResponse = useCustomAxios(
     {
       method: 'GET',
-      url: `/manager/${localStorage.getItem('username')}/merchantsLicenseSummary`,
+      url: `/manager/${localStorage.getItem(
+        'username',
+      )}/merchantsLicenseSummary`,
     },
     localStorage.getItem('username') +
       '+merchantsLicenseSummary+' +
@@ -92,7 +102,9 @@ const Manager = () => {
   const managerMerchantsClosingBalanceSummaryResponse = useCustomAxios(
     {
       method: 'GET',
-      url: `/manager/${localStorage.getItem('username')}/merchantsClosingBalanceSummary`,
+      url: `/manager/${localStorage.getItem(
+        'username',
+      )}/merchantsClosingBalanceSummary`,
     },
     localStorage.getItem('username') +
       '+merchantsClosingBalanceSummary+' +
@@ -111,7 +123,19 @@ const Manager = () => {
       new Date().toLocaleDateString(),
   )
 
+  const lastTargetUploadDate = useCustomAxios(
+    {
+      method: 'GET',
+      url: `targetUploadDate`,
+    },
+    'targetUploadDate',
+  )
+
   const cols = getRepsColumns()
+
+  const handleGetNotifications = () => {
+    getNotifications(notifications, setNotifications, SetIsNotificationsOpen)
+  }
 
   if (
     loading ||
@@ -129,7 +153,7 @@ const Manager = () => {
   } else {
     return (
       <>
-       <ToastContainer
+        <ToastContainer
           position="bottom-left"
           autoClose={3000}
           hideProgressBar
@@ -162,9 +186,17 @@ const Manager = () => {
                         instance={'POS'}
                       />
                     </div>
-                    <div className={'flex gap-2'} style={{backgroundColor: getColor(managerPerformanceResponse?.response)}}>
+                    <div
+                      className={'flex gap-2'}
+                      style={{
+                        backgroundColor: getColor(
+                          managerPerformanceResponse?.response,
+                        ),
+                      }}>
                       <InstanceViewer
-                        value={getPerformance(managerPerformanceResponse?.response)}
+                        value={getPerformance(
+                          managerPerformanceResponse?.response,
+                        )}
                         instance={'الاداء'}
                       />
                     </div>
@@ -176,15 +208,29 @@ const Manager = () => {
                         instance={'زيادة عدد التجار'}
                       />
                     </div>
+                    <div className={'flex gap-2'}>
+                      <InstanceViewer
+                        value={lastTargetUploadDate?.response}
+                        instance={'تاريخ اضافة التارجت'}
+                      />
+                    </div>
                     <span
-                    onClick={() => {
-                      setIsComplainModalOpen(true)
-                    }}
-                    className={
-                      'font-medium underline text-orient-600 cursor-pointer'
-                    }>
-                    تقديم شكوى او مقترح
-                  </span>
+                      onClick={() => {
+                        setIsComplainModalOpen(true)
+                      }}
+                      className={
+                        'font-medium underline text-orient-600 cursor-pointer'
+                      }>
+                      تقديم شكوى او مقترح
+                    </span>
+                    <br />  
+                    <span
+                      onClick={() => handleGetNotifications()}
+                      className={
+                        'font-medium underline text-orient-600 cursor-pointer'
+                      }>
+                      عرض جميع الرسائل المسبقة
+                    </span>
                   </span>
                 </div>
               </div>
@@ -250,24 +296,26 @@ const Manager = () => {
               <div className={'flex flex-col '}>
                 <span className={'text-lg'}>الرخص</span>
               </div>
-              {managerMerchantsLicenseSummaryResponse.response.map((item, index) => {
-                return (
-                  <div
-                    style={{
-                      direction: 'ltr',
-                    }}
-                    key={index}
-                    className={'flex flex-col gap-2 items-start '}>
-                    <span className={'text-lg'}>{item?.license}</span>
+              {managerMerchantsLicenseSummaryResponse.response.map(
+                (item, index) => {
+                  return (
                     <div
-                      className={
-                        'flex flex-col gap-1 divide-y border rounded bg-gray-100 border-dashed  '
-                      }>
-                      <p className={'text-left px-1'}>Count {item?.count}</p>
+                      style={{
+                        direction: 'ltr',
+                      }}
+                      key={index}
+                      className={'flex flex-col gap-2 items-start '}>
+                      <span className={'text-lg'}>{item?.license}</span>
+                      <div
+                        className={
+                          'flex flex-col gap-1 divide-y border rounded bg-gray-100 border-dashed  '
+                        }>
+                        <p className={'text-left px-1'}>Count {item?.count}</p>
+                      </div>
                     </div>
-                  </div>
-                )
-              })}
+                  )
+                },
+              )}
             </div>
             <div
               className={
@@ -276,24 +324,26 @@ const Manager = () => {
               <div className={'flex flex-col '}>
                 <span className={'text-lg'}>Closing Balance</span>
               </div>
-              {managerMerchantsClosingBalanceSummaryResponse.response.map((item, index) => {
-                return (
-                  <div
-                    style={{
-                      direction: 'ltr',
-                    }}
-                    key={index}
-                    className={'flex flex-col gap-2 items-start '}>
-                    <span className={'text-lg'}>{item?.range}</span>
+              {managerMerchantsClosingBalanceSummaryResponse.response.map(
+                (item, index) => {
+                  return (
                     <div
-                      className={
-                        'flex flex-col gap-1 divide-y border rounded bg-gray-100 border-dashed  '
-                      }>
-                      <p className={'text-left px-1'}>Count {item?.count}</p>
+                      style={{
+                        direction: 'ltr',
+                      }}
+                      key={index}
+                      className={'flex flex-col gap-2 items-start '}>
+                      <span className={'text-lg'}>{item?.range}</span>
+                      <div
+                        className={
+                          'flex flex-col gap-1 divide-y border rounded bg-gray-100 border-dashed  '
+                        }>
+                        <p className={'text-left px-1'}>Count {item?.count}</p>
+                      </div>
                     </div>
-                  </div>
-                )
-              })}
+                  )
+                },
+              )}
             </div>
           </div>
           <SectionTitle title={'المشرفين'} />
@@ -306,14 +356,19 @@ const Manager = () => {
               window.location.reload()
             }}
           />
-           <GiveFeedback
-          isOpen={isComplainModalOpen}
-          setIsOpen={setIsComplainModalOpen}
-        />
+          <GiveFeedback
+            isOpen={isComplainModalOpen}
+            setIsOpen={setIsComplainModalOpen}
+          />
           <DetailsModalRep
             repData={repData}
             isOpen={isRepModalOpen}
             setIsOpen={setIsRepModalOpen}
+          />
+          <Notifications
+            notifications={notifications}
+            isOpen={isNotificationsOpen}
+            setIsOpen={SetIsNotificationsOpen}
           />
           <SectionTitle title={'المناديب'} />
           <DataTableFilter

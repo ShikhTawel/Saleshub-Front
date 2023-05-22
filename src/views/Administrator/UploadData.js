@@ -16,16 +16,19 @@ const UploadData = () => {
 
   const [isLoading, SetIsLoading] = useState(false)
   const [isUsersLoading, SetIsUsersLoading] = useState(false)
-  const [isMerchantsTargetLoading, SetIsMerchantsTargetLoading] = useState(false)
+  const [isMerchantsTargetLoading, SetIsMerchantsTargetLoading] =
+    useState(false)
 
   const [isTargetSampleLoading, SetIsTargetSampleLoading] = useState(false)
-  const [isMerchantsTargetSampleLoading, SetIsMerchantsTargetSampleLoading] = useState(false)
+  const [isMerchantsTargetSampleLoading, SetIsMerchantsTargetSampleLoading] =
+    useState(false)
   const [isUserSampleLoading, SetIsUserSampleLoading] = useState(false)
   const [isDownloadUsersLoading, SetIsDownloadUsersLoading] = useState(false)
 
   const [selectedFile, setSelectedFile] = useState()
   const [selectedFileTarget, setSelectedFileTarget] = useState()
-  const [selectedFileMerchantsTarget, setSelectedFileMerchantsTarget] = useState()
+  const [selectedFileMerchantsTarget, setSelectedFileMerchantsTarget] =
+    useState()
 
   const changeHandler = (event) => {
     setSelectedFile(event.target.files[0])
@@ -235,7 +238,9 @@ const UploadData = () => {
       })
       .then((result) => {
         SetIsMerchantsTargetSampleLoading(false)
-        FileSaver.saveAs(fromByteArrayToExcel(result, 'Merhcants_Increase_Target_Sample'))
+        FileSaver.saveAs(
+          fromByteArrayToExcel(result, 'Merhcants_Increase_Target_Sample'),
+        )
       })
       .catch((err) => {
         SetIsMerchantsTargetSampleLoading(false)
@@ -284,8 +289,9 @@ const UploadData = () => {
             'flex flex-col  items-center justify-center w-full h-screen'
           }>
           <span className={'text-3xl text-gray-800 font-semibold mt-5'}>
-            Upload Targets
+            رفع تارجتس المبيعات
           </span>
+          <br />
           <input type="file" name="fileTarget" onChange={changeHandlerTarget} />
 
           <div>
@@ -308,9 +314,14 @@ const UploadData = () => {
             'flex flex-col  items-center justify-center w-full h-screen'
           }>
           <span className={'text-3xl text-gray-800 font-semibold mt-5'}>
-            Upload Merchants Increasing Target
+            رفع تارجتس زيادة التجار
           </span>
-          <input type="file" name="fileTargetMerchants" onChange={changeHandlerMrechantsTarget} />
+          <br />
+          <input
+            type="file"
+            name="fileTargetMerchants"
+            onChange={changeHandlerMrechantsTarget}
+          />
 
           <div>
             <FButton onClick={postFileRequestMerchantsTarget}>
@@ -332,8 +343,9 @@ const UploadData = () => {
             'flex flex-col  items-center justify-center w-full h-screen'
           }>
           <span className={'text-3xl text-gray-800 font-semibold mt-5'}>
-            Upload New Users
+            رفع مستخدمين جدد
           </span>
+          <br />
           <input type="file" name="fileUsers" onChange={changeHandler} />
 
           <div>

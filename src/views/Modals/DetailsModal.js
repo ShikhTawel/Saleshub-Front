@@ -1,17 +1,18 @@
-import FModal from '../components/FModal'
+import FModal from '../../components/FModal'
 import { Area, AreaChart, CartesianGrid, Tooltip, XAxis, YAxis } from 'recharts'
-import FButton from '../components/FButton'
+import FButton from '../../components/FButton'
+import FProductTag from '../../components/FProductTag'
 import { useEffect, useState } from 'react'
-import InstanceViewer from './InstanceViewer'
-import { axiosInstance } from '../api/requister'
-import ESpinner from '../components/ESpinner'
-import FLabel from '../components/FLabel'
-import FInputField from '../components/FInputField'
+import InstanceViewer from '../InstanceViewer'
+import { axiosInstance } from '../../api/requister'
+import ESpinner from '../../components/ESpinner'
+import FLabel from '../../components/FLabel'
+import FInputField from '../../components/FInputField'
 import { format } from 'date-fns'
-import { useCustomAxios } from '../Hooks/useAxios'
+import { useCustomAxios } from '../../Hooks/useAxios'
 import { subMonths } from 'date-fns'
 
-const DetailsModalRep = ({ isOpen, setIsOpen, repData }) => {
+const DetailsModal = ({ isOpen, setIsOpen, merchantData }) => {
   const products = useCustomAxios(
     {
       method: 'GET',
@@ -23,7 +24,7 @@ const DetailsModalRep = ({ isOpen, setIsOpen, repData }) => {
   const [projection, selectedProjection] = useState('general')
   const [graphDataPlot, setGraphDataPlot] = useState([])
   const [loading, setLoading] = useState(false)
-  const [duration, setDuration] = useState('month')
+  const [duration, setDuration] = useState('day')
   let [startDate, setStartDate] = useState(
     format(subMonths(new Date(), 3), 'yyyy-MM-dd'),
   )
@@ -68,11 +69,11 @@ const DetailsModalRep = ({ isOpen, setIsOpen, repData }) => {
     setReset(false)
 
     setLoading(true)
-    if (repData) {
+    if (merchantData) {
       if (
         sessionStorage.getItem(
           projection +
-            repData.name +
+            merchantData.code +
             duration +
             startDate +
             endDate +
@@ -83,7 +84,7 @@ const DetailsModalRep = ({ isOpen, setIsOpen, repData }) => {
           JSON.parse(
             sessionStorage.getItem(
               projection +
-                repData.name +
+                merchantData.code +
                 duration +
                 startDate +
                 endDate +
@@ -95,18 +96,18 @@ const DetailsModalRep = ({ isOpen, setIsOpen, repData }) => {
       } else {
         let serviceTransactionsRequestDto = {
           serviceName: projection,
-          id: repData.name,
+          id: merchantData.code,
           filter: duration,
           startDate: startDate,
           endDate: endDate,
         }
         axiosInstance
-          .post(`salesrep/serviceTransactions`, serviceTransactionsRequestDto)
+          .post(`merchant/serviceTransactions`, serviceTransactionsRequestDto)
           .then((response) => {
             handleGraph(response.data.transactions)
             sessionStorage.setItem(
               projection +
-                repData.name +
+                merchantData.code +
                 duration +
                 startDate +
                 endDate +
@@ -116,6 +117,10 @@ const DetailsModalRep = ({ isOpen, setIsOpen, repData }) => {
             setLoading(false)
           })
           .catch(() => {
+            startDate = format(subMonths(new Date(), 3), 'yyyy-MM-dd')
+            setStartDate(format(subMonths(new Date(), 3), 'yyyy-MM-dd'))
+            endDate = format(new Date(), 'yyyy-MM-dd')
+            setEndDate(format(new Date(), 'yyyy-MM-dd'))
             setLoading(false)
           })
       }
@@ -124,11 +129,11 @@ const DetailsModalRep = ({ isOpen, setIsOpen, repData }) => {
 
   useEffect(() => {
     setLoading(true)
-    if (repData) {
+    if (merchantData) {
       if (
         sessionStorage.getItem(
           projection +
-            repData.name +
+            merchantData.code +
             duration +
             startDate +
             endDate +
@@ -139,7 +144,7 @@ const DetailsModalRep = ({ isOpen, setIsOpen, repData }) => {
           JSON.parse(
             sessionStorage.getItem(
               projection +
-                repData.name +
+                merchantData.code +
                 duration +
                 startDate +
                 endDate +
@@ -151,18 +156,18 @@ const DetailsModalRep = ({ isOpen, setIsOpen, repData }) => {
       } else {
         let serviceTransactionsRequestDto = {
           serviceName: projection,
-          id: repData.name,
+          id: merchantData.code,
           filter: duration,
           startDate: startDate,
           endDate: endDate,
         }
         axiosInstance
-          .post(`salesrep/serviceTransactions`, serviceTransactionsRequestDto)
+          .post(`merchant/serviceTransactions`, serviceTransactionsRequestDto)
           .then((response) => {
             handleGraph(response.data.transactions)
             sessionStorage.setItem(
               projection +
-                repData.name +
+                merchantData.code +
                 duration +
                 startDate +
                 endDate +
@@ -172,17 +177,21 @@ const DetailsModalRep = ({ isOpen, setIsOpen, repData }) => {
             setLoading(false)
           })
           .catch(() => {
+            startDate = format(subMonths(new Date(), 3), 'yyyy-MM-dd')
+            setStartDate(format(subMonths(new Date(), 3), 'yyyy-MM-dd'))
+            endDate = format(new Date(), 'yyyy-MM-dd')
+            setEndDate(format(new Date(), 'yyyy-MM-dd'))
             setLoading(false)
           })
       }
     }
-  }, [repData, projection, duration])
+  }, [merchantData, projection, duration])
 
   return (
     <>
       <FModal
         isAutoWidth
-        title={repData.name}
+        title={merchantData.name}
         isOpen={isOpen}
         setIsOpen={setIsOpen}
         callbackFunction={() => {
@@ -190,7 +199,7 @@ const DetailsModalRep = ({ isOpen, setIsOpen, repData }) => {
             JSON.parse(
               sessionStorage.getItem(
                 projection +
-                  repData.name +
+                  merchantData.code +
                   duration +
                   startDate +
                   endDate +
@@ -229,12 +238,39 @@ const DetailsModalRep = ({ isOpen, setIsOpen, repData }) => {
               <FButton onClick={resetDate}>Reset</FButton>
             </div>
           ) : null}
-
-          <div className="grid gap-10 my-3 grid-cols-4 border border rounded bg-gray-50 primary-shadow p-3">
-            <InstanceViewer instance={' اسم المندوب'} value={repData.name} />
+          <div className="grid gap-3 my-3 grid-cols-4 border border rounded bg-gray-50 primary-shadow p-3">
             <InstanceViewer
-              instance={'عدد المكن'}
-              value={repData.numberOfPOS}
+              instance={'Merchant Code'}
+              value={merchantData.code}
+            />
+            <InstanceViewer
+              instance={'Class'}
+              value={merchantData.merchantClass}
+            />
+            <InstanceViewer
+              instance={'Overdraft Limit'}
+              value={merchantData.overdraftLimit}
+            />
+            <InstanceViewer
+              instance={'AutoFund'}
+              value={merchantData.autoFund}
+            />
+
+            <InstanceViewer
+              instance={'License Delivery'}
+              valueBlock={
+                merchantData.license ? (
+                  <FProductTag productName={'مفعل'} color="green" />
+                ) : (
+                  <FProductTag productName={'غير مفعل'} color="orange">
+                    غير مكتمل
+                  </FProductTag>
+                )
+              }
+            />
+            <InstanceViewer
+              instance={'Closing Balance '}
+              value={merchantData.closingBalance}
             />
           </div>
           <div>
@@ -349,4 +385,19 @@ const DetailsModalRep = ({ isOpen, setIsOpen, repData }) => {
     </>
   )
 }
-export default DetailsModalRep
+export default DetailsModal
+
+/* Insurance
+<InstanceViewer
+              instance={"Insurance Payment"}
+              valueBlock={
+                merchantData.insurance ? (
+                  <FProductTag productName={"مكتمل"} color="green" />
+                ) : (
+                  <FProductTag productName={"غير مفعل"} color="orange">
+                    غير مكتمل
+                  </FProductTag>
+                )
+              }
+            />
+            */

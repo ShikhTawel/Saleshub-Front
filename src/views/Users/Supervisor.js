@@ -1,20 +1,25 @@
-import { useCustomAxios } from '../Hooks/useAxios'
+import { useCustomAxios } from '../../Hooks/useAxios'
 import React from 'react'
-import SectionTitle from '../components/SectionTitle'
-import logo from '../assets/images/logo.jpg'
-import DataTableFilter from './DataTableFilter'
-import DetailsModal from './DetailsModal'
+import SectionTitle from '../../components/SectionTitle'
+import logo from '../../assets/images/logo.jpg'
+import DataTableFilter from '../DataTableFilter'
+import DetailsModal from '../Modals/DetailsModal'
 import { useState } from 'react'
-import ESpinnerBig from '../components/ESpinnerBig'
-import InstanceViewer from './InstanceViewer'
-import DetailsModalRep from './DetailsModalRep'
-import { getColor, getPerformance } from '../Utilities/Performance'
+import ESpinnerBig from '../../components/ESpinnerBig'
+import InstanceViewer from '../InstanceViewer'
+import DetailsModalRep from '../Modals/DetailsModalRep'
+import {
+  getColor,
+  getNotifications,
+  getPerformance,
+} from '../../Utilities/Performance'
 import {
   getMerchantsColumns,
   getRepsColumns,
-} from '../Utilities/ColumnsDefinition'
-import GiveFeedback from './GiveFeedback'
+} from '../../Utilities/ColumnsDefinition'
+import GiveFeedback from '../Modals/GiveFeedback'
 import { ToastContainer } from 'react-toastify'
+import Notifications from '../Modals/Notifications'
 
 const Supervisor = () => {
   const [merchantData, setMerchantData] = useState('')
@@ -23,6 +28,9 @@ const Supervisor = () => {
   const [repData, setRepData] = useState('')
   const [isRepModalOpen, setIsRepModalOpen] = useState(false)
   const [isComplainModalOpen, setIsComplainModalOpen] = useState(false)
+
+  let [notifications, setNotifications] = useState([])
+  let [isNotificationsOpen, SetIsNotificationsOpen] = useState(false)
 
   const { loading, response } = useCustomAxios(
     {
@@ -118,6 +126,18 @@ const Supervisor = () => {
       new Date().toLocaleDateString(),
   )
 
+  const lastTargetUploadDate = useCustomAxios(
+    {
+      method: 'GET',
+      url: `targetUploadDate`,
+    },
+    'targetUploadDate',
+  )
+
+  const handleGetNotifications = () => {
+    getNotifications(notifications, setNotifications, SetIsNotificationsOpen)
+  }
+
   const repsCols = getRepsColumns()
 
   const columns = getMerchantsColumns()
@@ -192,6 +212,12 @@ const Supervisor = () => {
                         instance={'زيادة عدد التجار'}
                       />
                     </div>
+                    <div className={'flex gap-2'}>
+                      <InstanceViewer
+                        value={lastTargetUploadDate?.response}
+                        instance={'تاريخ اضافة التارجت'}
+                      />
+                    </div>
                     <span
                       onClick={() => {
                         setIsComplainModalOpen(true)
@@ -200,6 +226,14 @@ const Supervisor = () => {
                         'font-medium underline text-orient-600 cursor-pointer'
                       }>
                       تقديم شكوى او مقترح
+                    </span>
+                    <br />
+                    <span
+                      onClick={() => handleGetNotifications()}
+                      className={
+                        'font-medium underline text-orient-600 cursor-pointer'
+                      }>
+                      عرض جميع الرسائل المسبقة
                     </span>
                   </span>
                 </div>
@@ -255,7 +289,11 @@ const Supervisor = () => {
               setRepData(row)
             }}
           />
-
+          <Notifications
+            notifications={notifications}
+            isOpen={isNotificationsOpen}
+            setIsOpen={SetIsNotificationsOpen}
+          />
           <div className={'p-5 w-full'}>
             <div
               className={

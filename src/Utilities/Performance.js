@@ -52,3 +52,27 @@ export function submitFeedback(values, username, passedRole) {
       } else toast.error('Error Occurred')
     })
 }
+
+
+export function getNotifications (notifications, setNotifications, SetIsNotificationsOpen){
+
+  let headers = {
+    Authorization: localStorage.getItem(`access_token`),
+    'Content-Type': 'application/json',
+  }
+
+  axiosInstance
+    .get(
+      `${BASE_URL}getAllNotifications`,
+      headers,
+    )
+    .then((res) => {
+      notifications = res.data
+      setNotifications(res.data)
+      SetIsNotificationsOpen(true)
+    })
+    .catch(() => {
+      SetIsNotificationsOpen(false)
+    })
+  
+}

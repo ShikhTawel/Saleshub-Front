@@ -24,7 +24,7 @@ const ViewAllSentNotifications = () => {
   const notificationsResponse = useCustomAxios(
     {
       method: 'GET',
-      url: `/admin/getAllNotifications`,
+      url: `/getAllNotifications`,
     },
     "Notifications+" + new Date().toLocaleDateString(),
   )

@@ -1,11 +1,11 @@
-import Supervisor from './Supervisor'
+import Supervisor from './Users/Supervisor'
 import React, { useState } from 'react'
-import Salesrep from './Salesrep'
+import Salesrep from './Users/Salesrep'
 import Header from './Header'
-import Manager from './Manager'
-import Admin from './Admin'
+import Manager from './Users/Manager'
+import Admin from './Users/Admin'
 import { useCustomAxios } from '../Hooks/useAxios'
-import Notifications from './Notifications'
+import Notifications from './Modals/Notifications' 
 
 const Dashboard = () => {
   if (!localStorage.getItem('access_token')) window.location.href = '/'

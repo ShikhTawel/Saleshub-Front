@@ -1,5 +1,5 @@
 import React from 'react'
-import SideBar from '../components/Layout/SideBar'
+import SideBar from '../../components/Layout/SideBar'
 
 const Admin = () => {
   const [isSideBarOpen, setIsSideBarOpen] = React.useState(false)

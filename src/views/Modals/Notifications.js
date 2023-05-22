@@ -1,8 +1,8 @@
-import FModal from '../components/FModal'
-import FButton from '../components/FButton'
+import FModal from '../../components/FModal'
+import FButton from '../../components/FButton'
 import { useEffect } from 'react'
-import { getNotificationsCols } from '../Utilities/ColumnsDefinition'
-import DataTableFilter from './DataTableFilter'
+import { getNotificationsCols } from '../../Utilities/ColumnsDefinition'
+import DataTableFilter from '../DataTableFilter'
 
 const Notifications = ({ isOpen, setIsOpen, notifications }) => {
   useEffect(() => {}, [notifications])

@@ -1,13 +1,13 @@
-import FModal from '../components/FModal'
-import FButton from '../components/FButton'
-import FLabel from '../components/FLabel'
-import FInputField from '../components/FInputField'
+import FModal from '../../components/FModal'
+import FButton from '../../components/FButton'
+import FLabel from '../../components/FLabel'
+import FInputField from '../../components/FInputField'
 import * as Yup from 'yup'
-import { submitFeedback } from '../Utilities/Performance'
+import { submitFeedback } from '../../Utilities/Performance'
 import { Field, FormikProvider, useFormik } from 'formik'
-import EFormWrapper from '../components/EFormWrapper'
-import EFormInvalidInput from '../components/EFormInvalidInput'
-import FIconWrapper from '../components/FIconWrapper'
+import EFormWrapper from '../../components/EFormWrapper'
+import EFormInvalidInput from '../../components/EFormInvalidInput'
+import FIconWrapper from '../../components/FIconWrapper'
 
 const GiveFeedback = ({ isOpen, setIsOpen }) => {
   const Formik = useFormik({
