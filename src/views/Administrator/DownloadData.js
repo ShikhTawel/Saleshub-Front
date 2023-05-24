@@ -1,13 +1,11 @@
 import { useState } from 'react'
 import FButton from '../../components/FButton'
 import SideBar from '../../components/Layout/SideBar'
-import { BASE_URL } from '../../env'
-import { toast, ToastContainer } from 'react-toastify'
+import {ToastContainer } from 'react-toastify'
 import FIconWrapper from '../../components/FIconWrapper'
 import ESpinner from '../../components/ESpinner'
-import fromByteArrayToExcel from '../../Utilities/ToExcelConvertor'
-import * as FileSaver from 'file-saver'
-import axios from 'axios'
+import { importExcel } from '../../Utilities/ExcelUtil'
+
 
 const DownloadData = () => {
   if (!localStorage.getItem('access_token')) window.location.href = '/'
@@ -19,59 +17,11 @@ const DownloadData = () => {
 
   
   const exportAllUsers = () => {
-    SetIsDownloadUsersLoading(true)
-
-    axios
-      .get(`${BASE_URL}admin/exportAllUsers`, {
-        headers: {
-          Authorization: localStorage.getItem(`access_token`),
-        },
-      })
-      .then((result) => {
-        SetIsDownloadUsersLoading(false)
-        FileSaver.saveAs(fromByteArrayToExcel(result, 'System_Users'))
-      })
-      .catch((err) => {
-        SetIsDownloadUsersLoading(false)
-
-        console.log(err)
-        if (err.response.data.errors) {
-          let errors = err.response.data.errors
-
-          for (let index = 0; index < errors.length; index++) {
-            const error = errors[index]
-            toast.error(error.message)
-          }
-        } else toast.error('Error Occurred')
-      })
+    importExcel('admin/exportAllUsers', SetIsDownloadUsersLoading, 'System_Users')
   }
 
   const exportAllAccountStatus = () => {
-    SetIsDownloadAccountStatusLoading(true)
-
-    axios
-      .get(`${BASE_URL}admin/exportAllAccountStatus`, {
-        headers: {
-          Authorization: localStorage.getItem(`access_token`),
-        },
-      })
-      .then((result) => {
-        SetIsDownloadAccountStatusLoading(false)
-        FileSaver.saveAs(fromByteArrayToExcel(result, 'Account_Status'))
-      })
-      .catch((err) => {
-        SetIsDownloadAccountStatusLoading(false)
-
-        console.log(err)
-        if (err.response.data.errors) {
-          let errors = err.response.data.errors
-
-          for (let index = 0; index < errors.length; index++) {
-            const error = errors[index]
-            toast.error(error.message)
-          }
-        } else toast.error('Error Occurred')
-      })
+    importExcel('admin/exportAllAccountStatus', SetIsDownloadAccountStatusLoading, 'Account_Status')
   }
 
   return (

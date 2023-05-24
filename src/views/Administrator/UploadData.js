@@ -1,13 +1,10 @@
 import { useState } from 'react'
 import FButton from '../../components/FButton'
 import SideBar from '../../components/Layout/SideBar'
-import { BASE_URL } from '../../env'
-import { toast, ToastContainer } from 'react-toastify'
+import { ToastContainer } from 'react-toastify'
 import FIconWrapper from '../../components/FIconWrapper'
 import ESpinner from '../../components/ESpinner'
-import fromByteArrayToExcel from '../../Utilities/ToExcelConvertor'
-import * as FileSaver from 'file-saver'
-import axios from 'axios'
+import { exportExcel, importExcel } from '../../Utilities/ExcelUtil'
 
 const UploadData = () => {
   if (!localStorage.getItem('access_token')) window.location.href = '/'
@@ -51,251 +48,36 @@ const UploadData = () => {
   }
 
   const postFileRequestUsers = () => {
-    SetIsUsersLoading(true)
-    const multipartFile = new FormData()
-
-    multipartFile.append('multipartFile', selectedFile)
-
-    let headers = {
-      Authorization: localStorage.getItem(`access_token`),
-    }
-
-    fetch(BASE_URL + 'admin/uploadUsers', {
-      method: 'POST',
-      body: multipartFile,
-      headers: headers,
-    })
-      .then((response) => response.json())
-      .then((result) => {
-        SetIsUsersLoading(false)
-        toast.info(result.message)
-      })
-      .catch((err) => {
-        SetIsUsersLoading(false)
-
-        if (err.response.data.errors) {
-          let errors = err.response.data.errors
-
-          for (let index = 0; index < errors.length; index++) {
-            const error = errors[index]
-            toast.error(error.message)
-          }
-        } else toast.error('Error Occurred')
-      })
+    exportExcel('admin/uploadUsers',SetIsUsersLoading , selectedFile)
   }
 
   const postFileRequestTarget = () => {
-    SetIsLoading(true)
-
-    const multipartFile = new FormData()
-
-    multipartFile.append('multipartFile', selectedFileTarget)
-
-    let headers = {
-      Authorization: localStorage.getItem(`access_token`),
-    }
-
-    fetch(BASE_URL + 'admin/uploadTarget', {
-      method: 'POST',
-      body: multipartFile,
-      headers: headers,
-    })
-      .then((response) => response.json())
-      .then((result) => {
-        SetIsLoading(false)
-        toast.info(result.message)
-      })
-      .catch((err) => {
-        SetIsLoading(false)
-        if (err.response.data?.errors != null) {
-          let errors = err.response.data.errors
-
-          for (let index = 0; index < errors.length; index++) {
-            const error = errors[index]
-            toast.error(error.message)
-          }
-        } else toast.error('Error Occurred')
-      })
+    exportExcel('admin/uploadTarget',SetIsLoading , selectedFileTarget)
   }
 
   const postFileRequestHr = () => {
-    SetIsHrLoading(true)
-    const multipartFile = new FormData()
-
-    multipartFile.append('multipartFile', selectedFileHr)
-
-    let headers = {
-      Authorization: localStorage.getItem(`access_token`),
-    }
-
-    fetch(BASE_URL + 'admin/upload-HR-ID', {
-      method: 'POST',
-      body: multipartFile,
-      headers: headers,
-    })
-      .then((response) => response.json())
-      .then((result) => {
-        SetIsHrLoading(false)
-        toast.info(result.message)
-      })
-      .catch((err) => {
-        SetIsHrLoading(false)
-
-        if (err.response.data.errors) {
-          let errors = err.response.data.errors
-
-          for (let index = 0; index < errors.length; index++) {
-            const error = errors[index]
-            toast.error(error.message)
-          }
-        } else toast.error('Error Occurred')
-      })
+    exportExcel('admin/upload-HR-ID',SetIsHrLoading , selectedFileHr)
   }
 
-  const exportSampleHr= () => {
-    SetIsHrSampleLoading(true)
+  const postFileRequestMerchantsTarget = () => {
+    exportExcel('admin/uploadMerchantsTarget',SetIsMerchantsTargetLoading , selectedFileMerchantsTarget)
+  }
 
-    axios
-      .get(`${BASE_URL}admin/export-HR-ID`, {
-        headers: {
-          Authorization: localStorage.getItem(`access_token`),
-        },
-      })
-      .then((result) => {
-        SetIsHrSampleLoading(false)
-        FileSaver.saveAs(fromByteArrayToExcel(result, 'MainAccount_HR-Sample'))
-      })
-      .catch((err) => {
-        SetIsHrSampleLoading(false)
-
-        if (err.response.data.errors) {
-          let errors = err.response.data.errors
-
-          for (let index = 0; index < errors.length; index++) {
-            const error = errors[index]
-            toast.error(error.message)
-          }
-        } else toast.error('Error Occurred')
-      })
+  const exportSampleHr = () => {
+    importExcel('admin/export-HR-ID', SetIsHrSampleLoading, 'MainAccount_HR-Sample')
   }
 
 
   const exportSampleTarget = () => {
-    SetIsTargetSampleLoading(true)
-
-    axios
-      .get(`${BASE_URL}admin/exportSampleTarget`, {
-        headers: {
-          Authorization: localStorage.getItem(`access_token`),
-        },
-      })
-      .then((result) => {
-        SetIsTargetSampleLoading(false)
-        FileSaver.saveAs(fromByteArrayToExcel(result, 'Target-Sample'))
-      })
-      .catch((err) => {
-        SetIsTargetSampleLoading(false)
-
-        if (err.response.data.errors) {
-          let errors = err.response.data.errors
-
-          for (let index = 0; index < errors.length; index++) {
-            const error = errors[index]
-            toast.error(error.message)
-          }
-        } else toast.error('Error Occurred')
-      })
+    importExcel('admin/exportSampleTarget', SetIsTargetSampleLoading, 'Target-Sample')
   }
 
   const exportSampleUser = () => {
-    SetIsUserSampleLoading(true)
-
-    axios
-      .get(`${BASE_URL}admin/exportSampleUsers`, {
-        headers: {
-          Authorization: localStorage.getItem(`access_token`),
-        },
-      })
-      .then((result) => {
-        SetIsUserSampleLoading(false)
-        FileSaver.saveAs(fromByteArrayToExcel(result, 'Users-Sample'))
-      })
-      .catch((err) => {
-        SetIsUserSampleLoading(false)
-
-        console.log(err)
-        if (err.response.data.errors) {
-          let errors = err.response.data.errors
-
-          for (let index = 0; index < errors.length; index++) {
-            const error = errors[index]
-            toast.error(error.message)
-          }
-        } else toast.error('Error Occurred')
-      })
-  }
-
-  const postFileRequestMerchantsTarget = () => {
-    SetIsMerchantsTargetLoading(true)
-
-    const multipartFile = new FormData()
-
-    multipartFile.append('multipartFile', selectedFileMerchantsTarget)
-
-    let headers = {
-      Authorization: localStorage.getItem(`access_token`),
-    }
-
-    fetch(BASE_URL + 'admin/uploadMerchantsTarget', {
-      method: 'POST',
-      body: multipartFile,
-      headers: headers,
-    })
-      .then((response) => response.json())
-      .then((result) => {
-        SetIsMerchantsTargetLoading(false)
-        toast.info(result.message)
-      })
-      .catch((err) => {
-        SetIsMerchantsTargetLoading(false)
-        if (err.response.data?.errors != null) {
-          let errors = err.response.data.errors
-
-          for (let index = 0; index < errors.length; index++) {
-            const error = errors[index]
-            toast.error(error.message)
-          }
-        } else toast.error('Error Occurred')
-      })
+    importExcel('admin/exportSampleUsers', SetIsUserSampleLoading, 'Users-Sample')
   }
 
   const exportSampleMerchantsTarget = () => {
-    SetIsMerchantsTargetSampleLoading(true)
-
-    axios
-      .get(`${BASE_URL}admin/exportSampleMerchantsTarget`, {
-        headers: {
-          Authorization: localStorage.getItem(`access_token`),
-        },
-      })
-      .then((result) => {
-        SetIsMerchantsTargetSampleLoading(false)
-        FileSaver.saveAs(
-          fromByteArrayToExcel(result, 'Merhcants_Increase_Target_Sample'),
-        )
-      })
-      .catch((err) => {
-        SetIsMerchantsTargetSampleLoading(false)
-
-        if (err.response.data.errors) {
-          let errors = err.response.data.errors
-
-          for (let index = 0; index < errors.length; index++) {
-            const error = errors[index]
-            toast.error(error.message)
-          }
-        } else toast.error('Error Occurred')
-      })
+    importExcel('admin/exportSampleMerchantsTarget', SetIsMerchantsTargetSampleLoading, 'Merhcants_Increase_Target_Sample')
   }
 
   return (
