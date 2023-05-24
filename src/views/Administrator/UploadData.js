@@ -16,6 +16,8 @@ const UploadData = () => {
 
   const [isLoading, SetIsLoading] = useState(false)
   const [isUsersLoading, SetIsUsersLoading] = useState(false)
+  const [isHrLoading, SetIsHrLoading] = useState(false)
+
   const [isMerchantsTargetLoading, SetIsMerchantsTargetLoading] =
     useState(false)
 
@@ -23,15 +25,21 @@ const UploadData = () => {
   const [isMerchantsTargetSampleLoading, SetIsMerchantsTargetSampleLoading] =
     useState(false)
   const [isUserSampleLoading, SetIsUserSampleLoading] = useState(false)
-  const [isDownloadUsersLoading, SetIsDownloadUsersLoading] = useState(false)
+  const [isHrSampleLoading, SetIsHrSampleLoading] = useState(false)
 
   const [selectedFile, setSelectedFile] = useState()
+  const [selectedFileHr, setSelectedFileHr] = useState()
+
   const [selectedFileTarget, setSelectedFileTarget] = useState()
   const [selectedFileMerchantsTarget, setSelectedFileMerchantsTarget] =
     useState()
 
   const changeHandler = (event) => {
     setSelectedFile(event.target.files[0])
+  }
+
+  const changeHrHandler = (event) => {
+    setSelectedFileHr(event.target.files[0])
   }
 
   const changeHandlerTarget = (event) => {
@@ -110,6 +118,68 @@ const UploadData = () => {
       })
   }
 
+  const postFileRequestHr = () => {
+    SetIsHrLoading(true)
+    const multipartFile = new FormData()
+
+    multipartFile.append('multipartFile', selectedFileHr)
+
+    let headers = {
+      Authorization: localStorage.getItem(`access_token`),
+    }
+
+    fetch(BASE_URL + 'admin/upload-HR-ID', {
+      method: 'POST',
+      body: multipartFile,
+      headers: headers,
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        SetIsHrLoading(false)
+        toast.info(result.message)
+      })
+      .catch((err) => {
+        SetIsHrLoading(false)
+
+        if (err.response.data.errors) {
+          let errors = err.response.data.errors
+
+          for (let index = 0; index < errors.length; index++) {
+            const error = errors[index]
+            toast.error(error.message)
+          }
+        } else toast.error('Error Occurred')
+      })
+  }
+
+  const exportSampleHr= () => {
+    SetIsHrSampleLoading(true)
+
+    axios
+      .get(`${BASE_URL}admin/export-HR-ID`, {
+        headers: {
+          Authorization: localStorage.getItem(`access_token`),
+        },
+      })
+      .then((result) => {
+        SetIsHrSampleLoading(false)
+        FileSaver.saveAs(fromByteArrayToExcel(result, 'MainAccount_HR-Sample'))
+      })
+      .catch((err) => {
+        SetIsHrSampleLoading(false)
+
+        if (err.response.data.errors) {
+          let errors = err.response.data.errors
+
+          for (let index = 0; index < errors.length; index++) {
+            const error = errors[index]
+            toast.error(error.message)
+          }
+        } else toast.error('Error Occurred')
+      })
+  }
+
+
   const exportSampleTarget = () => {
     SetIsTargetSampleLoading(true)
 
@@ -152,34 +222,6 @@ const UploadData = () => {
       })
       .catch((err) => {
         SetIsUserSampleLoading(false)
-
-        console.log(err)
-        if (err.response.data.errors) {
-          let errors = err.response.data.errors
-
-          for (let index = 0; index < errors.length; index++) {
-            const error = errors[index]
-            toast.error(error.message)
-          }
-        } else toast.error('Error Occurred')
-      })
-  }
-
-  const exportAllUsers = () => {
-    SetIsDownloadUsersLoading(true)
-
-    axios
-      .get(`${BASE_URL}admin/exportAllUsers`, {
-        headers: {
-          Authorization: localStorage.getItem(`access_token`),
-        },
-      })
-      .then((result) => {
-        SetIsDownloadUsersLoading(false)
-        FileSaver.saveAs(fromByteArrayToExcel(result, 'System_Users'))
-      })
-      .catch((err) => {
-        SetIsDownloadUsersLoading(false)
 
         console.log(err)
         if (err.response.data.errors) {
@@ -362,10 +404,30 @@ const UploadData = () => {
               <span className={'text-s'}>تحميل عينة من ملف المستخدمين</span>
             </FIconWrapper>
           </FButton>
-          <FButton onClick={exportAllUsers}>
+        </div>
+
+        <div
+          className={
+            'flex flex-col  items-center justify-center w-full h-screen'
+          }>
+          <span className={'text-3xl text-gray-800 font-semibold mt-5'}>
+            رفع الرقم التعريفي الخاص بالاتش ار
+          </span>
+          <br />
+          <input type="file" name="fileHr" onChange={changeHrHandler} />
+
+          <div>
+            <FButton onClick={postFileRequestHr}>
+              <FIconWrapper>
+                <ESpinner isVisible={isHrLoading} />
+                <span className={'text-s'}>Submit</span>
+              </FIconWrapper>
+            </FButton>
+          </div>
+          <FButton onClick={exportSampleHr}>
             <FIconWrapper>
-              <ESpinner isVisible={isDownloadUsersLoading} />
-              <span className={'text-s'}>تنزيل ملف المستخدمين</span>
+              <ESpinner isVisible={isHrSampleLoading} />
+              <span className={'text-s'}>تحميل عينة من ملف الاتش ار</span>
             </FIconWrapper>
           </FButton>
         </div>

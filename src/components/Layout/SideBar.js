@@ -4,7 +4,8 @@ import FFlexWrapper from '../FFlexWrapper'
 import { useEffect, useRef, useState } from 'react'
 import FNavLink from '../FNavLink'
 import {
-  FaFileExcel,
+  FaFileDownload,
+  FaFileUpload,
   FaRegCommentDots,
   FaRegComments,
   FaRegEye,
@@ -107,9 +108,16 @@ const SideBar = ({ isSideBarOpen, setIsSideBarOpen, onClickOutside }) => {
             </FNavLink>
 
             <FNavLink setIsSideBarOpen={setIsSideBarOpen} to={'/upload-data'}>
-              <FaFileExcel size={25} />
+              <FaFileUpload size={25} />
               <span className={`text-sm ${isCollapse ? 'hidden' : ''}`}>
-                ملفات الاكسل
+                رفع ملفات الاكسل
+              </span>
+            </FNavLink>
+
+            <FNavLink setIsSideBarOpen={setIsSideBarOpen} to={'/download-data'}>
+              <FaFileDownload size={25} />
+              <span className={`text-sm ${isCollapse ? 'hidden' : ''}`}>
+                تنزيل ملفات الاكسل
               </span>
             </FNavLink>
 

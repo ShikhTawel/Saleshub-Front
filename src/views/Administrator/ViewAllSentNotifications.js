@@ -18,6 +18,7 @@ const ViewAllSentNotifications = () => {
 
   const [isSideBarOpen, setIsSideBarOpen] = useState(false)
   const [isLoading, SetIsLoading] = useState(false)
+  const [isRemoveLoading, SetIsRemoveLoading] = useState(false)
 
   useState(false)
 
@@ -52,6 +53,17 @@ const ViewAllSentNotifications = () => {
         </FButton>
       ),
     },
+
+    {
+      Header: 'حذف الرسالة',
+      accessor: 'buttonRemove',
+      Cell: ({ cell }) => (
+        <FButton value={cell.row.values.button} onClick={() => RemoveMessage(cell.row.values)}>
+          <ESpinner isVisible={isRemoveLoading} />
+          حذف
+        </FButton>
+      ),
+    },
   ])
 
   const downloadReadExcel = (info) =>{
@@ -80,6 +92,33 @@ const ViewAllSentNotifications = () => {
       })
   }
 
+  const RemoveMessage = (info) =>{
+    SetIsRemoveLoading(true)
+    axios
+      .delete(`${BASE_URL}admin/` + info.id + '/removeNotification' , {
+        headers: {
+          Authorization: localStorage.getItem(`access_token`),
+        },
+      })
+      .then(() => {
+        SetIsRemoveLoading(false)
+        sessionStorage.removeItem(
+          'Notifications+' + new Date().toLocaleDateString(),
+        )
+        toast.info("تم حذف الرسالة بنجاح")
+      })
+      .catch((err) => {
+        SetIsRemoveLoading(false)
+        if (err.response?.data.errors) {
+          let errors = err.response.data.errors
+
+          for (let index = 0; index < errors.length; index++) {
+            const error = errors[index]
+            toast.error(error.message)
+          }
+        } else toast.error('Error Occurred')
+      })
+  }
   return (
     <>
       <div

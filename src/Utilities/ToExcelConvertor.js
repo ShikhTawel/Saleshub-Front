@@ -21,3 +21,4 @@ export default function fromByteArrayToExcel(data, fileName) {
 export function saveFile(file) {
     FileSaver.saveAs(file, file.name);
 }
+

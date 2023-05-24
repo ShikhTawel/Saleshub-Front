@@ -238,6 +238,7 @@ const DetailsModal = ({ isOpen, setIsOpen, merchantData }) => {
               <FButton onClick={resetDate}>Reset</FButton>
             </div>
           ) : null}
+
           <div className="grid gap-3 my-3 grid-cols-4 border border rounded bg-gray-50 primary-shadow p-3">
             <InstanceViewer
               instance={'Merchant Code'}
