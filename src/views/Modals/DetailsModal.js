@@ -21,6 +21,9 @@ const DetailsModal = ({ isOpen, setIsOpen, merchantData }) => {
     'services' + new Date().toLocaleDateString(),
   )
 
+  const [airtimeInfo, setAirtimeInfo] = useState({})
+  const [utilitiesInfo, setUtilitiesInfo] = useState({})
+
   const [projection, selectedProjection] = useState('general')
   const [graphDataPlot, setGraphDataPlot] = useState([])
   const [loading, setLoading] = useState(false)
@@ -32,18 +35,35 @@ const DetailsModal = ({ isOpen, setIsOpen, merchantData }) => {
   let [reset, setReset] = useState(false)
 
   const handleGraph = (graphResponse) => {
+    console.log(graphResponse)
     let graphData = []
-    const keys = Object.keys(graphResponse)
+    const keys = Object.keys(graphResponse.transactions)
     for (let i = 0; i < keys.length; i++) {
-      graphData = [
-        ...graphData,
-        ...[
-          {
-            name: keys[i],
-            uv: graphResponse[keys[i]],
-          },
-        ],
-      ]
+      if (
+        duration == 'day' &&
+        (projection == 'AIRTIME' || projection == 'Utilities')
+      ) {
+        graphData = [
+          ...graphData,
+          ...[
+            {
+              name: keys[i],
+              achieved: graphResponse.transactions[keys[i]],
+              expected: graphResponse.target,
+            },
+          ],
+        ]
+      } else {
+        graphData = [
+          ...graphData,
+          ...[
+            {
+              name: keys[i],
+              achieved: graphResponse.transactions[keys[i]],
+            },
+          ],
+        ]
+      }
     }
     setGraphDataPlot(graphData)
   }
@@ -104,7 +124,7 @@ const DetailsModal = ({ isOpen, setIsOpen, merchantData }) => {
         axiosInstance
           .post(`merchant/serviceTransactions`, serviceTransactionsRequestDto)
           .then((response) => {
-            handleGraph(response.data.transactions)
+            handleGraph(response.data)
             sessionStorage.setItem(
               projection +
                 merchantData.code +
@@ -112,7 +132,7 @@ const DetailsModal = ({ isOpen, setIsOpen, merchantData }) => {
                 startDate +
                 endDate +
                 new Date().toLocaleDateString(),
-              JSON.stringify(response.data.transactions),
+              JSON.stringify(response.data),
             )
             setLoading(false)
           })
@@ -130,6 +150,62 @@ const DetailsModal = ({ isOpen, setIsOpen, merchantData }) => {
   useEffect(() => {
     setLoading(true)
     if (merchantData) {
+      if (
+        sessionStorage.getItem(
+          merchantData.code + '+airtimeInfo+' + new Date().toLocaleDateString(),
+        )
+      )
+        setAirtimeInfo(
+          JSON.parse(
+            sessionStorage.getItem(
+              merchantData.code +
+                '+airtimeInfo+' +
+                new Date().toLocaleDateString(),
+            ),
+          ),
+        )
+      else
+        axiosInstance
+          .get(`merchant/` + merchantData.code + `/airtimeInfo`)
+          .then((response) => {
+            setAirtimeInfo(response.data)
+            sessionStorage.setItem(
+              merchantData.code +
+                '+airtimeInfo+' +
+                new Date().toLocaleDateString(),
+              JSON.stringify(response.data),
+            )
+          })
+
+      if (
+        sessionStorage.getItem(
+          merchantData.code +
+            '+utilitiesInfo+' +
+            new Date().toLocaleDateString(),
+        )
+      )
+        setUtilitiesInfo(
+          JSON.parse(
+            sessionStorage.getItem(
+              merchantData.code +
+                '+utilitiesInfo+' +
+                new Date().toLocaleDateString(),
+            ),
+          ),
+        )
+      else
+        axiosInstance
+          .get(`merchant/` + merchantData.code + `/utilitiesInfo`)
+          .then((response) => {
+            sessionStorage.setItem(
+              merchantData.code +
+                '+utilitiesInfo+' +
+                new Date().toLocaleDateString(),
+              JSON.stringify(response.data),
+            )
+            setUtilitiesInfo(response.data)
+          })
+
       if (
         sessionStorage.getItem(
           projection +
@@ -164,7 +240,7 @@ const DetailsModal = ({ isOpen, setIsOpen, merchantData }) => {
         axiosInstance
           .post(`merchant/serviceTransactions`, serviceTransactionsRequestDto)
           .then((response) => {
-            handleGraph(response.data.transactions)
+            handleGraph(response.data)
             sessionStorage.setItem(
               projection +
                 merchantData.code +
@@ -172,7 +248,7 @@ const DetailsModal = ({ isOpen, setIsOpen, merchantData }) => {
                 startDate +
                 endDate +
                 new Date().toLocaleDateString(),
-              JSON.stringify(response.data.transactions),
+              JSON.stringify(response.data),
             )
             setLoading(false)
           })
@@ -236,6 +312,56 @@ const DetailsModal = ({ isOpen, setIsOpen, merchantData }) => {
                 }}></input>
               <FButton onClick={updateDataBasedOnDate}>Submit Filter</FButton>
               <FButton onClick={resetDate}>Reset</FButton>
+            </div>
+          ) : null}
+
+          {projection == 'AIRTIME' ? (
+            <div
+              className="grid gap-3 my-3 grid-cols-4 border border rounded bg-gray-50 primary-shadow p-3"
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <InstanceViewer
+                instance={'التارجت الشهري'}
+                value={airtimeInfo.merchantTarget}
+              />
+
+              <InstanceViewer
+                instance={'المحقق الشهري'}
+                value={airtimeInfo.achieved}
+              />
+
+              <InstanceViewer
+                instance={'التارجت اليومي'}
+                value={airtimeInfo.dailyTarget}
+              />
+            </div>
+          ) : null}
+
+          {projection == 'Utilities' ? (
+            <div
+              className="grid gap-3 my-3 grid-cols-4 border border rounded bg-gray-50 primary-shadow p-3"
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <InstanceViewer
+                instance={'التارجت الشهري'}
+                value={utilitiesInfo.merchantTarget}
+              />
+
+              <InstanceViewer
+                instance={'المحقق الشهري'}
+                value={utilitiesInfo.achieved}
+              />
+
+              <InstanceViewer
+                instance={'التارجت اليومي'}
+                value={utilitiesInfo.dailyTarget}
+              />
             </div>
           ) : null}
 
@@ -315,7 +441,6 @@ const DetailsModal = ({ isOpen, setIsOpen, merchantData }) => {
               <select
                 value={projection}
                 onChange={(e) => {
-                  console.log(e.target.value)
                   selectedProjection(e.target.value)
                 }}
                 className={
@@ -346,20 +471,21 @@ const DetailsModal = ({ isOpen, setIsOpen, merchantData }) => {
                 </defs>
                 <XAxis dataKey="name" />
                 <YAxis />
+
                 <CartesianGrid strokeDasharray="3 3" />
                 <Tooltip />
                 <Area
                   type="monotone"
-                  dataKey="uv"
+                  dataKey="achieved"
                   stroke="#8884d8"
                   fillOpacity={1}
                   fill="url(#colorUv)"
                 />
                 <Area
                   type="monotone"
-                  dataKey="pv"
+                  dataKey="expected"
                   stroke="#82ca9d"
-                  fillOpacity={1}
+                  fillOpacity={0}
                   fill="url(#colorPv)"
                 />
                 <Area
