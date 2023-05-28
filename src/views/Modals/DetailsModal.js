@@ -23,6 +23,7 @@ const DetailsModal = ({ isOpen, setIsOpen, merchantData }) => {
 
   const [airtimeInfo, setAirtimeInfo] = useState({})
   const [utilitiesInfo, setUtilitiesInfo] = useState({})
+  const [billsInfo, setBillsInfo] = useState({})
 
   const [projection, selectedProjection] = useState('general')
   const [graphDataPlot, setGraphDataPlot] = useState([])
@@ -41,7 +42,7 @@ const DetailsModal = ({ isOpen, setIsOpen, merchantData }) => {
     for (let i = 0; i < keys.length; i++) {
       if (
         duration == 'day' &&
-        (projection == 'AIRTIME' || projection == 'Utilities')
+        (projection == 'AIRTIME' || projection == 'Utilities' || projection == 'BILLS')
       ) {
         graphData = [
           ...graphData,
@@ -208,6 +209,33 @@ const DetailsModal = ({ isOpen, setIsOpen, merchantData }) => {
 
       if (
         sessionStorage.getItem(
+          merchantData.code + '+billsInfo+' + new Date().toLocaleDateString(),
+        )
+      )
+        setBillsInfo(
+          JSON.parse(
+            sessionStorage.getItem(
+              merchantData.code +
+                '+billsInfo+' +
+                new Date().toLocaleDateString(),
+            ),
+          ),
+        )
+      else
+        axiosInstance
+          .get(`merchant/` + merchantData.code + `/billsInfo`)
+          .then((response) => {
+            sessionStorage.setItem(
+              merchantData.code +
+                '+billsInfo+' +
+                new Date().toLocaleDateString(),
+              JSON.stringify(response.data),
+            )
+            setBillsInfo(response.data)
+          })
+
+      if (
+        sessionStorage.getItem(
           projection +
             merchantData.code +
             duration +
@@ -365,6 +393,31 @@ const DetailsModal = ({ isOpen, setIsOpen, merchantData }) => {
             </div>
           ) : null}
 
+          {projection == 'BILLS' ? (
+            <div
+              className="grid gap-3 my-3 grid-cols-4 border border rounded bg-gray-50 primary-shadow p-3"
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <InstanceViewer
+                instance={'التارجت الشهري'}
+                value={billsInfo.merchantTarget}
+              />
+
+              <InstanceViewer
+                instance={'المحقق الشهري'}
+                value={billsInfo.achieved}
+              />
+
+              <InstanceViewer
+                instance={'التارجت اليومي'}
+                value={billsInfo.dailyTarget}
+              />
+            </div>
+          ) : null}
+
           <div className="grid gap-3 my-3 grid-cols-4 border border rounded bg-gray-50 primary-shadow p-3">
             <InstanceViewer
               instance={'Merchant Code'}
@@ -377,10 +430,6 @@ const DetailsModal = ({ isOpen, setIsOpen, merchantData }) => {
             <InstanceViewer
               instance={'Overdraft Limit'}
               value={merchantData.overdraftLimit}
-            />
-            <InstanceViewer
-              instance={'AutoFund'}
-              value={merchantData.autoFund}
             />
 
             <InstanceViewer

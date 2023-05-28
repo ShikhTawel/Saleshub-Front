@@ -57,7 +57,7 @@ const SideBar = ({ isSideBarOpen, setIsSideBarOpen, onClickOutside }) => {
         }
         className={`${
           //  "bg-gray-900"
-          'hidden bg-orient-500'
+          'hidden bg-orient-500 '
         }  f-col h-full `}>
         <div className={'py-2 px-4'}>
           <div className={'f-col gap-1  '}>

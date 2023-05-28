@@ -21,7 +21,7 @@ const Admin = () => {
         />
         <div
           className={
-            'flex flex-col  items-center justify-center w-full h-screen'
+            'flex flex-col  items-center justify-center w-full h-screen '
           }>
           <span className={'text-3xl text-gray-800 font-semibold mt-5'}>
             اهلا بك في صفحة الادمن
