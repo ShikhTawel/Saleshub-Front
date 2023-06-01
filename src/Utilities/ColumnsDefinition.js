@@ -88,6 +88,12 @@ export function getMerchantsColumns() {
         accessor: 'name', // String-based value accessors!
       },
       {
+        Header: 'الحالة',
+        accessor: 'status', // String-based value accessors!
+        Filter: SelectColumnFilter,
+        filter: 'exact',
+      },
+      {
         Header: 'merchantClass',
         accessor: 'merchantClass', // String-based value accessors!
         Filter: SelectColumnFilter,
