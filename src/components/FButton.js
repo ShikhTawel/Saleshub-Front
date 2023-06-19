@@ -4,7 +4,7 @@ const FButton = ({ children, className, onClick, btnType, ...props }) => {
       onClick={onClick}
       className={` ${className}  ${
         btnType === "danger"
-          ? "bg-red-500 text-white   disabled:bg-red-300  "
+          ? "bg-red-600 text-white   disabled:bg-red-300  "
           : btnType === "success"
           ? "border border-green-500 bg-green-600 text-white disabled:bg-green-300 "
           : btnType === "secondary"

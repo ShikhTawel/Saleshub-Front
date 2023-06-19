@@ -92,7 +92,13 @@ function Table({ columns, data, onRowClick }) {
 
   return (
     <>
-      <table className={'w-full '} {...getTableProps()}>
+      <div className={'w-full overflow-x-auto '}>
+      <table
+        className={"table-auto border-collapse border border-gray-400 w-full"}
+        style={{
+        minWidth: 'Max-content',
+      }}
+             {...getTableProps()}>
         <thead>
           {headerGroups.map((headerGroup, l) => (
             <tr
@@ -144,6 +150,7 @@ function Table({ columns, data, onRowClick }) {
           })}
         </tbody>
       </table>
+      </div>
       <div className="flex w-full gap-1 items-start justify-center bg-white p-1 border-x border-b">
         <div
           className={
@@ -189,7 +196,7 @@ function Table({ columns, data, onRowClick }) {
           className={
             ' w-5/12 rounded border border-gray-300 p-1.5 text-sm  shadow-sm ring-orient-400 focus:border focus:border-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2'
           }
-          
+
           value={pageSize}
           onChange={(e) => {
             setPageSize(Number(e.target.value))

@@ -172,7 +172,7 @@ const Supervisor = () => {
           <div className={'p-5 w-full'}>
             <div
               className={
-                'flex w-full  justify-between gap-2 p-3 gap-5  items-start bg-white border primary-shadow rounded mt-5 '
+                'flex w-full  justify-between   p-3 gap-5  items-start bg-red-200 border primary-shadow rounded mt-5 '
               }>
               <div className={'flex gap-2 items-center '}>
                 <div className={'flex flex-col '}>

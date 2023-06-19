@@ -199,7 +199,7 @@ const Salesrep = () => {
           <div className={'p-5 w-full'}>
             <div
               className={
-                'flex w-full  justify-between gap-2 p-3 gap-5  items-start bg-white border primary-shadow rounded mt-5 '
+                'grid lg:grid-cols-7 grid-cols-1 w-full  justify-between gap-2 p-3  items-start bg-white border primary-shadow rounded mt-5 '
               }>
               <div className={'flex gap-2 items-center '}>
                 <FAvatar name={'mostafa.elamrawiy'} />
@@ -293,7 +293,7 @@ const Salesrep = () => {
           <div className={'p-5 w-full'}>
             <div
               className={
-                'flex w-full  justify-between gap-2 p-3 gap-5  items-start bg-white border primary-shadow rounded mt-5 '
+                'grid lg:grid-cols-7 grid-cols-1  w-full  justify-between  p-3 gap-5  items-start bg-white border primary-shadow rounded mt-5 '
               }>
               <div className={'flex flex-col '}>
                 <span className={'text-lg'}>فئات التجار</span>
@@ -319,7 +319,7 @@ const Salesrep = () => {
             </div>
             <div
               className={
-                'flex w-full  justify-between gap-2 p-3 gap-5  items-start bg-white border primary-shadow rounded mt-5 '
+                'grid grid-cols-7 grid-cols-1 w-full  justify-between   p-3 gap-5  items-start bg-white border primary-shadow rounded mt-5 '
               }>
               <div className={'flex flex-col '}>
                 <span className={'text-lg'}>الرخص</span>
@@ -347,7 +347,7 @@ const Salesrep = () => {
             </div>
             <div
               className={
-                'flex w-full  justify-between gap-2 p-3 gap-5  items-start bg-white border primary-shadow rounded mt-5 '
+                'grid lg:grid-cols-7 gird-cols-1 w-full  justify-between gap-2 p-3 gap-5  items-start bg-white border primary-shadow rounded mt-5 '
               }>
               <div className={'flex flex-col '}>
                 <span className={'text-lg'}>Closing Balance</span>
