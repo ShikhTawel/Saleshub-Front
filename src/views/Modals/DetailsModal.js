@@ -11,7 +11,8 @@ import FInputField from '../../components/FInputField'
 import { format } from 'date-fns'
 import { useCustomAxios } from '../../Hooks/useAxios'
 import { subMonths } from 'date-fns'
-
+import useWindowDimensions from '../../Hooks/useWindowDimensions'
+import EFormWrapper from '../../components/EFormWrapper'
 const DetailsModal = ({ isOpen, setIsOpen, merchantData }) => {
   const products = useCustomAxios(
     {
@@ -20,6 +21,8 @@ const DetailsModal = ({ isOpen, setIsOpen, merchantData }) => {
     },
     'services' + new Date().toLocaleDateString(),
   )
+
+  const { width } = useWindowDimensions()
 
   const [airtimeInfo, setAirtimeInfo] = useState({})
   const [utilitiesInfo, setUtilitiesInfo] = useState({})
@@ -42,7 +45,9 @@ const DetailsModal = ({ isOpen, setIsOpen, merchantData }) => {
     for (let i = 0; i < keys.length; i++) {
       if (
         duration == 'day' &&
-        (projection == 'AIRTIME' || projection == 'Utilities' || projection == 'BILLS')
+        (projection == 'AIRTIME' ||
+          projection == 'Utilities' ||
+          projection == 'BILLS')
       ) {
         graphData = [
           ...graphData,
@@ -314,38 +319,50 @@ const DetailsModal = ({ isOpen, setIsOpen, merchantData }) => {
         }}>
         <div className="flex flex-col">
           {duration == 'day' ? (
-            <div
-              className="grid gap-3 my-3 grid-cols-4 border border rounded bg-gray-50 primary-shadow p-3"
-              style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              Start Date{' '}
-              <input
-                value={startDate}
-                type="date"
-                onChange={(e) => {
-                  e.preventDefault()
-                  startDate = e.target.value
-                  setStartDate(e.target.value)
-                }}></input>
-              End Date{' '}
-              <input
-                value={endDate}
-                type="date"
-                onChange={(e) => {
-                  endDate = e.target.value
-                  setEndDate(e.target.value)
-                }}></input>
-              <FButton onClick={updateDataBasedOnDate}>Submit Filter</FButton>
-              <FButton onClick={resetDate}>Reset</FButton>
-            </div>
+            <>
+              <div
+                className={
+                  'grid gap-3 my-3 lg:grid-cols-4 grid-cols-1 items-end border rounded bg-gray-50 primary-shadow p-3'
+                }>
+                <EFormWrapper>
+                  Start Date
+                  <input
+                    value={startDate}
+                    type="date"
+                    onChange={(e) => {
+                      e.preventDefault()
+                      startDate = e.target.value
+                      setStartDate(e.target.value)
+                    }}></input>
+                </EFormWrapper>
+
+                <EFormWrapper>
+                  End Date
+                  <input
+                    value={endDate}
+                    type="date"
+                    onChange={(e) => {
+                      endDate = e.target.value
+                      setEndDate(e.target.value)
+                    }}></input>
+                </EFormWrapper>
+                <EFormWrapper>
+                  {' '}
+                  <FButton onClick={updateDataBasedOnDate}>
+                    Submit Filter
+                  </FButton>
+                </EFormWrapper>
+                <EFormWrapper>
+                  {' '}
+                  <FButton onClick={resetDate}>Reset</FButton>
+                </EFormWrapper>
+              </div>
+            </>
           ) : null}
 
           {projection == 'AIRTIME' ? (
             <div
-              className="grid gap-3 my-3 grid-cols-4 border border rounded bg-gray-50 primary-shadow p-3"
+              className="grid gap-3 my-3 lg:grid-cols-4 border border rounded bg-gray-50 primary-shadow p-3"
               style={{
                 display: 'flex',
                 justifyContent: 'center',
@@ -370,7 +387,7 @@ const DetailsModal = ({ isOpen, setIsOpen, merchantData }) => {
 
           {projection == 'Utilities' ? (
             <div
-              className="grid gap-3 my-3 grid-cols-4 border border rounded bg-gray-50 primary-shadow p-3"
+              className="grid gap-3 my-3 lg:grid-cols-4 border border rounded bg-gray-50 primary-shadow p-3"
               style={{
                 display: 'flex',
                 justifyContent: 'center',
@@ -418,7 +435,7 @@ const DetailsModal = ({ isOpen, setIsOpen, merchantData }) => {
             </div>
           ) : null}
 
-          <div className="grid gap-3 my-3 grid-cols-4 border border rounded bg-gray-50 primary-shadow p-3">
+          <div className="grid gap-3 my-3 lg:grid-cols-4 grid-cols-1   border rounded bg-gray-50 primary-shadow p-3">
             <InstanceViewer
               instance={'Merchant Code'}
               value={merchantData.code}
@@ -507,44 +524,49 @@ const DetailsModal = ({ isOpen, setIsOpen, merchantData }) => {
             {loading ? (
               <ESpinner isVisible={true} />
             ) : (
-              <AreaChart width={900} height={250} data={graphDataPlot}>
-                <defs>
-                  <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8} />
-                    <stop offset="80%" stopColor="#8884d8" stopOpacity={0} />
-                  </linearGradient>
-                  <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8} />
-                    <stop offset="95%" stopColor="#82ca9d" stopOpacity={0} />
-                  </linearGradient>
-                </defs>
-                <XAxis dataKey="name" />
-                <YAxis />
+              <>
+                <AreaChart
+                  width={width > 768 ? 900 : 320}
+                  height={250}
+                  data={graphDataPlot}>
+                  <defs>
+                    <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8} />
+                      <stop offset="80%" stopColor="#8884d8" stopOpacity={0} />
+                    </linearGradient>
+                    <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8} />
+                      <stop offset="95%" stopColor="#82ca9d" stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
+                  <XAxis dataKey="name" />
+                  <YAxis />
 
-                <CartesianGrid strokeDasharray="3 3" />
-                <Tooltip />
-                <Area
-                  type="monotone"
-                  dataKey="achieved"
-                  stroke="#8884d8"
-                  fillOpacity={1}
-                  fill="url(#colorUv)"
-                />
-                <Area
-                  type="monotone"
-                  dataKey="expected"
-                  stroke="#82ca9d"
-                  fillOpacity={0}
-                  fill="url(#colorPv)"
-                />
-                <Area
-                  type="monotone"
-                  dataKey="amt"
-                  stroke="#82ca9d"
-                  fillOpacity={1}
-                  fill="url(#colorPv)"
-                />
-              </AreaChart>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <Tooltip />
+                  <Area
+                    type="monotone"
+                    dataKey="achieved"
+                    stroke="#8884d8"
+                    fillOpacity={1}
+                    fill="url(#colorUv)"
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="expected"
+                    stroke="#82ca9d"
+                    fillOpacity={0}
+                    fill="url(#colorPv)"
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="amt"
+                    stroke="#82ca9d"
+                    fillOpacity={1}
+                    fill="url(#colorPv)"
+                  />
+                </AreaChart>
+              </>
             )}
           </div>
         </div>
